@@ -1,15 +1,30 @@
-<!-- YOU CAN DELETE EVERYTHING IN THIS PAGE -->
+<script>
+	import MenuLink from "$lib/components/MenuLink.svelte";
 
-<div class="container h-full mx-auto flex justify-center items-center">
-	<div class="space-y-5">
-		<h1 class="h1">Let's get cracking bones!</h1>
-		<p>Start by exploring:</p>
-		<ul>
-			<li><code class="code">/src/routes/+layout.svelte</code> - barebones layout</li>
-			<li><code class="code">/src/app.postcss</code> - app wide css</li>
-			<li>
-				<code class="code">/src/routes/+page.svelte</code> - this page, you can replace the contents
-			</li>
-		</ul>
-	</div>
+</script>
+<div
+	class="background-planet w-screen h-screen flex flex-col items-center justify-center space-y-2"
+>
+	<h1 class="h1 py-8">Sidereal Confluence</h1>
+	<MenuLink href="/">
+		<h4 class="h4 text-primary-400 py-2 px-4">Settings</h4>
+	</MenuLink>
+	<MenuLink href="/">
+		<h4 class="h4 text-primary-400 py-2 px-4">Settings</h4>
+	</MenuLink>
+	<MenuLink href="/">
+		<h4 class="h4 text-primary-400 py-2 px-4">Settings</h4>
+	</MenuLink>
+	<MenuLink href="/">
+		<h4 class="h4 text-primary-400 py-2 px-4">Settings</h4>
+	</MenuLink>
 </div>
+
+<style>
+	.background-planet {
+		background-image: url('/images/menacing-planet.png');
+		background-position-x: center;
+		background-position-y: top;
+		object-fit: fill;
+	}
+</style>
