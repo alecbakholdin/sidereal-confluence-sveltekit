@@ -18,7 +18,6 @@ const pusher = new Pusher({
 	cluster: PUBLIC_PUSHER_CLUSTER
 });
 
-/** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
 	const { gameId } = event.params;
 	if (!gameId) return await resolve(event);
