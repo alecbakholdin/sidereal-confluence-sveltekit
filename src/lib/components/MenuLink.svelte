@@ -6,7 +6,7 @@
 </script>
 
 <a
-	class="menuButton border-2 border-primary-400 {anchorClass}"
+	class="menuButton border rounded-sm border-primary-400 {anchorClass}"
 	{href}
 	use:sound={{src: '/sounds/buttonBeep.mp3', events: ['mouseover']}}
 >
