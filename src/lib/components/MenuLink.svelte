@@ -1,34 +1,15 @@
 <script lang="ts">
-	import { cubicIn } from 'svelte/easing';
-	import { tweened } from 'svelte/motion';
+	import { sound } from '$lib/actions/sound';
 
 	export let href: string;
 	export let anchorClass: string = '';
-
-	let volume = tweened(0, {
-		duration: 100,
-		easing: cubicIn
-	});
-	let currentTime = 0;
-	function handleMouseEnter() {
-		currentTime = 0;
-		$volume = 1;
-		paused = false;
-	}
-	function handleMouseLeave() {
-		$volume = 0;
-	}
-	$: paused = !$volume;
-	$: if (!$volume) currentTime = 0;
 </script>
 
 <a
 	class="menuButton border-2 border-primary-400 {anchorClass}"
 	{href}
-	on:mouseenter={handleMouseEnter}
-	on:mouseleave={handleMouseLeave}
+	use:sound={{src: '/sounds/buttonBeep.mp3', events: ['mouseover']}}
 >
-	<audio bind:paused bind:currentTime volume={$volume} src="/sounds/buttonBeep.mp3" />
 	<slot />
 </a>
 
