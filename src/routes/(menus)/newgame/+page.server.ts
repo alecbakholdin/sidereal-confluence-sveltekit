@@ -1,7 +1,11 @@
+import { getDefaultGameState } from "$lib/types/game.js";
+import { setGameState } from "$lib/util/gameState.server.js";
 import { redirect } from "@sveltejs/kit";
 
-export async function load({url}) {
-    throw redirect(308, `/game/${randomId()}`)
+export async function load() {
+    const gameId = randomId();
+    await setGameState(gameId, getDefaultGameState());
+    throw redirect(308, `/game/${gameId}`)
 }
 
 const startChar = "A".charCodeAt(0);

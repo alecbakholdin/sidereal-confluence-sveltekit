@@ -1,12 +1,17 @@
 <script>
 	import 'iconify-icon';
 	import '../app.postcss';
-// Floating UI for Popups
+
 	import { onNavigate } from '$app/navigation';
 	import { settingsModal } from '$lib/util/settingsStore';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
-	import { Modal, Toast, getModalStore, initializeStores, storePopup } from '@skeletonlabs/skeleton';
-	import { page } from '$app/stores';
+	import {
+		Modal,
+		Toast,
+		getModalStore,
+		initializeStores,
+		storePopup
+	} from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	initializeStores();
 	const modalStore = getModalStore();
