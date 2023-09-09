@@ -4,7 +4,7 @@ import { redirect } from "@sveltejs/kit";
 
 export async function load() {
     const gameId = randomId();
-    await setGameState(gameId, getDefaultGameState());
+    await setGameState(gameId, getDefaultGameState(gameId));
     throw redirect(308, `/game/${gameId}`)
 }
 

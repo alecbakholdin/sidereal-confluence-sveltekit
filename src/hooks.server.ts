@@ -1,36 +1,35 @@
-import { AUTH_SECRET, PUSHER_SECRET } from '$env/static/private';
-import { PUBLIC_PUSHER_APP_ID, PUBLIC_PUSHER_CLUSTER, PUBLIC_PUSHER_KEY } from '$env/static/public';
-import { createNewUser } from '$lib/types/user';
-import { UPDATE_EVENT, updateChannel } from '$lib/util/pusherChannels';
+import { AUTH_SECRET } from '$env/static/private';
+import { pusher } from '$lib/objects.server';
+import { createNewUser, type User } from '$lib/types/user';
+import { UPDATE_EVENT, presenceChannel } from '$lib/util/pusherChannels';
 import { getGameState, setGameState } from '$lib/util/server/gameState.server';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { diff } from 'json-diff-ts';
 import { decode, sign, verify } from 'jsonwebtoken';
-import Pusher from 'pusher';
 
-const handleAuth: Handle = async ({event, resolve}) => {
+const handleAuth: Handle = async ({ event, resolve }) => {
 	const authHeader = event.cookies.get("Authorization");
+	const payload = (authHeader && decode(authHeader));
+	const user = (payload && (payload as any)?.data as User) || createNewUser();
 	
-	if(!authHeader) {
-		const user = createNewUser();
-		const payload = sign({data: user}, AUTH_SECRET);
+	const resetJwt = () => {
+		const payload = sign({ data: user }, AUTH_SECRET, {expiresIn: "12h"});
 		event.cookies.set("Authorization", payload);
-	} else {
-		const user = decode(authHeader)
 	}
+	if (!authHeader) {
+		resetJwt();
+	} else try {
+		verify(authHeader, AUTH_SECRET);
+	} catch (e) {
+		resetJwt();
+	}
+	event.locals.user = user;
 
 	return resolve(event);
 }
 
-const pusher = new Pusher({
-	appId: PUBLIC_PUSHER_APP_ID,
-	key: PUBLIC_PUSHER_KEY,
-	secret: PUSHER_SECRET,
-	cluster: PUBLIC_PUSHER_CLUSTER
-});
-
-const handleGame: Handle = async({ event, resolve }) => {
+const handleGame: Handle = async ({ event, resolve }) => {
 	const { gameId } = event.params;
 	if (!gameId) return await resolve(event);
 
@@ -45,7 +44,7 @@ const handleGame: Handle = async({ event, resolve }) => {
 	const newState = event.locals.gameState;
 	const difference = diff(oldState, newState);
 	if (difference.length) {
-		pusher.trigger(updateChannel(gameId), UPDATE_EVENT, difference);
+		pusher.trigger(presenceChannel(gameId), UPDATE_EVENT, difference);
 		await setGameState(gameId, newState);
 	}
 

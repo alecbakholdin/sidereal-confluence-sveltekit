@@ -1,4 +1,5 @@
 import type { GameState } from '$lib/types/game';
+import type { User } from '$lib/types/user';
 
 declare global {
 	// preserve any customizations you have here
@@ -8,6 +9,7 @@ declare global {
 		}
 		interface Locals {
 			gameState: GameState;
+			user: User;
 		}
 		// interface PageData {}
 		// interface Platform {}

@@ -1,9 +1,3 @@
-<script>
-	import { settingsModal } from '$lib/util/settingsStore';
-	import { getModalStore } from '@skeletonlabs/skeleton';
-	const modalStore = getModalStore();
-</script>
-
 <div class="background-planet w-screen h-screen relative grid place-items-center">
 	<slot />
 </div>
