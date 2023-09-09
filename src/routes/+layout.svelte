@@ -3,7 +3,7 @@
 	import '../app.postcss';
 
 	import { onNavigate } from '$app/navigation';
-	import { settingsModal } from '$lib/util/settingsStore';
+	import { settingsModal } from '$lib/util/client/settingsStore';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 	import {
 		Modal,

@@ -1,9 +1,5 @@
-export function cacheChannel(gameId: string) {
-    return `cacheGame${gameId}`;
-}
-
 export function updateChannel(gameId: string) {
-    return `updateGame${gameId}`;
+    return `privateUpdateGame${gameId}`;
 }
 
 export const UPDATE_EVENT = 'update';

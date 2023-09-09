@@ -1,10 +1,27 @@
-import { PUSHER_SECRET } from '$env/static/private';
+import { AUTH_SECRET, PUSHER_SECRET } from '$env/static/private';
 import { PUBLIC_PUSHER_APP_ID, PUBLIC_PUSHER_CLUSTER, PUBLIC_PUSHER_KEY } from '$env/static/public';
-import { getGameState, setGameState } from '$lib/util/gameState.server';
+import { createNewUser } from '$lib/types/user';
 import { UPDATE_EVENT, updateChannel } from '$lib/util/pusherChannels';
+import { getGameState, setGameState } from '$lib/util/server/gameState.server';
+import type { Handle } from '@sveltejs/kit';
+import { sequence } from '@sveltejs/kit/hooks';
 import { diff } from 'json-diff-ts';
+import { decode, sign, verify } from 'jsonwebtoken';
 import Pusher from 'pusher';
 
+const handleAuth: Handle = async ({event, resolve}) => {
+	const authHeader = event.cookies.get("Authorization");
+	
+	if(!authHeader) {
+		const user = createNewUser();
+		const payload = sign({data: user}, AUTH_SECRET);
+		event.cookies.set("Authorization", payload);
+	} else {
+		const user = decode(authHeader)
+	}
+
+	return resolve(event);
+}
 
 const pusher = new Pusher({
 	appId: PUBLIC_PUSHER_APP_ID,
@@ -13,7 +30,7 @@ const pusher = new Pusher({
 	cluster: PUBLIC_PUSHER_CLUSTER
 });
 
-export async function handle({ event, resolve }) {
+const handleGame: Handle = async({ event, resolve }) => {
 	const { gameId } = event.params;
 	if (!gameId) return await resolve(event);
 
@@ -34,3 +51,5 @@ export async function handle({ event, resolve }) {
 
 	return response;
 }
+
+export const handle = sequence(handleAuth, handleGame);

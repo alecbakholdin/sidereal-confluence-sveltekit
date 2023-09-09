@@ -1,5 +1,5 @@
 import { getDefaultGameState } from "$lib/types/game.js";
-import { setGameState } from "$lib/util/gameState.server.js";
+import { setGameState } from "$lib/util/server/gameState.server.js";
 import { redirect } from "@sveltejs/kit";
 
 export async function load() {

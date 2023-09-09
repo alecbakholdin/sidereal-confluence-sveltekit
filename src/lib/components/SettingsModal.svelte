@@ -1,5 +1,5 @@
 <script>
-	import { settings } from '$lib/util/settingsStore';
+	import { settings } from '$lib/util/client/settingsStore';
 	import { RangeSlider, getModalStore } from '@skeletonlabs/skeleton';
 	import { writable } from 'svelte/store';
 
