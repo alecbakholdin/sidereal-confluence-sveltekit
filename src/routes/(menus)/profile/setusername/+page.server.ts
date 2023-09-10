@@ -32,7 +32,7 @@ export const actions = {
         };
         cookies.set("Authorization", jwt.sign({ data: newUser }, AUTH_SECRET), { path: '/' });
 
-        let redirectUrl = url.searchParams.get('redirect')
+        let redirectUrl = url.searchParams.get('redirect');
         if(redirectUrl) {
             throw redirect(308, redirectUrl);
         }
