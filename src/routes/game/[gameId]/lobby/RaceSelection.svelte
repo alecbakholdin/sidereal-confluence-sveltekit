@@ -1,12 +1,11 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { sound } from '$lib/actions/sound';
 	import { raceInfo, type RaceType } from '$lib/types/race';
 	import { getGameContext } from '$lib/util/client/gameContext';
-	import { derived } from 'svelte/store';
+	import { getToastStore } from '@skeletonlabs/skeleton';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
-	import { getToastStore } from '@skeletonlabs/skeleton';
-	import { sound } from '$lib/actions/sound';
 
 	const toastStore = getToastStore();
 	const gameContext = getGameContext();
@@ -16,6 +15,12 @@
 	$: selectedRaces = Object.values($gameState.lobbyInfoMap)
 		.filter(({ ready }) => ready)
 		.map(({ race }) => race);
+	$: confirmedRaces = Object.entries($gameState.lobbyInfoMap)
+		.filter(([_, { race, ready }]) => race && ready)
+		.reduce(
+			(obj, [playerId, { race }]) => ({ ...obj, [race!]: $gameState.usernameMap[playerId] }),
+			{} as Record<RaceType, string>
+		);
 
 	let selectedRace: RaceType | undefined = $gameState.lobbyInfoMap[gameContext.me.id].race;
 
@@ -50,14 +55,20 @@
 					type="submit"
 					disabled={(me.ready || selectedRaces.includes(name)) && me.race !== name}
 					style:border-color={(selectedRace === name && color) || undefined}
-					class="h-fit m-1 p-1 border-2 rounded hover:border-slate-700 border-transparent disabled:grayscale disabled:border-transparent"
+					class="h-fit m-1 p-1 border-2 rounded hover:border-slate-700 border-transparent disabled:grayscale disabled:border-transparent relative"
 					class:border-dashed={!me?.ready}
 					class:pointer-events-none={me.ready}
-					use:sound={{src: '/sounds/buttonBeep.mp3', events: ['click']}}
+					use:sound={{ src: '/sounds/buttonBeep.mp3', events: ['click'] }}
 				>
 					{name}
 					<img src={image} alt={name} class="w-full rounded" />
+					{#if confirmedRaces[name]}
+						<span class="absolute px-1 bottom-1 right-1 bg-surface-700">
+							{confirmedRaces[name]}
+						</span>
+					{/if}
 				</button>
+				<span></span>
 			</form>
 		{/each}
 	</section>
