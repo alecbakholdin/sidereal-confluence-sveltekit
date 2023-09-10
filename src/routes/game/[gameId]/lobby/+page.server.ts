@@ -73,6 +73,7 @@ export const actions = {
 				resources: raceObj.startingResources || []
 			};
 		}
+		gameState.state = "inProgress";
 
 		throw redirect(308, `/game/${gameState.id}/game`);
 	}

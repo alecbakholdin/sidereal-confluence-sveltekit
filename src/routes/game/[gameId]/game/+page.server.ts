@@ -13,9 +13,4 @@ export async function load() {
 }
 
 export const actions = {
-    async inviteToTrade({request, locals: {gameState}}) {
-        const form = await superValidate(request, tradeInviteSchema);
-        if(!form.valid) return fail(400, {form});
-
-    }
 }

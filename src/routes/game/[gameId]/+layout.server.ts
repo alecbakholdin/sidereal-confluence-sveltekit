@@ -5,8 +5,17 @@ export async function load({ locals, url }) {
 	if (!gameState) throw error(404, { message: 'Game does not exist' });
 	if (!user) throw error(401, { message: 'User is not authenticated' });
 
+	if (gameState.state !== 'lobby' && !gameState.players.includes(user.id)) {
+		console.error('Game is in progress. Cannot join');
+		throw error(400, 'Game is in progress');
+	}
+	if (gameState.state === 'lobby' && !url.pathname.endsWith('/lobby')) {
+		throw redirect(308, `/game/${gameState.id}/lobby`);
+	} else if (gameState.state === 'inProgress' && !url.pathname.endsWith('/game')) {
+		throw redirect(308, `/game/${gameState.id}/game`);
+	}
 	if (!user.username) {
-        console.log("User's username is not set. Redirecting to setusername page");
+		console.log("User's username is not set. Redirecting to setusername page");
 		throw redirect(308, '/profile/setusername?redirect=' + url.pathname);
 	}
 
@@ -14,7 +23,7 @@ export async function load({ locals, url }) {
 		gameState.players.push(user.id);
 	}
 	gameState.usernameMap[user.id] = user.username;
-    gameState.lobbyInfoMap[user.id] = gameState.lobbyInfoMap[user.id] || {};
+	gameState.lobbyInfoMap[user.id] = gameState.lobbyInfoMap[user.id] || {};
 	gameState.gameInfo[user.id] = gameState.gameInfo[user.id] || {};
 
 	return {

@@ -61,7 +61,7 @@
 					use:sound={{ src: '/sounds/buttonBeep.mp3', events: ['click'] }}
 				>
 					{name}
-					<img src={image} alt={name} class="w-full rounded" />
+					<img src={image} alt={name} class="w-full rounded pointer-events-none" />
 					{#if confirmedRaces[name]}
 						<span class="absolute px-1 bottom-1 right-1 bg-surface-700">
 							{confirmedRaces[name]}

@@ -8,7 +8,9 @@ export async function POST({ request, locals: {user, gameState} }) {
     if (!socketId || !channelName) throw error(400, { message: "missing socketId or channelName" });
 
     if (!user || !gameState) throw error(400, { message: 'User or game state not present' });
-    if (gameState.players.includes(user.id)) {
+
+    const userId = socketId.split('-')[3]
+    if (gameState.players.includes(user.id) && (!userId || user.id === userId)) {
         const authResponse = pusher.authorizeChannel(socketId, channelName, { user_id: user.id, user_info: user });
         return json(authResponse);
     }
