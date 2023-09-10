@@ -9,6 +9,7 @@ export async function load({ locals, url }) {
 	if(!gameState.players.includes(user.id)) {
 		gameState.players.push(user.id);
 	}
+	gameState.usernameMap[user.id] = user.username;
 
 	return {
 		gameState

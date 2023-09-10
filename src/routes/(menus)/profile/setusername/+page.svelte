@@ -6,16 +6,21 @@
 	import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { highlight } from '$lib/actions/highlight';
+	import { loadingButton } from '$lib/actions/loadingButton';
 
 	export let data: PageData;
 	const redirectUrl = $page.url.searchParams.get('redirect') || '/';
 	const { form, enhance, submitting, errors } = superForm(data.usernameForm, {
 		async onResult({ result }) {
 			if (result.type !== 'success') return;
-			setTimeout(() => goto(redirectUrl, {
-				replaceState: true,
-				invalidateAll: true
-			}), 50);
+/* 			setTimeout(
+				() =>
+					goto(redirectUrl, {
+						replaceState: true,
+						invalidateAll: true
+					}),
+				50
+			); */
 		}
 	});
 </script>
@@ -34,12 +39,8 @@
 			/>
 		</div>
 		<div>
-			<button type="submit" class="btn variant-ghost" disabled={$submitting}>
-				{#if $submitting}
-					<ProgressRadial width="w-6" />
-				{:else}
-					Submit
-				{/if}
+			<button type="submit" class="btn variant-ghost" use:loadingButton={{ loading: submitting }}>
+				Submit
 			</button>
 		</div>
 	</div>
