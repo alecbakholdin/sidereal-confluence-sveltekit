@@ -27,6 +27,7 @@ export const actions = {
 			return message(form, "Can't kick yourself", { status: 400 });
 		gameState.players = gameState.players.filter((id) => id !== form.data.playerId);
 		delete gameState.usernameMap[form.data.playerId];
+		delete gameState.lobbyInfoMap[form.data.playerId];
 	},
 	async chooseRace({ request, locals: { gameState, user } }) {
 		const form = await superValidate(request, chooseRaceSchema);
