@@ -1,19 +1,15 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { getGameContext } from '$lib/util/client/gameContext';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
-	import { page } from '$app/stores';
-	import { getToastStore } from '@skeletonlabs/skeleton';
-	import { getGameContext } from '$lib/util/client/gameContext';
 
 	const gameContext = getGameContext();
 	const gameState = gameContext.gameState;
 
-	const toastStore = getToastStore();
-	const { enhance, message } = superForm(($page.data as PageData).toggleReadyForm);
-	$: if ($message) {
-		toastStore.trigger({ message: $message });
-		$message = null;
-	}
+	const { enhance, message } = superForm(($page.data as PageData).emptyForm, {
+		warnings: { duplicateId: false }
+	});
 </script>
 
 <form action="{$page.url.pathname}?/toggleReady" method="POST" use:enhance>

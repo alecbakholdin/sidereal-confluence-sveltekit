@@ -3,6 +3,7 @@ import type { User, UserId } from "./user";
 
 export type GameState = {
     id: string;
+    adminId: string;
 	state: 'lobby' | 'inProgress';
     players: UserId[];
     usernameMap: Record<UserId, string>;
@@ -14,9 +15,10 @@ export type LobbyPlayerInfo = {
     race?: RaceType;
 }
 
-export function getDefaultGameState(id: string): GameState {
+export function getDefaultGameState(id: string, adminId: UserId): GameState {
     return {
         id,
+        adminId: adminId,
         state: 'lobby',
         players: [],
         usernameMap: {},

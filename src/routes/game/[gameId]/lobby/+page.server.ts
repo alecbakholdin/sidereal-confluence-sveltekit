@@ -9,13 +9,13 @@ const kickUserSchema = z.object({
 const chooseRaceSchema = z.object({
 	race: z.enum(availableRaces)
 });
-const toggleReadySchema = z.object({});
+const emptySchema = z.object({});
 
 export async function load() {
 	return {
 		kickUserForm: await superValidate(kickUserSchema),
 		chooseRaceSchema: await superValidate(chooseRaceSchema),
-		toggleReadyForm: await superValidate(toggleReadySchema)
+		emptyForm: await superValidate(emptySchema)
 	};
 }
 
@@ -41,19 +41,23 @@ export const actions = {
 		if (raceTaken)
 			return message(form, 'This race has already been selected by someone else', { status: 400 });
 
-		for(const lobbyInfo of Object.values(lobbyInfoMap)) {
-			if(lobbyInfo.race === form.data.race) {
+		for (const lobbyInfo of Object.values(lobbyInfoMap)) {
+			if (lobbyInfo.race === form.data.race) {
 				lobbyInfo.race = undefined;
 			}
 		}
 		lobbyInfoMap[user.id].race = form.data.race;
 	},
 	async toggleReady({ request, locals: { gameState, user } }) {
-		const form = await superValidate(request, toggleReadySchema);
+		const form = await superValidate(request, emptySchema);
 		if (!form.valid) return fail(400, { form });
 
 		if (!gameState.lobbyInfoMap[user.id].race)
 			return message(form, 'Please select a race first', { status: 400 });
 		gameState.lobbyInfoMap[user.id].ready = !gameState.lobbyInfoMap[user.id].ready;
+	},
+	async startGame({ request }) {
+		const form = await superValidate(request, z.object({}));
+		return message(form, 'Start game is not a supported action right now', { status: 400 });
 	}
 };

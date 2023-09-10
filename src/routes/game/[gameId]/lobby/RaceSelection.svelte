@@ -38,7 +38,7 @@
 	}
 </script>
 
-<div class="card variant-ghost h-80 w-full flex flex-col">
+<div class="card variant-ghost h-full w-full flex flex-col">
 	<header class="card-header">
 		<h4 class="h4">Race Selection</h4>
 	</header>
@@ -53,7 +53,6 @@
 					class="h-fit m-1 p-1 border-2 rounded hover:border-slate-700 border-transparent disabled:grayscale disabled:border-transparent"
 					class:border-dashed={!me?.ready}
 					class:pointer-events-none={me.ready}
-					on:click={() => (selectedRace = name)}
 					use:sound={{src: '/sounds/buttonBeep.mp3', events: ['click']}}
 				>
 					{name}
