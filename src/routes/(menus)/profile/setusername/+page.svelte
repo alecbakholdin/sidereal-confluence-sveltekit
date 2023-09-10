@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { highlight } from '$lib/actions/highlight';
 	import { loadingButton } from '$lib/actions/loadingButton';
