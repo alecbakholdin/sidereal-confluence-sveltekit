@@ -13,14 +13,14 @@
 	const { form, enhance, submitting, errors } = superForm(data.usernameForm, {
 		async onResult({ result }) {
 			if (result.type !== 'success') return;
-/* 			setTimeout(
+			setTimeout(
 				() =>
 					goto(redirectUrl, {
 						replaceState: true,
 						invalidateAll: true
 					}),
 				50
-			); */
+			);
 		}
 	});
 </script>
