@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { highlight } from '$lib/actions/highlight';
 	import { loadingButton } from '$lib/actions/loadingButton';
@@ -9,17 +9,12 @@
 
 	export let data: PageData;
 	const redirectUrl = $page.url.searchParams.get('redirect') || '/';
+	async function doRedirect() {
+		await goto(redirectUrl, {invalidateAll: true});
+	}
 	const { form, enhance, submitting, errors } = superForm(data.usernameForm, {
 		async onResult({ result }) {
-			if (result.type !== 'success') return;
-			setTimeout(
-				() =>
-					goto(redirectUrl, {
-						replaceState: true,
-						invalidateAll: true
-					}),
-				50
-			);
+			if (result.type === 'success') await doRedirect();
 		}
 	});
 </script>

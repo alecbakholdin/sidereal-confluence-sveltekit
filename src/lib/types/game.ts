@@ -1,3 +1,5 @@
+import type { User } from "./user";
+
 export type GameState = {
     id: string;
 	state: 'lobby' | 'inProgress';

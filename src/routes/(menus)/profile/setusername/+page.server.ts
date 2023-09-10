@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 const changeUsernameSchema = z.object({
     username: z.string()
         .min(5, "Username must be at least 5 characters")
-        .regex(/^[A-Za-z0-9_-]+$/, "Username can only have letters, numbers, underscores, and hyphens")
+        .regex(/^[ A-Za-z0-9_-]+$/, "Username can only have letters, numbers, underscores, spaces, and hyphens")
 })
 
 export async function load({ locals }) {

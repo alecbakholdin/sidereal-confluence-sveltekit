@@ -14,6 +14,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	const user = (payload && (payload as any)?.data as User) || createNewUser();
 	
 	const resetJwt = () => {
+		console.log('resetting jwt to ' + JSON.stringify(user));
 		const payload = jwt.sign({ data: user }, AUTH_SECRET, {expiresIn: "12h"});
 		event.cookies.set("Authorization", payload, {path: '/'});
 	}
