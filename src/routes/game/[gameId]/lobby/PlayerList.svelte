@@ -31,7 +31,9 @@
 	<section class="p-4 w-64 flex-grow flex flex-col justify-between">
 		<div class="grid grid-cols-[auto_1fr_auto] gap-x-2">
 			{#each $gameState.players as playerId (playerId)}
-				{#if gameContext.me.id === playerId}
+				{#if $gameState.lobbyInfoMap[playerId].ready}
+					<iconify-icon icon="material-symbols:check" class="text-success-400 place-self-center"/>
+				{:else if gameContext.me.id === playerId}
 					<iconify-icon icon="material-symbols:person" class="place-self-center" />
 				{:else}
 					<div

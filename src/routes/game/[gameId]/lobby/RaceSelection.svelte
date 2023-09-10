@@ -6,33 +6,35 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
 	import { getToastStore } from '@skeletonlabs/skeleton';
+	import { sound } from '$lib/actions/sound';
 
 	const toastStore = getToastStore();
 	const gameContext = getGameContext();
 	const gameState = gameContext.gameState;
 
-	const disabledRaces = derived(gameState, ({ lobbyInfoMap }) =>
-		Object.values(lobbyInfoMap)
-			.filter(({ ready }) => ready)
-			.map(({ race }) => race)
-	);
 	$: me = $gameState.lobbyInfoMap[gameContext.me.id];
+	$: selectedRaces = Object.values($gameState.lobbyInfoMap)
+		.filter(({ ready }) => ready)
+		.map(({ race }) => race);
+
 	let selectedRace: RaceType | undefined = $gameState.lobbyInfoMap[gameContext.me.id].race;
 
 	const { enhance, message } = superForm(($page.data as PageData).chooseRaceSchema, {
-		onSubmit({ formData }) {
-			selectedRace = formData.get('race')?.toString() as RaceType;
+		onSubmit({ formData, cancel }) {
+			const formRace = formData.get('race')?.toString() as RaceType;
+			if (formRace === selectedRace) cancel();
+			else selectedRace = formRace;
 		},
 		onResult({ result }) {
-            console.log(result);
+			console.log(result);
 			if (result.type === 'failure') {
 				selectedRace = undefined;
 			}
 		}
 	});
 	$: if ($message) {
-		toastStore.trigger({ message: $message, background: "bg-warning-700" });
-        $message = null;
+		toastStore.trigger({ message: $message });
+		$message = null;
 	}
 </script>
 
@@ -45,11 +47,14 @@
 			<form action="{$page.url.pathname}?/chooseRace" method="POST" use:enhance>
 				<input type="hidden" name="race" value={name} />
 				<button
-					disabled={$disabledRaces.includes(name) && me.race !== name}
+					type="submit"
+					disabled={(me.ready || selectedRaces.includes(name)) && me.race !== name}
 					style:border-color={(selectedRace === name && color) || undefined}
 					class="h-fit m-1 p-1 border-2 rounded hover:border-slate-700 border-transparent disabled:grayscale disabled:border-transparent"
 					class:border-dashed={!me?.ready}
+					class:pointer-events-none={me.ready}
 					on:click={() => (selectedRace = name)}
+					use:sound={{src: '/sounds/buttonBeep.mp3', events: ['click']}}
 				>
 					{name}
 					<img src={image} alt={name} class="w-full rounded" />
