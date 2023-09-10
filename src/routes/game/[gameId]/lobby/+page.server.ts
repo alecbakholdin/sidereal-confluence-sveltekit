@@ -1,6 +1,6 @@
-import { error, fail } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms/server";
-import { string, z } from "zod";
+import { z } from "zod";
 
 const kickUserSchema = z.object({
     playerId: z.string()

@@ -1,5 +1,5 @@
 import { AUTH_SECRET } from '$env/static/private';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken'
@@ -22,7 +22,7 @@ export async function load({ locals }) {
 }
 
 export const actions = {
-    async default({ request, locals, cookies }) {
+    async default({ request, locals, cookies, url }) {
         const form = await superValidate(request, changeUsernameSchema)
         if (!form.valid) return fail(400, { form });
 
@@ -30,6 +30,11 @@ export const actions = {
             ...locals.user,
             username: form.data.username
         };
-        cookies.set("Authorization", jwt.sign({ data: newUser }, AUTH_SECRET), { path: '/' })
+        cookies.set("Authorization", jwt.sign({ data: newUser }, AUTH_SECRET), { path: '/' });
+
+        let redirectUrl = url.searchParams.get('redirect');
+        if(redirectUrl) {
+            throw redirect(308, redirectUrl);
+        }
     }
 }

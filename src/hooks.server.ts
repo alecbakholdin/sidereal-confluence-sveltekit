@@ -31,6 +31,8 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 }
 
 const handleGame: Handle = async ({ event, resolve }) => {
+	console.log(event.url.toString());
+
 	const { gameId } = event.params;
 	if (!gameId) return await resolve(event);
 

@@ -9,17 +9,15 @@
 
 	export let data: PageData;
 	const redirectUrl = $page.url.searchParams.get('redirect') || '/';
-	async function doRedirect() {
-		await goto(redirectUrl, {invalidateAll: true});
-	}
-	const { form, enhance, submitting, errors } = superForm(data.usernameForm, {
-		async onResult({ result }) {
-			if (result.type === 'success') await doRedirect();
-		}
-	});
+	const { form, enhance, submitting, errors } = superForm(data.usernameForm);
 </script>
 
-<form action={$page.url.pathname} method="POST" use:enhance class="w-[300px]">
+<form
+	action="{$page.url.pathname}?redirect={redirectUrl}"
+	method="POST"
+	use:enhance
+	class="w-[300px]"
+>
 	<div class="flex items-end space-x-3">
 		<div>
 			<label class="label" for="username">Username</label>

@@ -4,10 +4,13 @@ export async function load({ locals, url }) {
 	const { gameState, user } = locals;
 	if (!gameState) throw error(404, { message: 'Game does not exist' });
 	if (!user) throw error(401, { message: 'User is not authenticated' });
-	console.log(user);
-	if (!user.username) throw redirect(308, '/profile/setusername?redirect=' + url.pathname);
 
-	if(!gameState.players.includes(user.id)) {
+	if (!user.username) {
+        console.log("User's username is not set. Redirecting to setusername page");
+		throw redirect(308, '/profile/setusername?redirect=' + url.pathname);
+	}
+
+	if (!gameState.players.includes(user.id)) {
 		gameState.players.push(user.id);
 	}
 	gameState.usernameMap[user.id] = user.username;
