@@ -14,6 +14,7 @@ export async function load({ locals, url }) {
 		gameState.players.push(user.id);
 	}
 	gameState.usernameMap[user.id] = user.username;
+    gameState.lobbyInfoMap[user.id] = gameState.lobbyInfoMap[user.id] || {}
 
 	return {
 		gameState

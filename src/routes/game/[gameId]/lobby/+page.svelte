@@ -3,7 +3,7 @@
 	import UserList from './UserList.svelte';
 </script>
 
-<div class="flex flex-nowrap gap-4">
+<div class="grid grid-cols-[2fr_1fr] h-80 gap-3">
 	<RaceSelection/>
 	<UserList />
 </div>
