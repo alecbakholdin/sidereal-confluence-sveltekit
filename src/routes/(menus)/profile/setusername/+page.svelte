@@ -1,12 +1,11 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import FormFieldError from '$lib/components/FormFieldError.svelte';
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
-	import type { PageData } from './$types';
-	import { superForm } from 'sveltekit-superforms/client';
 	import { highlight } from '$lib/actions/highlight';
 	import { loadingButton } from '$lib/actions/loadingButton';
+	import FormFieldError from '$lib/components/FormFieldError.svelte';
+	import { superForm } from 'sveltekit-superforms/client';
+	import type { PageData } from './$types';
 
 	export let data: PageData;
 	const redirectUrl = $page.url.searchParams.get('redirect') || '/';
