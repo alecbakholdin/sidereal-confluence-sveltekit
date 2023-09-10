@@ -1,4 +1,5 @@
 import type { RaceType } from "./race";
+import type { ResourceAmount } from "./resource";
 import type { User, UserId } from "./user";
 
 export type GameState = {
@@ -8,11 +9,17 @@ export type GameState = {
     players: UserId[];
     usernameMap: Record<UserId, string>;
     lobbyInfoMap: Record<UserId, LobbyPlayerInfo>; 
+    gameInfo: Record<UserId, PlayerGameInfo>
 };
 
 export type LobbyPlayerInfo = {
     ready?: boolean;
     race?: RaceType;
+}
+
+export type PlayerGameInfo = {
+    race: RaceType;
+    resources: ResourceAmount[];
 }
 
 export function getDefaultGameState(id: string, adminId: UserId): GameState {
@@ -23,5 +30,6 @@ export function getDefaultGameState(id: string, adminId: UserId): GameState {
         players: [],
         usernameMap: {},
         lobbyInfoMap: {},
+        gameInfo: {},
     }
 }

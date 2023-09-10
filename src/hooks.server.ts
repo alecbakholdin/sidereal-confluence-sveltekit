@@ -46,7 +46,7 @@ const handleGame: Handle = async ({ event, resolve }) => {
 
 	const newState = event.locals.gameState;
 	const difference = diff(oldState, newState);
-	if (difference.length) {
+	if (difference.length && response.status < 400) {
 		pusher.trigger(presenceChannel(gameId), UPDATE_EVENT, difference);
 		await setGameState(gameId, newState);
 	}

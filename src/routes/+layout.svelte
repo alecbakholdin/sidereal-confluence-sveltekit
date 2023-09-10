@@ -40,7 +40,7 @@
 
 <button
 	type="button"
-	class="btn-icon bg-surface-hover-token fixed z-10 top-0 right-0 p-2 w-fit m-2"
+	class="btn-icon bg-surface-hover-token fixed z-20 top-0 right-0 p-2 w-fit m-2"
 	on:click={() => modalStore.trigger(settingsModal)}
 >
 	<iconify-icon class="text-4xl" icon="material-symbols:settings" />

@@ -1,5 +1,5 @@
-import { availableRaces } from '$lib/types/race.js';
-import { fail } from '@sveltejs/kit';
+import { availableRaces, raceInfoMap } from '$lib/types/race.js';
+import { fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 
@@ -28,6 +28,7 @@ export const actions = {
 		gameState.players = gameState.players.filter((id) => id !== form.data.playerId);
 		delete gameState.usernameMap[form.data.playerId];
 		delete gameState.lobbyInfoMap[form.data.playerId];
+		delete gameState.gameInfo[form.data.playerId];
 	},
 	async chooseRace({ request, locals: { gameState, user } }) {
 		const form = await superValidate(request, chooseRaceSchema);
@@ -57,10 +58,22 @@ export const actions = {
 			return message(form, 'Please select a race first', { status: 400 });
 		gameState.lobbyInfoMap[user.id].ready = !gameState.lobbyInfoMap[user.id].ready;
 	},
-	async startGame({ request, locals: {gameState} }) {
+	async startGame({ request, locals: { gameState } }) {
 		const form = await superValidate(request, z.object({}));
-		const allReady = Object.values(gameState.lobbyInfoMap).find(({ready}) => !ready);
-		if(!allReady) return message(form, "Not everyone is ready. Wait until everyone is ready to start the game");
-		return message(form, 'Start game is not a supported action right now', { status: 400 });
+		const allReady = !Object.values(gameState.lobbyInfoMap).find(({ ready }) => !ready);
+		if (!allReady)
+			return message(form, 'Not everyone is ready. Wait until everyone is ready to start the game');
+
+		gameState.gameInfo = {};
+		for (const playerId of gameState.players) {
+			const race = gameState.lobbyInfoMap[playerId].race!;
+			const raceObj = raceInfoMap[race];
+			gameState.gameInfo[playerId] = {
+				race,
+				resources: raceObj.startingResources || []
+			};
+		}
+
+		throw redirect(308, `/game/${gameState.id}/game`);
 	}
 };
