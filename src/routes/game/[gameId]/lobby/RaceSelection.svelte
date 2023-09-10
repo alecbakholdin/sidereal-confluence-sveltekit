@@ -17,7 +17,7 @@
 			.map(({ race }) => race)
 	);
 	$: me = $gameState.lobbyInfoMap[gameContext.me.id];
-	let selectedRace: RaceType | undefined;
+	let selectedRace: RaceType | undefined = $gameState.lobbyInfoMap[gameContext.me.id].race;
 
 	const { enhance, message } = superForm(($page.data as PageData).chooseRaceSchema, {
 		onSubmit({ formData }) {
