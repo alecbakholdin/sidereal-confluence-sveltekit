@@ -12,7 +12,7 @@ export type ResourceAmount = {
 
 export function toSortedResourceArr(resourceAmounts: ResourceAmount[]) {
 	return (
-		[...resourceAmounts].sort(
+		[...(resourceAmounts || [])].sort(
 			(a, b) => resources.indexOf(a.resource) - resources.indexOf(b.resource)
 		) || []
 	);
