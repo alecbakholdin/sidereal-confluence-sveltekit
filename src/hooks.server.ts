@@ -6,21 +6,21 @@ import { getGameState, setGameState } from '$lib/util/server/gameState.server';
 import type { Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
 import { diff } from 'json-diff-ts';
-import { decode, sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
 	const authHeader = event.cookies.get("Authorization");
-	const payload = (authHeader && decode(authHeader));
+	const payload = (authHeader && jwt.decode(authHeader));
 	const user = (payload && (payload as any)?.data as User) || createNewUser();
 	
 	const resetJwt = () => {
-		const payload = sign({ data: user }, AUTH_SECRET, {expiresIn: "12h"});
-		event.cookies.set("Authorization", payload);
+		const payload = jwt.sign({ data: user }, AUTH_SECRET, {expiresIn: "12h"});
+		event.cookies.set("Authorization", payload, {path: '/'});
 	}
 	if (!authHeader) {
 		resetJwt();
 	} else try {
-		verify(authHeader, AUTH_SECRET);
+		jwt.verify(authHeader, AUTH_SECRET);
 	} catch (e) {
 		resetJwt();
 	}
