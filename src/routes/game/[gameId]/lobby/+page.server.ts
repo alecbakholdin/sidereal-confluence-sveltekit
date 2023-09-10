@@ -56,8 +56,10 @@ export const actions = {
 			return message(form, 'Please select a race first', { status: 400 });
 		gameState.lobbyInfoMap[user.id].ready = !gameState.lobbyInfoMap[user.id].ready;
 	},
-	async startGame({ request }) {
+	async startGame({ request, locals: {gameState} }) {
 		const form = await superValidate(request, z.object({}));
+		const allReady = Object.values(gameState.lobbyInfoMap).find(({ready}) => !ready);
+		if(!allReady) return message(form, "Not everyone is ready. Wait until everyone is ready to start the game");
 		return message(form, 'Start game is not a supported action right now', { status: 400 });
 	}
 };
