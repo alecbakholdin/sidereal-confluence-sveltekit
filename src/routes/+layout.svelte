@@ -7,6 +7,7 @@
 	import { settingsModal } from '$lib/util/client/settingsStore';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 	import {
+		Drawer,
 		Modal,
 		Toast,
 		getModalStore,
@@ -19,10 +20,10 @@
 	initializeStores();
 	const modalStore = getModalStore();
 	const toastStore = getToastStore();
-	
+
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;
-		
+
 		return new Promise((resolve) => {
 			document.startViewTransition(async () => {
 				resolve();
@@ -30,7 +31,7 @@
 			});
 		});
 	});
-	
+
 	const { message } = superForm($page.data.emptyForm);
 	$: if ($message) {
 		toastStore.trigger(typeof $message === 'string' ? { message: $message } : $message);
@@ -48,3 +49,4 @@
 <slot />
 <Toast />
 <Modal />
+<Drawer />
