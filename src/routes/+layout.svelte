@@ -2,12 +2,11 @@
 	import 'iconify-icon';
 	import '../app.postcss';
 
-	import { page } from '$app/stores';
 	import { onNavigate } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { settingsModal } from '$lib/util/client/settingsStore';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 	import {
-		Drawer,
 		Modal,
 		Toast,
 		getModalStore,
@@ -49,4 +48,3 @@
 <slot />
 <Toast />
 <Modal />
-<Drawer />

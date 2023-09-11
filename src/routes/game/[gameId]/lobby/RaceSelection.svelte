@@ -43,11 +43,11 @@
 	}
 </script>
 
-<div class="card variant-ghost h-full w-full flex flex-col">
+<div class="card variant-ghost w-full flex flex-col">
 	<header class="card-header">
 		<h4 class="h4">Race Selection</h4>
 	</header>
-	<section class="m-2 p-2 overflow-y-scroll h-full flex-grow grid grid-cols-3">
+	<section class="m-2 p-2 overflow-y-scroll h-full flex-grow grid grid-cols-2 md:grid-cols-3">
 		{#each raceInfo as { image, name, color }}
 			<form action="{$page.url.pathname}?/chooseRace" method="POST" use:enhance>
 				<input type="hidden" name="race" value={name} />

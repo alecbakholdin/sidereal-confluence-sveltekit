@@ -7,17 +7,32 @@
 	import { writable } from 'svelte/store';
 	import type { LayoutData } from './$types';
 	import { setGameContext } from '$lib/util/client/gameContext';
+	import { AppShell, Drawer } from '@skeletonlabs/skeleton';
+	import GamePlayerList from './game/GamePlayerList.svelte';
+	import LobbyPlayerList from './lobby/LobbyPlayerList.svelte';
+	import StartButton from './lobby/StartButton.svelte';
 
 	export let data: LayoutData;
 	const gameState = writable<GameState>(data.gameState);
 	const onlineMembers = writable<User[]>([]);
-	setGameContext({gameState, onlineMembers, me: data.me});
+	setGameContext({ gameState, onlineMembers, me: data.me });
 
 	onMount(() => {
 		joinGame(gameState, onlineMembers, $page.params.gameId);
 	});
 </script>
 
-<div class="w-full h-full grid place-items-center">
-	<slot />
-</div>
+<AppShell>
+	<div class="w-full h-full grid place-items-center">
+		<slot />
+	</div>
+</AppShell>
+
+<Drawer>
+	{#if $gameState.state === 'lobby'}
+		<LobbyPlayerList />
+		<StartButton />
+	{:else if $gameState.state === 'inProgress'}
+		<GamePlayerList />
+	{/if}
+</Drawer>

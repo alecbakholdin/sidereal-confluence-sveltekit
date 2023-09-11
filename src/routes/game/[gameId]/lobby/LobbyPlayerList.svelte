@@ -28,7 +28,7 @@
 	<header class="card-header">
 		<h4 class="h4">Players</h4>
 	</header>
-	<section class="p-4 w-64 flex-grow flex flex-col justify-between">
+	<section class="p-4 w-full flex-grow flex flex-col justify-between">
 		<div class="grid grid-cols-[auto_1fr_auto] gap-x-2">
 			{#each $gameState.players as playerId (playerId)}
 				{#if $gameState.lobbyInfoMap[playerId].ready}
@@ -53,7 +53,7 @@
 				{/if}
 			{/each}
 		</div>
-		<div class="w-full flex justify-end">
+		<div class="w-full flex justify-end mt-2">
 			<ReadyButton />
 		</div>
 	</section>
