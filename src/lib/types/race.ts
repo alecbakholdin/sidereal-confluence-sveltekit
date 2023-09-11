@@ -30,7 +30,13 @@ export const raceInfo: RaceInfo[] = [
 	{
 		name: 'Faderan',
 		image: '/images/races/Faderan.webp',
-		color: 'rgb(200, 231, 75)'
+		color: 'rgb(200, 231, 75)',
+		startingResources: [
+			{
+				resource: 'hexagon',
+				quantity: 50
+			}
+		]
 	},
 	{
 		name: "Kt'zr'kt'rtl",
