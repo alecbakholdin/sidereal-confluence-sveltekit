@@ -26,7 +26,7 @@
 		@apply absolute top-1/2 left-1/2 text-2xl;
 		transform: translateX(-50%) translateY(-50%);
 		font-weight: 900;
-		-webkit-text-stroke-width: 1px;
+		-webkit-text-stroke-width: 1.5px;
 		-webkit-text-stroke-color: rgb(var(--color-primary-800));
 	}
 
