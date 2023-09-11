@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { AppBar, AppShell } from '@skeletonlabs/skeleton';
+	import { AppBar, AppShell, Tab, TabGroup } from '@skeletonlabs/skeleton';
 	import GamePlayerList from './GamePlayerList.svelte';
 	import TradeWindow from './TradeWindow.svelte';
+
+	let tab = 0;
 </script>
 
-<AppShell slotSidebarRight="bg-surface-500/5 w-72 p-4">
+<AppShell slotSidebarRight="bg-surface-500/5 w-40 md:w-72 p-2 md:p-4" slotFooter="h-20 md:h-0">
 	<svelte:fragment slot="header">
 		<AppBar>
 			<a href="/">

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import Resource from '$lib/components/Resource.svelte';
 	import { raceInfoMap } from '$lib/types/race';
 	import { toSortedResourceArr } from '$lib/types/resource';
