@@ -9,9 +9,9 @@ export async function load({ locals, url }) {
 		console.error('Game is in progress. Cannot join');
 		throw error(400, 'Game is in progress');
 	}
-	if (gameState.state === 'lobby' && !url.pathname.endsWith('/lobby')) {
+	if (gameState.state === 'lobby' && !url.pathname.includes(`/${gameState.id}/lobby`)) {
 		throw redirect(308, `/game/${gameState.id}/lobby`);
-	} else if (gameState.state === 'inProgress' && !url.pathname.endsWith('/game')) {
+	} else if (gameState.state === 'inProgress' && !url.pathname.includes(`/${gameState.id}/game`)) {
 		throw redirect(308, `/game/${gameState.id}/game`);
 	}
 	if (!user.username) {
