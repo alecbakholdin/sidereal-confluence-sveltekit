@@ -32,13 +32,23 @@
 				</div>
 				<span class="text-xs text-gray-400">{$gameState.gameInfo[playerId].race}</span>
 			</header>
-			<section class="p-4 flex-grow flex">
-				{#each toSortedResourceArr($gameState.gameInfo[playerId].resources) as resourceAmount}
-					<Resource {...resourceAmount} />
-				{/each}
-				{#if $gameState.gameInfo[playerId].resources.length === 0}
-					<span class="text-gray-400">No resources</span>
-				{/if}
+			<section class="p-4">
+				<div class="flex-grow flex">
+					{#each toSortedResourceArr($gameState.gameInfo[playerId].resources) as resourceAmount}
+						<Resource {...resourceAmount} />
+					{/each}
+					{#if $gameState.gameInfo[playerId].resources.length === 0}
+						<span class="text-gray-400">No resources</span>
+					{/if}
+				</div>
+				<div>
+					<span>Offering</span>
+					<Resource resource="blue" quantity={3}/>
+				</div>
+				<div>
+					<span>Looking for</span>
+					<Resource resource="yellow"/>
+				</div>
 			</section>
 		</div>
 	{/each}

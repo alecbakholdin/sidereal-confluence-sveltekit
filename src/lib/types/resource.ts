@@ -17,3 +17,17 @@ export function toSortedResourceArr(resourceAmounts: ResourceAmount[]) {
 		) || []
 	);
 }
+
+export function sortByResource<T>(
+	arr: T[],
+	getResourceType: (item: T) => ResourceType | undefined
+) {
+	return [...(arr || [])].sort((a, b) => {
+		const resourceA = getResourceType(a);
+		const resourceB = getResourceType(b);
+		return (
+			(resourceA ? resources.indexOf(resourceA) : 0) -
+			(resourceB ? resources.indexOf(resourceB) : 0)
+		);
+	});
+}

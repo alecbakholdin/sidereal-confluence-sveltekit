@@ -29,10 +29,12 @@
 </AppShell>
 
 <Drawer>
-	{#if $gameState.state === 'lobby'}
-		<LobbyPlayerList />
-		<StartButton />
-	{:else if $gameState.state === 'inProgress'}
-		<GamePlayerList />
-	{/if}
+	<div class="p-2">
+		{#if $gameState.state === 'lobby'}
+			<LobbyPlayerList />
+			<StartButton />
+		{:else if $gameState.state === 'inProgress'}
+			<GamePlayerList />
+		{/if}
+	</div>
 </Drawer>

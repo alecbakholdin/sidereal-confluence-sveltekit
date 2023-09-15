@@ -3,18 +3,21 @@
 
 	export let resource: ResourceType;
 	export let quantity: number | undefined = undefined;
+	export let questionMark: boolean = false;
 
-	$: large = (largeResources).includes(resource as LargeResourceType);
-	$: small = !large
+	$: large = largeResources.includes(resource as LargeResourceType);
+	$: small = !large;
 </script>
 
-<div class="relative w-fit grid place-items-center">
+<div class="relative w-fit grid place-items-center {resource}">
 	{#if resource === 'hexagon'}
-		<iconify-icon icon="ic:baseline-hexagon" class="{resource} large" />
+		<iconify-icon icon="ic:baseline-hexagon" class="large" />
 	{:else}
-		<iconify-icon icon="ion:cube" class={resource} class:large class:small/>
+		<iconify-icon icon="bi:diamond-fill" class:large class:small />
 	{/if}
-	{#if quantity !== undefined}
+	{#if questionMark}
+		<span class="font-mono quantity">?</span>
+	{:else if quantity !== undefined}
 		<span class="font-mono quantity">
 			{quantity}
 		</span>
@@ -25,46 +28,56 @@
 	.quantity {
 		@apply absolute top-1/2 left-1/2 text-2xl;
 		transform: translateX(-50%) translateY(-50%);
-		font-weight: 900;
-		-webkit-text-stroke-width: 1.5px;
-		-webkit-text-stroke-color: rgb(var(--color-primary-800));
 	}
 
 	.large {
-		@apply text-4xl
+		@apply text-4xl;
 	}
 	.small {
-		@apply text-3xl
+		@apply text-2xl;
 	}
 
 	/* small cubes */
-	.green {
-		@apply text-green-400
+	.green iconify-icon {
+		@apply text-green-600;
 	}
-	.brown {
-		@apply text-amber-900
+	.brown iconify-icon {
+		@apply text-amber-900;
 	}
-	.white {
-		@apply text-white
+	.white iconify-icon {
+		@apply text-white;
+	}
+	.white span {
+		@apply text-black;
 	}
 
 	/* large cubes */
-	.blue {
-		@apply text-blue-400
+	.blue iconify-icon {
+		@apply text-blue-600;
 	}
-	.yellow {
-		@apply text-yellow-400
+	.yellow iconify-icon {
+		@apply text-yellow-400;
 	}
-	.black {
-		@apply text-black
+	.yellow span {
+		@apply text-black;
+	}
+	.black iconify-icon {
+		@apply text-black;
 	}
 
 	/* special */
-	.unitySmall,.unityLarge {
-		@apply text-gray-400
+	.unitySmall iconify-icon,
+	.unityLarge iconify-icon {
+		@apply text-gray-400;
 	}
-	.hexagon {
-		@apply text-amber-400
+	.unitySmall span,
+	.unityLarge span {
+		@apply text-black;
 	}
-
+	.hexagon iconify-icon {
+		@apply text-amber-400;
+	}
+	.hexagon span {
+		@apply text-black;
+	}
 </style>

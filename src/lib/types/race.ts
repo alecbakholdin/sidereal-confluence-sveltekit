@@ -1,7 +1,7 @@
 import { object } from 'zod';
 import type { ResourceAmount } from './resource';
 
-export const availableRaces = ['Caylion', 'Faderan', "Kt'zr'kt'rtl", 'Kjasjavikalimm'] as const;
+export const availableRaces = ['Caylion', 'Faderan', "Kt'zr'kt'rtl", 'Kjasjavikalimm', 'Unity'] as const;
 export type RaceType = (typeof availableRaces)[number];
 
 export type RaceInfo = {
@@ -47,6 +47,11 @@ export const raceInfo: RaceInfo[] = [
 		name: 'Kjasjavikalimm',
 		image: '/images/races/Kjasjavikalimm.webp',
 		color: 'rgb(177, 43, 43)'
+	},
+	{
+		name: "Unity",
+		image: '/images/races/Unity.webp',
+		color: 'rgb(123, 121, 121)'
 	}
 ] as const;
 export const raceInfoMap: Record<string, RaceInfo> = raceInfo.reduce(
