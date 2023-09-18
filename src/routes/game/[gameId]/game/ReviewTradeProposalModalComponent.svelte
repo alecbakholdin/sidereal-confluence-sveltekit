@@ -45,12 +45,12 @@
 	}
 </script>
 
-<div class="card">
+<div class="card w-80">
 	<header class="card-header">
 		<h4 class="h4">Review Proposal</h4>
 	</header>
 	<section class="p-4">
-		<div class="grid grid-cols-[1fr_auto_1fr] w-full place-items-center gap-2">
+		<div class="flex justify-center items-center gap-3">
 			<EntityContainerComponent title={'You'} entityContainer={tradeProposal.askingFor} />
 			<iconify-icon icon="uil:exchange" />
 			<EntityContainerComponent title={'Them'} entityContainer={tradeProposal.offering} />
