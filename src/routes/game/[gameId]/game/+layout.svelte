@@ -27,9 +27,9 @@
 			</a>
 		</AppBar>
 	</svelte:fragment>
-	<svelte:fragment slot="sidebarRight">
+<!-- 	<svelte:fragment slot="sidebarRight">
 		<GamePlayerList />
-	</svelte:fragment>
+	</svelte:fragment> -->
 	<TabGroup justify="justify-center">
 		<TabAnchor href={tradeTab} selected={$page.url.pathname === tradeTab}>
 			<span class="text-sm">Trade</span>
@@ -40,14 +40,14 @@
 		<TabAnchor href={confluenceTab} selected={$page.url.pathname === confluenceTab}>
 			<span class="text-sm">Confluence</span>
 		</TabAnchor>
-		<TabAnchor
+<!-- 		<TabAnchor
 			selected={false}
 			name="People"
 			value={0}
 			on:click={() => drawerStore.open({ position: 'right' })}
 		>
 			Players
-		</TabAnchor>
+		</TabAnchor> -->
 		<svelte:fragment slot="panel">
 			<slot />
 		</svelte:fragment>
