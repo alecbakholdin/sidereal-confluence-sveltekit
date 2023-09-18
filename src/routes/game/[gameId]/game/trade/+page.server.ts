@@ -40,8 +40,6 @@ export const actions = {
 		const userObj = gameState.gameInfo[user.id];
 		if (!userObj) return message(form, 'User is not part of this game', { status: 400 });
 
-		console.log(form.data);
-		pusher.trigger(presenceChannel(gameState.id), TRADE_PROPOSAL_EVENT, form.data);
 		pusher.sendToUser(form.data.destPlayerId, TRADE_PROPOSAL_EVENT, form.data);
 	},
 
