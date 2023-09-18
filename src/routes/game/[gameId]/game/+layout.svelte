@@ -1,15 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { getGameContext } from '$lib/util/client/gameContext';
-	import {
-		AppBar,
-		AppShell,
-		TabAnchor,
-		TabGroup,
-		getDrawerStore
-	} from '@skeletonlabs/skeleton';
-	import GamePlayerList from './GamePlayerList.svelte';
-	const drawerStore = getDrawerStore();
+	import { AppBar, AppShell, TabAnchor, TabGroup, getDrawerStore } from '@skeletonlabs/skeleton';
 	const gameContext = getGameContext();
 	const gameState = gameContext.gameState;
 	const gameId = $gameState.id;
@@ -19,7 +11,12 @@
 	let test = 0;
 </script>
 
-<AppShell slotSidebarLeft="bg-surface-500/5 w-72 p-4" slotSidebarRight="bg-surface-500/5 w-0 md:w-72 md:p-4"  slotFooter="h-20 md:h-0">
+<AppShell
+	slotSidebarLeft="bg-surface-500/5 w-72 p-4"
+	slotSidebarRight="bg-surface-500/5 w-0 md:w-72 md:p-4"
+	slotFooter="h-20 md:h-0"
+	slotPageContent="pb-8"
+>
 	<svelte:fragment slot="header">
 		<AppBar>
 			<a href="/">
@@ -27,7 +24,7 @@
 			</a>
 		</AppBar>
 	</svelte:fragment>
-<!-- 	<svelte:fragment slot="sidebarRight">
+	<!-- 	<svelte:fragment slot="sidebarRight">
 		<GamePlayerList />
 	</svelte:fragment> -->
 	<TabGroup justify="justify-center">
@@ -40,7 +37,7 @@
 		<TabAnchor href={confluenceTab} selected={$page.url.pathname === confluenceTab}>
 			<span class="text-sm">Confluence</span>
 		</TabAnchor>
-<!-- 		<TabAnchor
+		<!-- 		<TabAnchor
 			selected={false}
 			name="People"
 			value={0}

@@ -1,6 +1,5 @@
 import { z } from 'zod';
-import { resources, type ResourceAmount, type ResourceType } from './resource';
-import type { UserId } from './user';
+import { resources } from './resource';
 
 export const entityContainerSchema = z.object({
 	resource: z.object(
@@ -22,3 +21,13 @@ export const tradeInfoSchema = z.object({
 	note: z.string().optional()
 });
 export type TradeInfo = z.infer<typeof tradeInfoSchema>;
+
+export const tradeProposalSchema = z.object({
+	srcPlayerId: z.string().nonempty(),
+    destPlayerId: z.string().nonempty(),
+	askingFor: entityContainerSchema,
+	offering: entityContainerSchema,
+	note: z.string().optional(),
+    serverSignature: z.string().optional()
+});
+export type TradeProposal = z.infer<typeof tradeProposalSchema>;

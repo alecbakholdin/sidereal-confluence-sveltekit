@@ -1,26 +1,36 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import type { GameState } from '$lib/types/game';
 	import type { User } from '$lib/types/user';
+	import { setGameContext } from '$lib/util/client/gameContext';
 	import { joinGame } from '$lib/util/client/joinGame';
+	import { Drawer, getModalStore, getToastStore } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { derived, writable } from 'svelte/store';
 	import type { LayoutData } from './$types';
-	import { setGameContext } from '$lib/util/client/gameContext';
-	import { AppShell, Drawer } from '@skeletonlabs/skeleton';
-	import GamePlayerList from './game/GamePlayerList.svelte';
 	import LobbyPlayerList from './lobby/LobbyPlayerList.svelte';
 	import StartButton from './lobby/StartButton.svelte';
-	import { goto } from '$app/navigation';
+
+	const toastStore = getToastStore();
+	const modalStore = getModalStore();
 
 	export let data: LayoutData;
 	const gameState = writable<GameState>(data.gameState);
 	const onlineMembers = writable<User[]>([]);
 	setGameContext({ gameState, onlineMembers, me: data.me, getUrl });
 
-	onMount(() => {
-		joinGame(gameState, onlineMembers, $page.params.gameId);
-	});
+	onMount(() =>
+		joinGame(
+			gameState,
+			onlineMembers,
+			$page.params.gameId,
+			data.me.id,
+			toastStore,
+			modalStore,
+			getUsername
+		)
+	);
 
 	const derivedState = derived(gameState, ({ state }) => state);
 	const lobbyUrl = getUrl('/lobby');
@@ -33,13 +43,12 @@
 	function getUrl(path: string) {
 		return `/game/${$gameState.id}/${path.replace(/^\//, '')}`;
 	}
+	function getUsername(playerId: string) {
+		return $gameState.usernameMap[playerId];
+	}
 </script>
 
-<AppShell>
-	<div class="w-full h-full grid place-items-center">
-		<slot />
-	</div>
-</AppShell>
+<slot />
 
 <Drawer>
 	<div class="p-2">
@@ -47,7 +56,7 @@
 			<LobbyPlayerList />
 			<StartButton />
 		{:else if $gameState.state === 'inProgress'}
-			<GamePlayerList />
+			<!-- <GamePlayerList /> -->
 		{/if}
 	</div>
 </Drawer>

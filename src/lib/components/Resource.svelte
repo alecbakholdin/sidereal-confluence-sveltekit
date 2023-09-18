@@ -114,11 +114,11 @@
 	/* special */
 	.unitySmall iconify-icon,
 	.unityLarge iconify-icon {
-		@apply text-gray-400;
+		@apply text-gray-600;
 	}
 	.unitySmall span,
 	.unityLarge span {
-		@apply text-black;
+		@apply text-white;
 	}
 	.hexagon iconify-icon {
 		@apply text-amber-400;

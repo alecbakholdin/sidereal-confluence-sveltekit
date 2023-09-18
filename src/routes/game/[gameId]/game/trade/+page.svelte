@@ -5,7 +5,7 @@
 	import type { PageData } from './$types';
 	import { page } from '$app/stores';
 	import { loadingButton } from '$lib/actions/loadingButton';
-	import GamePlayer from '../GamePlayer.svelte';
+	import GamePlayer from './GamePlayer.svelte';
 
 	const gameContext = getGameContext();
 	const gameState = gameContext.gameState;
@@ -32,16 +32,20 @@
 				<TradeEntitySelector bind:entityContainer={$form.offering} />
 				<TradeEntitySelector bind:entityContainer={$form.lookingfor} />
 			</div>
-			<input class="input" type="text" placeholder="Note" name="note" bind:value={$form.note} />
+			<input
+				class="input"
+				type="text"
+				placeholder="Note"
+				name="note"
+				autocomplete="off"
+				bind:value={$form.note}
+			/>
 			<button class="btn variant-outline" use:loadingButton={{ loading: submitting }}>
 				Submit
 			</button>
 		</div>
 	</form>
-	<div
-		class="flex flex-col gap-y-3 sm:overflow-y-scroll"
-		style:height="{height || 0}px"
-	>
+	<div class="flex flex-col gap-y-3 sm:overflow-y-scroll" style:height="{height || 0}px">
 		{#each $gameState.players as playerId (playerId)}
 			<GamePlayer {playerId} />
 		{/each}

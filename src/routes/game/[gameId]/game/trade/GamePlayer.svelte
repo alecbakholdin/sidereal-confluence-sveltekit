@@ -3,9 +3,12 @@
 	import { raceInfoMap } from '$lib/types/race';
 	import { toSortedResourceArr, type ResourceType, sortByResource } from '$lib/types/resource';
 	import { getGameContext } from '$lib/util/client/gameContext';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import TradeProposalModalComponent from '../TradeProposalModalComponent.svelte';
+	import EntityContainerComponent from '$lib/components/EntityContainerComponent.svelte';
 
 	export let playerId: string;
-
+	const modalStore = getModalStore();
 	const gameContext = getGameContext();
 	const gameState = gameContext.gameState;
 	const onlineMembers = gameContext.onlineMembers;
@@ -14,14 +17,20 @@
 	$: isMe = gameContext.me.id === playerId;
 	$: userInfo = $gameState.gameInfo[playerId];
 	$: tradePreferences = userInfo.tradePreferences;
-	$: lookingFor = sortByResource(
-		Object.entries(tradePreferences?.lookingfor.resource || {}) as [ResourceType, number][],
-		([r]) => r
-	);
-	$: offering = sortByResource(
-		Object.entries(tradePreferences?.offering.resource || {}) as [ResourceType, number][],
-		([r]) => r
-	);
+
+	function startTradeProposal() {
+		modalStore.trigger({
+			type: 'component',
+			component: {
+				ref: TradeProposalModalComponent,
+				props: {
+					playerId,
+					mePlayerId: gameContext.me.id,
+					gameState: $gameState
+				}
+			}
+		});
+	}
 </script>
 
 <div
@@ -43,7 +52,7 @@
 		</div>
 		<span class="text-xs text-gray-400">{userInfo.race}</span>
 	</header>
-	<section class="p-4 flex flex-col gap-3">
+	<section class="p-4 flex flex-col gap-3 max-w-sm">
 		<div class="flex-grow flex flex-wrap">
 			{#each toSortedResourceArr(userInfo.resources) as resourceAmount}
 				<Resource {...resourceAmount} />
@@ -52,37 +61,26 @@
 				<span class="text-gray-400">No resources</span>
 			{/if}
 		</div>
-		{#if offering.length}
-			<div class="resource-container">
-				<span>Offering</span>
-				<div class="flex gap-1 flex-wrap">
-					{#each offering as [resource, quantity]}
-						<Resource {resource} {quantity} />
-					{/each}
-				</div>
-			</div>
-		{/if}
-		{#if lookingFor.length}
-			<div class="resource-container">
-				<span>Looking for</span>
-				<div class="flex gap-1 flex-wrap">
-					{#each lookingFor as [resource, quantity]}
-						<Resource {resource} {quantity} />
-					{/each}
-				</div>
-			</div>
-		{/if}
+		<EntityContainerComponent
+			entityContainer={tradePreferences?.lookingfor}
+			hideIfEmpty
+			title="Looking for"
+		/>
+		<EntityContainerComponent
+			entityContainer={tradePreferences?.offering}
+			hideIfEmpty
+			title="Offering"
+		/>
 		{#if tradePreferences?.note}
-			<div class="resource-container">
+			<div class="bg-surface-700 rounded-md p-2">
 				<span>Note</span>
 				<p>{tradePreferences.note}</p>
 			</div>
 		{/if}
 	</section>
+	{#if !isMe}
+		<footer class="card-footer p-4">
+			<button type="button" class="btn variant-outline" on:click={startTradeProposal}>Trade</button>
+		</footer>
+	{/if}
 </div>
-
-<style lang="postcss">
-	.resource-container {
-		@apply bg-surface-700 rounded-md p-2;
-	}
-</style>
