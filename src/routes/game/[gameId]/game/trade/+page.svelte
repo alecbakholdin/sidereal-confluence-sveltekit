@@ -45,7 +45,7 @@
 			</button>
 		</div>
 	</form>
-	<div class="flex flex-col gap-y-3 sm:overflow-y-scroll" style:height="{height || 0}px">
+	<div class="flex flex-col gap-y-3 sm:overflow-y-scroll items-center" style:height="{height || 0}px">
 		{#each $gameState.players as playerId (playerId)}
 			<GamePlayer {playerId} />
 		{/each}

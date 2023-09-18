@@ -34,7 +34,7 @@
 </script>
 
 <div
-	class="card variant-soft flex flex-col border"
+	class="card variant-soft flex flex-col border w-80"
 	style:border-color={raceInfoMap[$gameState.gameInfo[playerId].race].color}
 >
 	<header class="card-header flex flex-col">
@@ -52,7 +52,7 @@
 		</div>
 		<span class="text-xs text-gray-400">{userInfo.race}</span>
 	</header>
-	<section class="p-4 flex flex-col gap-3 max-w-sm">
+	<section class="p-4 flex flex-col gap-3">
 		<div class="flex-grow flex flex-wrap">
 			{#each toSortedResourceArr(userInfo.resources) as resourceAmount}
 				<Resource {...resourceAmount} />

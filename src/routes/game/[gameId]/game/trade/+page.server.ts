@@ -8,7 +8,6 @@ import {
 } from '$lib/types/trade';
 import { TRADE_PROPOSAL_EVENT, presenceChannel } from '$lib/util/pusherChannels.js';
 import { fail } from '@sveltejs/kit';
-import { findSourceMap } from 'module';
 import { message, superValidate } from 'sveltekit-superforms/server';
 
 export async function load({ locals: { gameState, user } }) {
@@ -20,7 +19,6 @@ export async function load({ locals: { gameState, user } }) {
 
 	return {
 		updateTradePreferencesForm,
-		tradeProposalForm: await superValidate(tradeProposalSchema)
 	};
 }
 
@@ -76,6 +74,7 @@ export const actions = {
 			getUserResourceObj(destUserObj, resource).quantity -= qty;
 		}
 
+
 		if (srcUserObj.resources.find(({ quantity }) => quantity < 0)) {
 			return message(
 				form,
@@ -94,5 +93,7 @@ export const actions = {
 				{ status: 400 }
 			);
 		}
+		srcUserObj.resources = srcUserObj.resources.filter(({quantity}) => quantity);
+		destUserObj.resources = destUserObj.resources.filter(({quantity}) => quantity);
 	}
 };
