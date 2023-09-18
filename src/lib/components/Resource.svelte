@@ -46,11 +46,10 @@
 			class="bg-transparent border-none quantity w-16 text-center p-0"
 			class:large
 			class:small
+			name="quantity"
 			bind:value={quantity}
-			on:blur={() => {
-				dispatch('change', quantity || 0);
-				editInProgress = false;
-			}}
+			on:input={() => dispatch('change', quantity || 0)}
+			on:blur={() => (editInProgress = false)}
 			bind:this={editInput}
 		/>
 	{:else}
@@ -128,12 +127,13 @@
 		@apply text-black;
 	}
 
+
+	/* remove up and down arrows */
 	input::-webkit-outer-spin-button,
 	input::-webkit-inner-spin-button {
 		-webkit-appearance: none;
 		margin: 0;
 	}
-
 	input[type='number'] {
 		-moz-appearance: textfield;
 	}

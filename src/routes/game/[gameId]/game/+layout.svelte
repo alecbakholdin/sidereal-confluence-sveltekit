@@ -1,17 +1,14 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { getGameContext } from '$lib/util/client/gameContext';
 	import {
 		AppBar,
 		AppShell,
-		Tab,
 		TabAnchor,
 		TabGroup,
 		getDrawerStore
 	} from '@skeletonlabs/skeleton';
 	import GamePlayerList from './GamePlayerList.svelte';
-	import { page } from '$app/stores';
-	import { resources } from '$lib/types/resource';
-	import Resource from '$lib/components/Resource.svelte';
 	const drawerStore = getDrawerStore();
 	const gameContext = getGameContext();
 	const gameState = gameContext.gameState;
