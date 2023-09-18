@@ -6,7 +6,8 @@ import type { Readable } from "svelte/store"
 export type GameContext = {
     gameState: Readable<GameState>,
     onlineMembers: Readable<User[]>,
-    me: User
+    me: User,
+    getUrl(path: string): string,
 }
 
 export function setGameContext(gameContext: GameContext) {

@@ -1,6 +1,6 @@
 import type { RaceType } from './race';
 import type { ResourceAmount } from './resource';
-import type { TradeInfo } from './trade';
+import type { EntityContainer, TradeInfo, TradePreferences } from './trade';
 import type { User, UserId } from './user';
 
 export type GameState = {
@@ -22,6 +22,7 @@ export type LobbyPlayerInfo = {
 export type PlayerGameInfo = {
 	race: RaceType;
 	resources: ResourceAmount[];
+	tradePreferences?: TradePreferences;
 };
 
 export function getDefaultGameState(id: string, adminId: UserId): GameState {
@@ -33,6 +34,6 @@ export function getDefaultGameState(id: string, adminId: UserId): GameState {
 		usernameMap: {},
 		lobbyInfoMap: {},
 		gameInfo: {},
-        trades: []
+		trades: []
 	};
 }

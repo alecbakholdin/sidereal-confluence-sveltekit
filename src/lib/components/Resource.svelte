@@ -1,12 +1,35 @@
 <script lang="ts">
 	import { largeResources, type LargeResourceType, type ResourceType } from '$lib/types/resource';
+	import { createEventDispatcher } from 'svelte';
 
 	export let resource: ResourceType;
 	export let quantity: number | undefined = undefined;
-	export let questionMark: boolean = false;
+	export let editable: boolean = false;
 
 	$: large = largeResources.includes(resource as LargeResourceType);
 	$: small = !large;
+
+	const dispatch = createEventDispatcher<{ change: number }>();
+
+	let editInProgress: boolean;
+	let timeout: NodeJS.Timeout | undefined;
+	function handleMouseDown() {
+		if (editable)
+			timeout = setTimeout(() => {
+				editInProgress = true;
+				timeout = undefined;
+			}, 400);
+	}
+	function handleMouseUp() {
+		if (timeout) clearTimeout(timeout);
+	}
+	let editInput: HTMLInputElement;
+	$: if (editInput) {
+		editInput.focus();
+		editInput.type = 'text';
+		editInput.setSelectionRange(0, editInput.value.length);
+		editInput.type = 'number';
+	}
 </script>
 
 <div class="relative w-fit grid place-items-center {resource}">
@@ -15,12 +38,36 @@
 	{:else}
 		<iconify-icon icon="bi:diamond-fill" class:large class:small />
 	{/if}
-	{#if questionMark}
-		<span class="font-mono quantity">?</span>
-	{:else if quantity !== undefined}
-		<span class="font-mono quantity">
-			{quantity}
-		</span>
+	{#if editInProgress}
+		<input
+			type="number"
+			inputmode="numeric"
+			style:background="none"
+			class="bg-transparent border-none quantity w-16 text-center p-0"
+			class:large
+			class:small
+			bind:value={quantity}
+			on:blur={() => {
+				dispatch('change', quantity || 0);
+				editInProgress = false;
+			}}
+			bind:this={editInput}
+		/>
+	{:else}
+		<button
+			class="absolute w-full h-full"
+			type="button"
+			on:mousedown={handleMouseDown}
+			on:touchstart={handleMouseDown}
+			on:mouseup={handleMouseUp}
+			on:touchend={handleMouseUp}
+			on:click
+			class:pointer-events-none={!editable}
+		>
+			<span class="font-mono quantity">
+				{quantity || ''}
+			</span>
+		</button>
 	{/if}
 </div>
 
@@ -79,5 +126,15 @@
 	}
 	.hexagon span {
 		@apply text-black;
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	input[type='number'] {
+		-moz-appearance: textfield;
 	}
 </style>

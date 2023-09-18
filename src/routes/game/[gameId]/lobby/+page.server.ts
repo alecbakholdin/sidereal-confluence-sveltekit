@@ -70,7 +70,7 @@ export const actions = {
 			const raceObj = raceInfoMap[race];
 			gameState.gameInfo[playerId] = {
 				race,
-				resources: raceObj.startingResources || []
+				resources: raceObj.startingResources || [],
 			};
 		}
 		gameState.state = "inProgress";

@@ -1,42 +1,52 @@
 <script lang="ts">
-	import { resources, type ResourceAmount, type ResourceType } from '$lib/types/resource';
-	import type { TradeEntity } from '$lib/types/trade';
-	import type { Writable } from 'svelte/store';
-	import TradeEntitySelectorRow from './TradeEntitySelectorRow.svelte';
+	import Resource from '$lib/components/Resource.svelte';
+	import { type ResourceType, resources } from '$lib/types/resource';
+	import type { EntityContainer } from '$lib/types/trade';
 
-	export let entities: Writable<TradeEntity[]>;
-	$: amountByResource = Object.fromEntries(resourceAmounts.map((r) => [r.resource, r])) as Record<
-		ResourceType,
-		ResourceAmount
-	>;
-	$: resourceAmounts = $entities.map((e) => e.resourceAmount).filter((x) => x) as ResourceAmount[];
-	function handleToggle(resource: ResourceType) {
-		if (amountByResource[resource]) {
-			$entities = $entities.filter(({ resourceAmount }) => resourceAmount?.resource !== resource);
-		} else {
-			$entities = [...$entities, { resourceAmount: { resource, quantity: 0 } }];
-		}
+	export let entityContainer: EntityContainer;
+
+	function toggleResource(resource: ResourceType) {
+		entityContainer.resource = {
+			...entityContainer.resource,
+			[resource]: entityContainer.resource[resource] === undefined ? 0 : undefined
+		};
+		console.log(entityContainer.resource);
+		entityContainer = entityContainer;
 	}
-	function updateQuantity(resourceType: ResourceType, quantity: number) {
-		for (const entity of $entities) {
-			if (entity.resourceAmount?.resource === resourceType) {
-				entity.resourceAmount.quantity = quantity;
-				$entities = $entities;
-				break;
-			}
-		}
+	function updateQuantity(resource: ResourceType, quantity: number) {
+		entityContainer.resource = { ...entityContainer.resource, [resource]: quantity };
+		entityContainer = entityContainer;
 	}
 </script>
 
-{JSON.stringify($entities)}
 <div class="flex flex-col w-fit gap-1 items-center">
-	{#each resources as resource, i}
-		<TradeEntitySelectorRow
-			{resource}
-			quantity={amountByResource[resource]?.quantity}
-			active={!!amountByResource[resource]}
-			on:change={({ detail }) => updateQuantity(resource, detail)}
-			on:toggle={() => handleToggle(resource)}
-		/>
+	{#each resources as resource}
+		<div
+			class="grid grid-cols-3 place-items-center rounded-full p-1"
+			class:bg-surface-700={entityContainer.resource[resource] !== undefined}
+		>
+			<button
+				type="button"
+				class="btn-icon btn-icon-sm"
+				on:click={() =>
+					updateQuantity(resource, Math.max(0, (entityContainer.resource[resource] || 0) - 1))}
+			>
+				<iconify-icon icon="material-symbols:chevron-left" />
+			</button>
+			<Resource
+				{resource}
+				quantity={entityContainer.resource[resource]}
+				editable
+				on:click={() => toggleResource(resource)}
+				on:change={({ detail }) => updateQuantity(resource, detail)}
+			/>
+			<button
+				type="button"
+				class="btn-icon btn-icon-sm"
+				on:click={() => updateQuantity(resource, (entityContainer.resource[resource] || 0) + 1)}
+			>
+				<iconify-icon icon="material-symbols:chevron-right" />
+			</button>
+		</div>
 	{/each}
 </div>

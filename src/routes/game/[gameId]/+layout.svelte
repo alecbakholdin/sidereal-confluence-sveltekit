@@ -4,22 +4,35 @@
 	import type { User } from '$lib/types/user';
 	import { joinGame } from '$lib/util/client/joinGame';
 	import { onMount } from 'svelte';
-	import { writable } from 'svelte/store';
+	import { derived, writable } from 'svelte/store';
 	import type { LayoutData } from './$types';
 	import { setGameContext } from '$lib/util/client/gameContext';
 	import { AppShell, Drawer } from '@skeletonlabs/skeleton';
 	import GamePlayerList from './game/GamePlayerList.svelte';
 	import LobbyPlayerList from './lobby/LobbyPlayerList.svelte';
 	import StartButton from './lobby/StartButton.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: LayoutData;
 	const gameState = writable<GameState>(data.gameState);
 	const onlineMembers = writable<User[]>([]);
-	setGameContext({ gameState, onlineMembers, me: data.me });
+	setGameContext({ gameState, onlineMembers, me: data.me, getUrl });
 
 	onMount(() => {
 		joinGame(gameState, onlineMembers, $page.params.gameId);
 	});
+
+	const derivedState = derived(gameState, ({ state }) => state);
+	const lobbyUrl = getUrl('/lobby');
+	const gameUrl = getUrl('/game');
+	$: if ($derivedState === 'inProgress' && !$page.url.pathname.startsWith(gameUrl)) {
+		goto(gameUrl);
+	} else if ($derivedState === 'lobby' && !$page.url.pathname.startsWith(lobbyUrl)) {
+		goto(lobbyUrl);
+	}
+	function getUrl(path: string) {
+		return `/game/${$gameState.id}/${path.replace(/^\//, '')}`;
+	}
 </script>
 
 <AppShell>
