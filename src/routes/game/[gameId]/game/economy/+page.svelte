@@ -32,7 +32,7 @@
 	] as { id: string; title: string; icon: string; numberConverters: number }[];
 </script>
 
-<div class="p-2 md:p-4 w-100" use:melt={$root}>
+<div class="p-2 md:p-4 w-full max-w-2xl place-self-center" use:melt={$root}>
 	{#each test as { id, title, icon, numberConverters }}
 		{@const selected = $isSelected(id)}
 		<div class="card my-1" use:melt={$item(id)} class:hover:bg-surface-700={!selected}>
@@ -45,7 +45,7 @@
 			</button>
 			{#if selected}
 				<ul class="flex flex-wrap gap-2 p-2" transition:slide>
-					{#each Array(numberConverters).fill(0, 0) as _, i}
+					{#each Array(numberConverters).fill(0, 0) as _}
 						<li><ConverterCard /></li>
 					{/each}
 				</ul>
