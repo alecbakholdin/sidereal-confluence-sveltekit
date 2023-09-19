@@ -5,6 +5,7 @@
 	export let resource: ResourceType;
 	export let quantity: number | undefined = undefined;
 	export let editable: boolean = false;
+	export let donation: boolean = false;
 
 	$: large = largeResources.includes(resource as LargeResourceType);
 	$: small = !large;
@@ -32,7 +33,7 @@
 	}
 </script>
 
-<div class="relative w-fit grid place-items-center {resource}">
+<div class="relative w-fit grid place-items-center {resource}" class:donation>
 	{#if resource === 'hexagon'}
 		<iconify-icon icon="ic:baseline-hexagon" class="large" />
 	{:else}
@@ -136,5 +137,13 @@
 	}
 	input[type='number'] {
 		-moz-appearance: textfield;
+	}
+
+	.donation iconify-icon {	
+		fill: none;
+		stroke: var(--donation-color);
+		stroke-width: 1px;
+		stroke-dasharray: 2,1;
+		stroke-linejoin: round;
 	}
 </style>
