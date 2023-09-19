@@ -1,1 +1,55 @@
-economy
+<script lang="ts">
+	import { createAccordion, melt } from '@melt-ui/svelte';
+	import { slide } from 'svelte/transition';
+	import ConverterCard from './ConverterCard.svelte';
+	import Icon from '@iconify/svelte';
+	import { writable } from 'svelte/store';
+
+	const {
+		elements: { item, root, trigger, content },
+		helpers: { isSelected }
+	} = createAccordion({defaultValue: 'converter-cards'});
+
+	const test = [
+		{
+			id: 'converter-cards',
+			title: 'Converter Cards',
+			icon: 'fluent:card-ui-20-regular',
+			numberConverters: 8
+		},
+		{
+			id: 'colonies',
+			title: 'Colonies',
+			icon: 'mdi:planet',
+			numberConverters: 3
+		},
+		{
+			id: 'research-teams',
+			title: 'Research Teams',
+			icon: 'majesticons:test-tube-filled',
+			numberConveters: 2
+		}
+	] as { id: string; title: string; icon: string; numberConverters: number }[];
+</script>
+
+<div class="p-2 md:p-4 w-100" use:melt={$root}>
+	{#each test as { id, title, icon, numberConverters }}
+		{@const selected = $isSelected(id)}
+		<div class="card my-1" use:melt={$item(id)} class:hover:bg-surface-700={!selected}>
+			<button type="button" class="w-full flex items-center p-2 gap-2" use:melt={$trigger(id)}>
+				<Icon {icon} class="text-4xl" />
+				<h4 class="h4 flex-grow sm:text-start">{title}</h4>
+				<div class:rotate-180={selected}>
+					<Icon icon="tabler:chevron-down" class="text-4xl transition-transform" />
+				</div>
+			</button>
+			{#if selected}
+				<ul class="flex flex-wrap gap-2 p-2" transition:slide>
+					{#each Array(numberConverters).fill(0, 0) as _, i}
+						<li><ConverterCard /></li>
+					{/each}
+				</ul>
+			{/if}
+		</div>
+	{/each}
+</div>

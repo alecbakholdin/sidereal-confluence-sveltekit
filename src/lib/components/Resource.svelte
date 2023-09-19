@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { largeResources, type LargeResourceType, type ResourceType } from '$lib/types/resource';
+	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
 
 	export let resource: ResourceType;
@@ -33,12 +34,14 @@
 	}
 </script>
 
-<div class="relative w-fit grid place-items-center {resource}" class:donation>
-	{#if resource === 'hexagon'}
-		<iconify-icon icon="ic:baseline-hexagon" class="large" />
-	{:else}
-		<iconify-icon icon="bi:diamond-fill" class:large class:small />
-	{/if}
+<div class="relative w-fit grid place-items-center {resource}" class:donation class:large class:small>
+	<div class="icon">
+		{#if resource === 'hexagon'}
+			<Icon icon="ic:baseline-hexagon" />
+		{:else}
+			<Icon icon="bi:diamond-fill" />
+		{/if}
+	</div>
 	{#if editInProgress}
 		<input
 			type="number"
@@ -85,13 +88,13 @@
 	}
 
 	/* small cubes */
-	.green iconify-icon {
+	.green .icon {
 		@apply text-green-600;
 	}
-	.brown iconify-icon {
+	.brown .icon {
 		@apply text-amber-900;
 	}
-	.white iconify-icon {
+	.white .icon {
 		@apply text-white;
 	}
 	.white span {
@@ -99,29 +102,29 @@
 	}
 
 	/* large cubes */
-	.blue iconify-icon {
+	.blue .icon {
 		@apply text-blue-600;
 	}
-	.yellow iconify-icon {
+	.yellow .icon {
 		@apply text-yellow-400;
 	}
 	.yellow span {
 		@apply text-black;
 	}
-	.black iconify-icon {
+	.black .icon {
 		@apply text-black;
 	}
 
 	/* special */
-	.unitySmall iconify-icon,
-	.unityLarge iconify-icon {
+	.unitySmall svg,
+	.unityLarge svg {
 		@apply text-gray-600;
 	}
 	.unitySmall span,
 	.unityLarge span {
 		@apply text-white;
 	}
-	.hexagon iconify-icon {
+	.hexagon svg {
 		@apply text-amber-400;
 	}
 	.hexagon span {
@@ -139,7 +142,7 @@
 		-moz-appearance: textfield;
 	}
 
-	.donation iconify-icon {	
+	.donation {	
 		fill: none;
 		stroke: var(--donation-color);
 		stroke-width: 1px;

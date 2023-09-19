@@ -22,7 +22,7 @@
 <div class="flex flex-col w-fit gap-1 items-center">
 	{#each resources as resource}
 		<div
-			class="grid grid-cols-3 place-items-center rounded-full p-1"
+			class="grid grid-cols-3 place-items-center rounded-full p-1 transition-colors"
 			class:bg-surface-700={entityContainer.resource[resource] !== undefined}
 		>
 			<button
