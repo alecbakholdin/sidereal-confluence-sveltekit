@@ -30,10 +30,10 @@ export const actions = {
             ...locals.user,
             username: form.data.username
         };
-        cookies.set("Authorization", jwt.sign({ data: newUser }, AUTH_SECRET), { path: '/' });
+        cookies.set("Authorization", jwt.sign({ data: newUser }, AUTH_SECRET), { path: '/', maxAge: 60 * 60 * 24 * 30 });
 
         let redirectUrl = url.searchParams.get('redirect');
-        if(redirectUrl) {
+        if (redirectUrl) {
             throw redirect(308, redirectUrl);
         }
     }

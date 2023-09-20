@@ -16,7 +16,7 @@ const handleAuth: Handle = async ({ event, resolve }) => {
 	const resetJwt = () => {
 		console.log('resetting jwt to ' + JSON.stringify(user));
 		const payload = jwt.sign({ data: user }, AUTH_SECRET, { expiresIn: '12h' });
-		event.cookies.set('Authorization', payload, { path: '/' });
+		event.cookies.set('Authorization', payload, { path: '/', maxAge: 60 * 60 * 24 * 30 });
 	};
 	if (!authHeader) {
 		resetJwt();
