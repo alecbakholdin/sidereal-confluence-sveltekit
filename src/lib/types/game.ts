@@ -1,12 +1,17 @@
 import type { RaceType } from './race';
 import type { ResourceAmount } from './resource';
-import type { EntityContainer, TradeInfo, TradePreferences } from './trade';
-import type { User, UserId } from './user';
+import type { TradeInfo, TradePreferences } from './trade';
+import type { UserId } from './user';
 
 export type GameState = {
 	id: string;
 	adminId: string;
+
 	state: 'lobby' | 'inProgress';
+	turn: number;
+	phase: number;
+	phases: ('trade' | 'economy' | 'confluence')[];
+
 	players: UserId[];
 	usernameMap: Record<UserId, string>;
 	lobbyInfoMap: Record<UserId, LobbyPlayerInfo>;
@@ -29,7 +34,12 @@ export function getDefaultGameState(id: string, adminId: UserId): GameState {
 	return {
 		id,
 		adminId: adminId,
+
 		state: 'lobby',
+		turn: 1,
+		phase: 0,
+		phases: ['trade', 'economy', 'confluence'],
+
 		players: [],
 		usernameMap: {},
 		lobbyInfoMap: {},
