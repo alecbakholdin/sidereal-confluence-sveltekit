@@ -4,13 +4,15 @@
 	import type { EntityContainer } from '$lib/types/trade';
 
 	export let entityContainer: EntityContainer;
+	export let ignoreZeros: boolean = false;
+
+	const startingQty = ignoreZeros ? 1 : 0;
 
 	function toggleResource(resource: ResourceType) {
 		entityContainer.resource = {
 			...entityContainer.resource,
-			[resource]: entityContainer.resource[resource] === undefined ? 0 : undefined
+			[resource]: entityContainer.resource[resource] === undefined ? startingQty : undefined
 		};
-		console.log(entityContainer.resource);
 		entityContainer = entityContainer;
 	}
 	function updateQuantity(resource: ResourceType, quantity: number) {
@@ -38,7 +40,8 @@
 				quantity={entityContainer.resource[resource]}
 				editable
 				on:click={() => toggleResource(resource)}
-				on:change={({ detail }) => updateQuantity(resource, detail)}
+				on:change={({ detail }) =>
+					ignoreZeros && !detail ? toggleResource(resource) : updateQuantity(resource, detail)}
 			/>
 			<button
 				type="button"
