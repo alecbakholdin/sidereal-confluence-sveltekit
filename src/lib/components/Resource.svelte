@@ -8,7 +8,7 @@
 	export let editable: boolean = false;
 	export let donation: boolean = false;
 
-	$: large = largeResources.includes(resource as LargeResourceType);
+	$: large = largeResources.includes(resource as LargeResourceType) || resource === 'hexagon';
 	$: small = !large;
 
 	const dispatch = createEventDispatcher<{ change: number }>();
@@ -34,7 +34,12 @@
 	}
 </script>
 
-<div class="relative w-fit grid place-items-center {resource}" class:donation class:large class:small>
+<div
+	class="relative w-fit grid place-items-center {resource}"
+	class:donation
+	class:large
+	class:small
+>
 	<div class="icon">
 		{#if resource === 'hexagon'}
 			<Icon icon="ic:baseline-hexagon" />
@@ -46,6 +51,7 @@
 		<input
 			type="number"
 			inputmode="numeric"
+			autocomplete="off"
 			style:background="none"
 			class="bg-transparent border-none quantity w-16 text-center p-0"
 			class:large
@@ -75,19 +81,43 @@
 </div>
 
 <style lang="postcss">
+	/* special formatting */
 	.quantity {
 		@apply absolute top-1/2 left-1/2 text-2xl;
 		transform: translateX(-50%) translateY(-50%);
 	}
 
-	.large {
+	.donation {
+		fill: none;
+		stroke: var(--donation-color);
+		stroke-width: 1px;
+		stroke-dasharray: 2, 1;
+		stroke-linejoin: round;
+	}
+
+	/* text formatting */
+	.large, .large input{
 		@apply text-4xl;
 	}
-	.small {
+	.small, .small input {
 		@apply text-2xl;
 	}
 
-	/* small cubes */
+	.green span,
+	.brown span,
+	.blue span,
+	.black span,
+	.unitySmall span,
+	.unityLarge span {
+		@apply text-white;
+	}
+	.white span,
+	.yellow span,
+	.hexagon span {
+		@apply text-black;
+	}
+
+	/* icon coloring */
 	.green .icon {
 		@apply text-green-600;
 	}
@@ -97,40 +127,22 @@
 	.white .icon {
 		@apply text-white;
 	}
-	.white span {
-		@apply text-black;
-	}
-
-	/* large cubes */
 	.blue .icon {
 		@apply text-blue-600;
 	}
 	.yellow .icon {
 		@apply text-yellow-400;
 	}
-	.yellow span {
-		@apply text-black;
-	}
 	.black .icon {
 		@apply text-black;
 	}
-
-	/* special */
-	.unitySmall svg,
-	.unityLarge svg {
+	.unitySmall .icon,
+	.unityLarge .icon {
 		@apply text-gray-600;
 	}
-	.unitySmall span,
-	.unityLarge span {
-		@apply text-white;
-	}
-	.hexagon svg {
+	.hexagon .icon {
 		@apply text-amber-400;
 	}
-	.hexagon span {
-		@apply text-black;
-	}
-
 
 	/* remove up and down arrows */
 	input::-webkit-outer-spin-button,
@@ -140,13 +152,5 @@
 	}
 	input[type='number'] {
 		-moz-appearance: textfield;
-	}
-
-	.donation {	
-		fill: none;
-		stroke: var(--donation-color);
-		stroke-width: 1px;
-		stroke-dasharray: 2,1;
-		stroke-linejoin: round;
 	}
 </style>
