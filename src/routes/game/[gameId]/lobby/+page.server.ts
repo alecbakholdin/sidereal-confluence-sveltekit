@@ -74,6 +74,9 @@ export const actions = {
 			};
 		}
 		gameState.state = "inProgress";
+		gameState.turn = 1;
+		gameState.phase = 0;
+		gameState.phases = ['trade', 'economy', 'confluence'];
 
 		throw redirect(308, `/game/${gameState.id}/game`);
 	}
