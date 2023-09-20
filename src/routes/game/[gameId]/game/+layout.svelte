@@ -81,8 +81,8 @@
 		>
 			Players
 		</TabAnchor> -->
-		<svelte:fragment slot="panel">
+		<div class="grid" slot="panel">
 			<slot />
-		</svelte:fragment>
+		</div>
 	</TabGroup>
 </AppShell>
