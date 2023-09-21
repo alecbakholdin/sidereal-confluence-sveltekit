@@ -1,3 +1,5 @@
+import type { EntityContainer } from './entityContainer';
+
 export const smallResources = ['green', 'brown', 'white', 'unitySmall'] as const;
 export type SmallResourceType = (typeof smallResources)[number];
 export const largeResources = ['blue', 'yellow', 'black', 'unityLarge'] as const;
@@ -19,19 +21,29 @@ export function toSortedResourceArr(resourceAmounts: ResourceAmount[]) {
 	);
 }
 
-export function sortResourceAmounts(
-	arr: ResourceAmount[]
-) {
+export function sortedResourceArrFromEntityContainer(entityContainer?: EntityContainer) {
+	const resources = (
+		Object.entries(entityContainer?.resource || {}) as [ResourceType, number][]
+	).map(([r, qty]) => ({ resource: r, quantity: qty }) as ResourceAmount);
+	const donations = (
+		Object.entries(entityContainer?.donations || {}) as [ResourceType, number][]
+	).map(([r, qty]) => ({ resource: r, quantity: qty, donation: true }) as ResourceAmount);
+	return toSortedResourceArr([...resources, ...donations]);
+}
+
+export function sortResourceAmounts(arr: ResourceAmount[]) {
 	return [...(arr || [])].sort((a, b) => {
-		const totalA = (a.resource ? resources.indexOf(a.resource) : 0) + (a.donation ? resources.length : 0);
-		const totalB = (b.resource ? resources.indexOf(b.resource) : 0) + (b.donation ? resources.length : 0);
+		const totalA =
+			(a.resource ? resources.indexOf(a.resource) : 0) + (a.donation ? 0 : resources.length);
+		const totalB =
+			(b.resource ? resources.indexOf(b.resource) : 0) + (b.donation ? 0 : resources.length);
 		return totalA - totalB;
-	})
+	});
 }
 
 export function sortByResource<T>(
 	arr: T[],
-	getResourceType: (item: T) => ResourceType | undefined,
+	getResourceType: (item: T) => ResourceType | undefined
 ) {
 	return [...(arr || [])].sort((a, b) => {
 		const resourceA = getResourceType(a);

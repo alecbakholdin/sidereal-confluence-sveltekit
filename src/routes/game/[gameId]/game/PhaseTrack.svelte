@@ -1,18 +1,18 @@
 <script lang="ts">
-	import type { ClientRectObject } from '@floating-ui/dom';
 	import Icon from '@iconify/svelte';
 
 	export let phases: any[];
 	export let activePhase: number;
 
-	$: formattedPhases = phases?.map((p) =>
-		String(p)
-			.split(' ')
-			.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-	);
+	$: formattedPhases =
+		phases?.map((p) =>
+			String(p)
+				.split(' ')
+				.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+		) || [];
 
-    let container: HTMLDivElement;
-    $: baseOffset = container?.getBoundingClientRect().x || 0;
+	let container: HTMLDivElement;
+	$: baseOffset = container?.getBoundingClientRect().x || 0;
 	let rects: HTMLSpanElement[] = Array(phases?.length || 0);
 </script>
 
@@ -26,6 +26,8 @@
 	<div
 		class="absolute rounded-full h-full transition-all bg-purple-400"
 		style:width="{rects[activePhase]?.clientWidth + 10}px"
-		style:transform="translateX({rects[activePhase]?.getBoundingClientRect().left - baseOffset - 5}px)"
+		style:transform="translateX({rects[activePhase]?.getBoundingClientRect().left -
+			baseOffset -
+			5}px)"
 	></div>
 </div>

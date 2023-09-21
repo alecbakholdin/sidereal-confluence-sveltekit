@@ -71,6 +71,7 @@
 			on:mouseup={handleMouseUp}
 			on:touchend={handleMouseUp}
 			on:click
+			tabindex={editable ? 0 : -1}
 			class:pointer-events-none={!editable}
 		>
 			<span class="font-mono quantity">
@@ -96,10 +97,16 @@
 	}
 
 	/* text formatting */
-	.large, .large input{
+	.large {
+		@apply text-5xl;
+	}
+	.large input{
 		@apply text-4xl;
 	}
-	.small, .small input {
+	.small {
+		@apply text-3xl;
+	}
+	.small input {
 		@apply text-2xl;
 	}
 

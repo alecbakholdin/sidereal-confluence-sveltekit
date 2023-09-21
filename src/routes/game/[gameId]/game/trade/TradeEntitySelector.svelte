@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Resource from '$lib/components/Resource.svelte';
 	import { type ResourceType, resources } from '$lib/types/resource';
-	import type { EntityContainer } from '$lib/types/trade';
+	import type { EntityContainer } from '$lib/types/entityContainer';
 
 	export let entityContainer: EntityContainer;
 	export let ignoreZeros: boolean = false;
@@ -11,7 +11,7 @@
 	function toggleResource(resource: ResourceType) {
 		entityContainer.resource = {
 			...entityContainer.resource,
-			[resource]: entityContainer.resource[resource] === undefined ? startingQty : undefined
+			[resource]: entityContainer?.resource?.[resource] === undefined ? startingQty : undefined
 		};
 		entityContainer = entityContainer;
 	}
@@ -25,19 +25,19 @@
 	{#each resources as resource}
 		<div
 			class="grid grid-cols-3 place-items-center rounded-full p-1 transition-colors"
-			class:bg-surface-700={entityContainer.resource[resource] !== undefined}
+			class:bg-surface-700={entityContainer?.resource?.[resource] !== undefined}
 		>
 			<button
 				type="button"
 				class="btn-icon btn-icon-sm"
 				on:click={() =>
-					updateQuantity(resource, Math.max(0, (entityContainer.resource[resource] || 0) - 1))}
+					updateQuantity(resource, Math.max(0, (entityContainer?.resource?.[resource] || 0) - 1))}
 			>
 				<iconify-icon icon="material-symbols:chevron-left" />
 			</button>
 			<Resource
 				{resource}
-				quantity={entityContainer.resource[resource]}
+				quantity={entityContainer?.resource?.[resource]}
 				editable
 				on:click={() => toggleResource(resource)}
 				on:change={({ detail }) =>
@@ -46,7 +46,7 @@
 			<button
 				type="button"
 				class="btn-icon btn-icon-sm"
-				on:click={() => updateQuantity(resource, (entityContainer.resource[resource] || 0) + 1)}
+				on:click={() => updateQuantity(resource, (entityContainer?.resource?.[resource] || 0) + 1)}
 			>
 				<iconify-icon icon="material-symbols:chevron-right" />
 			</button>

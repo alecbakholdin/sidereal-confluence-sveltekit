@@ -20,7 +20,7 @@ export const siderealTheme: CustomThemeConfig = {
 		"--on-warning": "0 0 0",
 		"--on-error": "255 255 255",
 		"--on-surface": "255 255 255",
-		// =~= Theme Colors  =~=
+		// =~= Theme Colors  =~=:root {
 		// primary | #428df0 
 		"--color-primary-50": "227 238 253", // #e3eefd
 		"--color-primary-100": "217 232 252", // #d9e8fc
@@ -33,16 +33,16 @@ export const siderealTheme: CustomThemeConfig = {
 		"--color-primary-800": "40 85 144", // #285590
 		"--color-primary-900": "32 69 118", // #204576
 		// secondary | #4F46E5 
-		"--color-secondary-50": "229 227 251", // #e5e3fb
-		"--color-secondary-100": "220 218 250", // #dcdafa
-		"--color-secondary-200": "211 209 249", // #d3d1f9
-		"--color-secondary-300": "185 181 245", // #b9b5f5
-		"--color-secondary-400": "132 126 237", // #847eed
-		"--color-secondary-500": "79 70 229", // #4F46E5
-		"--color-secondary-600": "71 63 206", // #473fce
-		"--color-secondary-700": "59 53 172", // #3b35ac
-		"--color-secondary-800": "47 42 137", // #2f2a89
-		"--color-secondary-900": "39 34 112", // #272270
+		"--color-secondary-50": "242 222 252", // #f2defc
+		"--color-secondary-100": "237 211 251", // #edd3fb
+		"--color-secondary-200": "233 200 250", // #e9c8fa
+		"--color-secondary-300": "219 166 246", // #dba6f6
+		"--color-secondary-400": "193 100 240", // #c164f0
+		"--color-secondary-500": "166 33 233", // #A621E9
+		"--color-secondary-600": "149 30 210", // #951ed2
+		"--color-secondary-700": "125 25 175", // #7d19af
+		"--color-secondary-800": "100 20 140", // #64148c
+		"--color-secondary-900": "81 16 114", // #511072
 		// tertiary | #0EA5E9 
 		"--color-tertiary-50": "219 242 252", // #dbf2fc
 		"--color-tertiary-100": "207 237 251", // #cfedfb
