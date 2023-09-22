@@ -1,10 +1,12 @@
 import type { EntityContainer } from './entityContainer';
 
-export const smallResources = ['green', 'brown', 'white', 'unitySmall'] as const;
-export type SmallResourceType = (typeof smallResources)[number];
-export const largeResources = ['blue', 'yellow', 'black', 'unityLarge'] as const;
+export const smallCubes = ['green', 'brown', 'white', 'unitySmall'] as const;
+export type SmallCubeType = (typeof smallCubes)[number];
+export const largeCubes = ['blue', 'yellow', 'black', 'unityLarge'] as const;
+export type LargeCubeType = (typeof largeCubes)[number];
+export const largeResources = ['hexagon', 'point', 'ship', ...largeCubes] as const;
 export type LargeResourceType = (typeof largeResources)[number];
-export const resources = ['hexagon', ...largeResources, ...smallResources] as const;
+export const resources = [...largeResources, ...smallCubes] as const;
 export type ResourceType = (typeof resources)[number];
 
 export type ResourceAmount = {

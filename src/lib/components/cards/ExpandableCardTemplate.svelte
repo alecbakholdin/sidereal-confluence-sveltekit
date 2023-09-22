@@ -5,6 +5,7 @@
 
 	export let flipped = false;
 	export let orientation: 'vertical' | 'horizontal' = 'vertical';
+	export let disableFlip = false;
 
 	interface $$slots {
 		title: {};
@@ -20,8 +21,6 @@
 		elements: { root, content, trigger },
 		states: { open }
 	} = createCollapsible();
-
-	
 
 	let frontTriggerHeight: number;
 	let frontTriggerWidth: number;
@@ -54,9 +53,11 @@
 					<button use:melt={$trigger} class="btn-icon btn-icon-sm absolute top-0 left-0">
 						<Icon icon="bx:collapse-alt" class="text-xl" />
 					</button>
+
 					<button
 						type="button"
 						class="btn-icon btn-icon-sm absolute top-0 right-0"
+						class:hidden={disableFlip}
 						on:click={() => (flipped = !flipped)}
 					>
 						<Icon icon="solar:refresh-bold" class="text-xl" />
@@ -103,6 +104,7 @@
 					<button
 						type="button"
 						class="btn-icon btn-icon-sm absolute top-0 right-0"
+						class:hidden={disableFlip}
 						on:click={() => (flipped = !flipped)}
 					>
 						<Icon icon="solar:refresh-bold" class="text-xl" />

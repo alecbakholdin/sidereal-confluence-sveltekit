@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ColonyCard from '$lib/components/cards/ColonyCard.svelte';
 	import ConverterCard from '$lib/components/cards/ConverterCard.svelte';
+	import ResearchTeamCard from '$lib/components/cards/ResearchTeamCard.svelte';
 	import Icon from '@iconify/svelte';
 	import { createAccordion, melt } from '@melt-ui/svelte';
 	import { slide } from 'svelte/transition';
@@ -47,7 +48,8 @@
 				<ul class="flex flex-wrap gap-2 p-2" use:melt={$content(id)} transition:slide>
 					{#each Array(numberConverters).fill(0, 0) as _}
 						<li>
-							{#if id === 'colonies'}<ColonyCard />{:else}<ConverterCard />{/if}
+							{#if id === 'colonies'}<ColonyCard />{:else if id === 'converter-cards'}<ConverterCard
+								/>{:else}<ResearchTeamCard />{/if}
 						</li>
 					{/each}
 				</ul>
