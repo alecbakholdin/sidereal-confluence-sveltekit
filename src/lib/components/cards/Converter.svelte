@@ -3,6 +3,9 @@
 	import { sortedResourceArrFromEntityContainer } from '$lib/types/resource';
 	import Icon from '@iconify/svelte';
 	import Resource from '../Resource.svelte';
+	import type { ColonyType } from '$lib/types/cards/colony';
+	import ColonyTypeComponent from './ColonyType.svelte';
+	const uuid = crypto.randomUUID();
 
 	export let input: EntityContainer | undefined = undefined;
 	export let output: EntityContainer | undefined = undefined;
@@ -11,6 +14,7 @@
 
 	$: inputArr = sortedResourceArrFromEntityContainer(input);
 	$: outputArr = sortedResourceArrFromEntityContainer(output);
+	$: colonyInputs = (Object.entries(input?.colonyTypes || {}) as [ColonyType, number][]).filter(([_, qty]) => qty);
 </script>
 
 <div class="flex items-center p-2">
@@ -18,11 +22,16 @@
 		{#each inputArr as { resource, quantity, donation }}
 			<Resource {resource} {quantity} {donation} />
 		{/each}
-		{#if inputArr.length === 0}
-			<Icon icon="material-symbols:crop-free" class="text-2xl" />
+		{#each colonyInputs as [colonyType, qty]}
+			{#if qty !== undefined}
+				<ColonyTypeComponent {colonyType} planetClass={'text-4xl'}/>
+			{/if}
+		{/each}
+		{#if inputArr.length === 0 && colonyInputs.length === 0}
+			<Icon icon="material-symbols:crop-free" class="text-2xl text-gray-500" />
 		{/if}
 	</div>
-	<div class:trade={phase === 'trade'} class:economy={phase === 'economy'}>
+	<div class:text-secondary-400={phase === 'trade'} class:text-white={phase === 'economy'}>
 		<Icon icon="uil:arrow-right" class="text-2xl" />
 	</div>
 	<div class="flex items-center gap-1 flex-wrap w-fit">
@@ -30,21 +39,9 @@
 			<Resource {resource} {quantity} {donation} />
 		{/each}
 		{#if upgrade}
-			<Icon icon="uil:arrow-up" class="text-secondary-400 text-2xl" />
+			<Icon icon="grommet-icons:upgrade" class="text-secondary-400 text-2xl" />
 		{:else if outputArr.length === 0}
 			<Icon icon="material-symbols:crop-free" class="text-2xl" />
 		{/if}
 	</div>
 </div>
-
-<style>
-	.trade svg {
-		color: white;
-	}
-	.economy svg {
-		color: var(--donation-color);
-	}
-	.upgrade {
-		color: var(--donation-color);
-	}
-</style>

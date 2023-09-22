@@ -1,0 +1,502 @@
+[
+	{
+		"id": "colony_279",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Acrux",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"backType": "Ice",
+			"backConverter": { "phase": "Economy", "output": { "black": "1", "white": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "white": "2" } }
+		}
+	},
+	{
+		"id": "colony_280",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Spica",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "green": "1", "white": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "green": "2" } }
+		}
+	},
+	{
+		"id": "colony_281",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Antares",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Ice",
+			"backConverter": {
+				"phase": "Economy",
+				"input": { "green": "1" },
+				"output": { "octagon": "1" }
+			},
+			"upgradeConverter": { "phase": "Trade", "input": { "octagon": "1" } }
+		}
+	},
+	{
+		"id": "colony_282",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Mimosa",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_283",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Regulus",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_284",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Castor",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Ice",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_285",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Miaplacidus",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_286",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Toliman",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Ice",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_287",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Wezen",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_288",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Mirfak",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Ice",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_289",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Benetnasch",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_290",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Sargas",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_291",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Peacock",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_292",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Koo She",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_293",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Polaris",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_294",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Fomalhaut",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Desert",
+			"backConverter": {
+				"phase": "Economy",
+				"input": { "brown": "1" },
+				"output": { "octagon": "1" }
+			},
+			"upgradeConverter": { "phase": "Trade", "input": { "octagon": "1" } }
+		}
+	},
+	{
+		"id": "colony_295",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Gacrux",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_296",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Betelgeuse",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Jungle",
+			"backConverter": {
+				"phase": "Economy",
+				"input": { "white": "1" },
+				"output": { "octagon": "1" }
+			},
+			"upgradeConverter": { "phase": "Trade", "input": { "octagon": "1" } }
+		}
+	},
+	{
+		"id": "colony_297",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Arcturus",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_298",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Alnair",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_299",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Alioth",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "brown": "1", "white": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "brown": "2" } }
+		}
+	},
+	{
+		"id": "colony_300",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Adara",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Ice",
+			"backConverter": { "phase": "Economy", "output": { "green": "1", "white": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "white": "2" } }
+		}
+	},
+	{
+		"id": "colony_301",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Sirius",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Ice",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_302",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Rigel",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_303",
+		"cardType": "Colony",
+		"colony": {
+			"name": "El Nath",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_304",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Aldebaran",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_305",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Atria",
+			"frontType": "Jungle",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_306",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Alnitak",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Ice",
+			"backConverter": {
+				"phase": "Economy",
+				"input": { "green": "1" },
+				"output": { "octagon": "1" }
+			},
+			"upgradeConverter": { "phase": "Trade", "input": { "octagon": "1" } }
+		}
+	},
+	{
+		"id": "colony_307",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Hadar",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_308",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Capella",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_309",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Shaula",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "brown": "1", "green": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "green": "2" } }
+		}
+	},
+	{
+		"id": "colony_310",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Canopus",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Ice",
+			"backConverter": {
+				"phase": "Economy",
+				"input": { "brown": "1" },
+				"output": { "octagon": "1" }
+			},
+			"upgradeConverter": { "phase": "Trade", "input": { "octagon": "1" } }
+		}
+	},
+	{
+		"id": "colony_311",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Vega",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_312",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Altair",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "green": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_313",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Suhail",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Ice",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_314",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Pollux",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_315",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Deneb",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "black": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "black": "1" } }
+		}
+	},
+	{
+		"id": "colony_316",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Bellatrix",
+			"frontType": "Ocean",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Desert",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	},
+	{
+		"id": "colony_317",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Achernar",
+			"frontType": "Ice",
+			"frontConverter": { "phase": "Economy", "output": { "white": "1" } },
+			"backType": "Jungle",
+			"backConverter": { "phase": "Economy", "output": { "blue": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "blue": "1" } }
+		}
+	},
+	{
+		"id": "colony_318",
+		"cardType": "Colony",
+		"colony": {
+			"name": "Procyon",
+			"frontType": "Desert",
+			"frontConverter": { "phase": "Economy", "output": { "brown": "1" } },
+			"backType": "Ocean",
+			"backConverter": { "phase": "Economy", "output": { "yellow": "1" } },
+			"upgradeConverter": { "phase": "Trade", "input": { "yellow": "1" } }
+		}
+	}
+]

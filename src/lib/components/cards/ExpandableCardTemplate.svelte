@@ -2,7 +2,6 @@
 	import Icon from '@iconify/svelte';
 	import { createCollapsible, melt } from '@melt-ui/svelte';
 	import { slide } from 'svelte/transition';
-	import Converter from './Converter.svelte';
 
 	export let flipped = false;
 	export let orientation: 'vertical' | 'horizontal' = 'vertical';
@@ -22,6 +21,8 @@
 		states: { open }
 	} = createCollapsible();
 
+	
+
 	let frontTriggerHeight: number;
 	let frontTriggerWidth: number;
 	let backTriggerHeight: number;
@@ -32,18 +33,12 @@
 	$: unexpandedWidth = triggerWidth + 'px';
 	$: expandedHeight = orientation === 'vertical' ? '20rem' : `${20 / 1.4}rem`;
 	$: expandedWidth = orientation === 'horizontal' ? '20rem' : `${20 / 1.4}rem`;
-	$: height = $open ? expandedHeight : unexpandedHeight;
-	$: width = $open ? expandedWidth : unexpandedWidth;
-
-	function toggleCollapsible() {
-		open.update((val) => !val);
-	}
 </script>
 
 <div class="card p-2">
 	<div
 		use:melt={$root}
-		class="relative flex flex-col items-center transition-all rotating-card transform w-fit h-fit"
+		class="rotating-card relative flex flex-col items-center transition-all transform w-fit h-fit"
 		style:width={$open ? expandedWidth : unexpandedWidth}
 		style:height={$open ? expandedHeight : unexpandedHeight}
 		style:transform-style="preserve-3d"
@@ -90,14 +85,18 @@
 			</div>
 
 			{#if $open}
-				<div class="flex-grow" use:melt={$content} transition:slide>
+				<div class="flex-grow w-full" use:melt={$content} transition:slide>
 					<slot name="frontBottom" />
 				</div>
 			{/if}
 		</div>
 		<div class="card-side top-0 left-0" style:transform="rotateY(180deg)" class:absolute={!flipped}>
 			{#if $open}
-				<div use:melt={$content} class="flex flex-col flex-grow" transition:slide>
+				<div
+					use:melt={$content}
+					class="flex flex-col flex-grow"
+					transition:slide={{ duration: 50 }}
+				>
 					<button use:melt={$trigger} class="btn-icon btn-icon-sm absolute top-0 left-0">
 						<Icon icon="bx:collapse-alt" class="text-xl" />
 					</button>
@@ -129,7 +128,7 @@
 				{/if}
 			</div>
 			{#if $open}
-				<div class="flex-grow" use:melt={$content} transition:slide>
+				<div class="flex-grow w-full" use:melt={$content} transition:slide>
 					<slot name="backBottom" />
 				</div>
 			{/if}
