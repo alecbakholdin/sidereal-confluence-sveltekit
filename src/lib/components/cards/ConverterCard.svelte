@@ -11,7 +11,7 @@
 		frontConverters: [
 			{
 				input: { resource: { black: 2, green: 4 } },
-				output: { resource: { hexagon: 1, black: 2, blue: 4 } }
+				output: { resource: { hexagon: 1, black: 2, blue: 4 }, donation: { hexagon: 1 } }
 			}
 		],
 		upgradeOptions: [

@@ -33,7 +33,7 @@
 	] as { id: string; title: string; icon: string; numberConverters: number }[];
 </script>
 
-<div class="p-2 md:p-4 w-full max-w-2xl place-self-center" use:melt={$root}>
+<div class="p-2 md:p-4 w-full max-w-4xl place-self-center" use:melt={$root}>
 	{#each test as { id, title, icon, numberConverters }}
 		{@const selected = $isSelected(id)}
 		<div class="card my-1" use:melt={$item(id)} class:hover:bg-surface-700={!selected}>
@@ -41,15 +41,24 @@
 				<Icon {icon} class="text-4xl" />
 				<h4 class="h4 flex-grow sm:text-start">{title}</h4>
 				<div class:rotate-180={selected}>
-					<Icon icon="tabler:chevron-down" class="text-4xl transition-transform" />
+					<Icon icon="tabler:chevron-down" class="text-4xl" />
 				</div>
 			</button>
 			{#if selected}
-				<ul class="flex flex-wrap gap-2 p-2" use:melt={$content(id)} transition:slide>
+				<ul
+					class="grid place-items-center grid-cols-1 lg:grid-cols-2 pb-4 gap-2"
+					use:melt={$content(id)}
+					transition:slide
+				>
 					{#each Array(numberConverters).fill(0, 0) as _}
 						<li>
-							{#if id === 'colonies'}<ColonyCard />{:else if id === 'converter-cards'}<ConverterCard
-								/>{:else}<ResearchTeamCard />{/if}
+							{#if id === 'colonies'}
+								<ColonyCard />
+							{:else if id === 'converter-cards'}
+								<ConverterCard />
+							{:else}
+								<ResearchTeamCard />
+							{/if}
 						</li>
 					{/each}
 				</ul>

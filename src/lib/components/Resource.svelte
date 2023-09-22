@@ -95,8 +95,7 @@
 	.donation {
 		fill: none;
 		stroke: var(--donation-color);
-		stroke-width: 1px;
-		stroke-dasharray: 2, 1;
+		stroke-width: 1.5px;
 		stroke-linejoin: round;
 	}
 

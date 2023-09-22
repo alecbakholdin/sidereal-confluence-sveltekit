@@ -28,7 +28,7 @@ export function sortedResourceArrFromEntityContainer(entityContainer?: EntityCon
 		Object.entries(entityContainer?.resource || {}) as [ResourceType, number][]
 	).map(([r, qty]) => ({ resource: r, quantity: qty }) as ResourceAmount);
 	const donations = (
-		Object.entries(entityContainer?.donations || {}) as [ResourceType, number][]
+		Object.entries(entityContainer?.donation || {}) as [ResourceType, number][]
 	).map(([r, qty]) => ({ resource: r, quantity: qty, donation: true }) as ResourceAmount);
 	return toSortedResourceArr([...resources, ...donations]);
 }
