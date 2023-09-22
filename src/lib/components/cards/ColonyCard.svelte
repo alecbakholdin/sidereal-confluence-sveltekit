@@ -32,7 +32,7 @@
 	<div
 		slot="frontBottom"
 		class="h-full flex items-end"
-        class:justify-between={colonyCard.upgradeConverters?.length !== 1}
+		class:justify-between={colonyCard.upgradeConverters?.length !== 1}
 		class:justify-center={colonyCard.upgradeConverters?.length === 1}
 	>
 		{#each colonyCard.upgradeConverters || [] as { input, output }}
@@ -46,10 +46,13 @@
 	<div class="grid place-items-center h-full" slot="backTop">
 		<ColonyType colonyType={colonyCard.backType} />
 	</div>
-	<div slot="backCenter" class="grid grid-cols-[auto_1fr] place-items-center">
-		{#each colonyCard.backConverters || [] as { input, output }}
-			<input type="checkbox" class="checkbox" />
-			<Converter {input} {output} />
+	<div slot="backCenter">
+		{#each colonyCard.backConverters || [] as { input, output }, i}
+			{@const inputId = `${colonyCard.id}-back-${i}`}
+			<label for={inputId} class="label cursor-pointer flex gap-2 items-center">
+				<input type="checkbox" class="checkbox" id={inputId} />
+				<Converter {input} {output} />
+			</label>
 		{/each}
 	</div>
 </ExpandableCardTemplate>
