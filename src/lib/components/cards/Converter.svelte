@@ -1,11 +1,10 @@
 <script lang="ts">
+	import type { ColonyType } from '$lib/types/cards/colony';
 	import type { EntityContainer } from '$lib/types/entityContainer';
 	import { sortedResourceArrFromEntityContainer } from '$lib/types/resource';
 	import Icon from '@iconify/svelte';
 	import Resource from '../Resource.svelte';
-	import type { ColonyType } from '$lib/types/cards/colony';
-	import ColonyTypeComponent from './ColonyType.svelte';
-	const uuid = crypto.randomUUID();
+	import ColonyTypeIcon from './ColonyTypeIcon.svelte';
 
 	export let input: EntityContainer | undefined = undefined;
 	export let output: EntityContainer | undefined = undefined;
@@ -24,7 +23,7 @@
 		{/each}
 		{#each colonyInputs as [colonyType, qty]}
 			{#if qty !== undefined}
-				<ColonyTypeComponent {colonyType} planetClass={'text-4xl'}/>
+				<ColonyTypeIcon {colonyType} planetClass={'text-4xl'}/>
 			{/if}
 		{/each}
 		{#if inputArr.length === 0 && colonyInputs.length === 0}

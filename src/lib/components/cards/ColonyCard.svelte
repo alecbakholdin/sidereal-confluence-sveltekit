@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Colony } from '$lib/types/cards/colony';
-	import ColonyType from './ColonyType.svelte';
+	import ColonyType from './ColonyTypeIcon.svelte';
 	import Converter from './Converter.svelte';
 	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
 
