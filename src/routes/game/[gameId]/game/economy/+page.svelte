@@ -57,7 +57,7 @@
 				>
 					{#if id === 'colonies'}
 						{#each mePlayerInfo.colonies as playerCard}
-							<ColonyCard {playerCard} />
+							<ColonyCard cardInfo={playerCard} />
 						{/each}
 					{:else}
 						{#each Array(numberConverters).fill(0, 0) as _}

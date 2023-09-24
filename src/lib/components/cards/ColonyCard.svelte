@@ -5,15 +5,19 @@
 	import Converter from './Converter.svelte';
 	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
 
-	export let playerCard: PlayerCard;
+	export let cardInfo: PlayerCard | string;
+	export let displayOnly: boolean = false;
 
-	const colonyCard = colonyMap[playerCard.cardId];
-	let flipped: boolean = playerCard.upgraded;
+	$: isUpgraded = (typeof cardInfo !== 'string' && cardInfo.upgraded) || false;
+	$: colonyCard = colonyMap[typeof cardInfo === 'string' ? cardInfo : cardInfo.cardId];
+	$: frontSelectable = !displayOnly && !isUpgraded
+	$: backSelectable = !displayOnly && isUpgraded
+	let flipped: boolean = isUpgraded;
 </script>
 
 <ExpandableCardTemplate
 	bind:flipped
-	on:toggleExpanded={({ detail }) => !detail && (flipped = playerCard.upgraded)}
+	on:toggleExpanded={({ detail }) => !detail && (flipped = isUpgraded)}
 >
 	<span class="text-center" slot="title">{colonyCard.title}</span>
 	<div class="grid place-items-center h-full" slot="frontTop">
@@ -25,9 +29,9 @@
 			<label
 				class="flex gap-2 items-center cursor-pointer"
 				for={inputId}
-				class:cursor-pointer={!playerCard.upgraded}
+				class:cursor-pointer={frontSelectable}
 			>
-				{#if !playerCard.upgraded}
+				{#if frontSelectable}
 					<input type="checkbox" class="checkbox" name="scheduled" id={inputId} />
 				{/if}
 				<Converter {input} {output} />
@@ -58,9 +62,9 @@
 			<label
 				for={inputId}
 				class="label flex gap-2 items-center"
-				class:cursor-pointer={playerCard.upgraded}
+				class:cursor-pointer={backSelectable}
 			>
-				{#if playerCard.upgraded}
+				{#if backSelectable}
 					<input type="checkbox" class="checkbox" id={inputId} />
 				{/if}
 				<Converter {input} {output} />
