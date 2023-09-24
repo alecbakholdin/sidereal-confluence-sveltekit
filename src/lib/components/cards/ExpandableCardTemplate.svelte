@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 	import { createCollapsible, melt } from '@melt-ui/svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
 
 	export let flipped = false;
@@ -17,10 +18,17 @@
 		backBottom: {};
 	}
 
+	const dispatch = createEventDispatcher<{ toggleExpanded: boolean }>();
+
 	const {
 		elements: { root, content, trigger },
 		states: { open }
-	} = createCollapsible();
+	} = createCollapsible({
+		onOpenChange: ({ next }) => {
+			dispatch('toggleExpanded', next);
+			return next;
+		}
+	});
 
 	let frontTriggerHeight: number;
 	let frontTriggerWidth: number;

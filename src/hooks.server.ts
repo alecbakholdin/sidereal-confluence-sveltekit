@@ -1,5 +1,6 @@
 import { AUTH_SECRET } from '$env/static/private';
 import { pusher } from '$lib/objects.server';
+import type { GameState } from '$lib/types/game';
 import { createNewUser, type User } from '$lib/types/user';
 import { UPDATE_EVENT, presenceChannel } from '$lib/util/pusherChannels';
 import { getGameState, setGameState } from '$lib/util/server/gameState.server';
@@ -46,9 +47,18 @@ const handleGame: Handle = async ({ event, resolve }) => {
 	const response = await resolve(event);
 
 	const newState = event.locals.gameState;
-	const difference = diff(oldState, newState);
-	if (difference.length && response.status < 400 && !(await isFormFailure(response))) {
-		pusher.trigger(presenceChannel(gameId), UPDATE_EVENT, difference);
+	const { serverInfo, ...newClientState } = newState;
+	delete oldState.serverInfo;
+	const serverDiff = diff(oldState.serverInfo, serverInfo);
+	const clientDiff = diff(oldState, newClientState);
+	if (
+		(clientDiff.length || serverDiff.length) &&
+		response.status < 400 &&
+		!(await isFormFailure(response))
+	) {
+		if (clientDiff.length) {
+			pusher.trigger(presenceChannel(gameId), UPDATE_EVENT, clientDiff);
+		}
 		await setGameState(gameId, newState);
 	}
 

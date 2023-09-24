@@ -1,21 +1,20 @@
 <script lang="ts">
-	import type { Colony } from '$lib/types/cards/colony';
+	import type { PlayerCard } from '$lib/types/cards/card';
+	import { colonyMap } from '$lib/types/cards/colony';
 	import ColonyType from './ColonyTypeIcon.svelte';
 	import Converter from './Converter.svelte';
 	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
 
-	const colonyCard: Colony = {
-		id: `testing-${crypto.randomUUID()}`,
-		title: 'Colony Title',
-		frontType: 'white',
-		backType: 'green',
-		frontConverters: [{ output: { resource: { brown: 1 } } }],
-		backConverters: [{ input: { resource: { brown: 1 } }, output: { resource: { hexagon: 1 } } }],
-		upgradeConverters: [{ input: { resource: { hexagon: 1 } } }]
-	};
+	export let playerCard: PlayerCard;
+
+	const colonyCard = colonyMap[playerCard.cardId];
+	let flipped: boolean = playerCard.upgraded;
 </script>
 
-<ExpandableCardTemplate>
+<ExpandableCardTemplate
+	bind:flipped
+	on:toggleExpanded={({ detail }) => !detail && (flipped = playerCard.upgraded)}
+>
 	<span class="text-center" slot="title">{colonyCard.title}</span>
 	<div class="grid place-items-center h-full" slot="frontTop">
 		<ColonyType colonyType={colonyCard.frontType} />
@@ -23,8 +22,14 @@
 	<div slot="frontCenter" class="grid grid-cols-[auto_1fr] place-items-center">
 		{#each colonyCard.frontConverters || [] as { input, output }, i}
 			{@const inputId = `${colonyCard.id}-front-${i}`}
-			<label class="flex gap-2 items-center cursor-pointer" for={inputId}>
-				<input type="checkbox" class="checkbox" name="scheduled" id={inputId} />
+			<label
+				class="flex gap-2 items-center cursor-pointer"
+				for={inputId}
+				class:cursor-pointer={!playerCard.upgraded}
+			>
+				{#if !playerCard.upgraded}
+					<input type="checkbox" class="checkbox" name="scheduled" id={inputId} />
+				{/if}
 				<Converter {input} {output} />
 			</label>
 		{/each}
@@ -49,8 +54,15 @@
 	<div slot="backCenter">
 		{#each colonyCard.backConverters || [] as { input, output }, i}
 			{@const inputId = `${colonyCard.id}-back-${i}`}
-			<label for={inputId} class="label cursor-pointer flex gap-2 items-center">
-				<input type="checkbox" class="checkbox" id={inputId} />
+
+			<label
+				for={inputId}
+				class="label flex gap-2 items-center"
+				class:cursor-pointer={playerCard.upgraded}
+			>
+				{#if playerCard.upgraded}
+					<input type="checkbox" class="checkbox" id={inputId} />
+				{/if}
 				<Converter {input} {output} />
 			</label>
 		{/each}

@@ -8,10 +8,10 @@
 </script>
 
 <div
-	class:text-white={colonyType === 'white'}
-	class:text-green-400={colonyType === 'green'}
-	class:text-blue-500={colonyType === 'blue'}
-	class:text-red-400={colonyType === 'red'}
+	class:text-white={colonyType === 'Ice'}
+	class:text-green-400={colonyType === 'Jungle'}
+	class:text-blue-500={colonyType === 'Ocean'}
+	class:text-red-400={colonyType === 'Desert'}
 >
 	<Icon icon="pepicons-print:planet" class={planetClass} />
 </div>

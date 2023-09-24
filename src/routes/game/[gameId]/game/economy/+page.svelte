@@ -2,9 +2,14 @@
 	import ColonyCard from '$lib/components/cards/ColonyCard.svelte';
 	import ConverterCard from '$lib/components/cards/ConverterCard.svelte';
 	import ResearchTeamCard from '$lib/components/cards/ResearchTeamCard.svelte';
+	import { getGameContext } from '$lib/util/client/gameContext';
 	import Icon from '@iconify/svelte';
 	import { createAccordion, melt } from '@melt-ui/svelte';
 	import { slide } from 'svelte/transition';
+
+	const gameContext = getGameContext();
+	const gameState = gameContext.gameState;
+	$: mePlayerInfo = $gameState.gameInfo[gameContext.me.id];
 
 	const {
 		elements: { item, root, trigger, content },
@@ -50,17 +55,21 @@
 					use:melt={$content(id)}
 					transition:slide
 				>
-					{#each Array(numberConverters).fill(0, 0) as _}
-						<li>
-							{#if id === 'colonies'}
-								<ColonyCard />
-							{:else if id === 'converter-cards'}
-								<ConverterCard />
-							{:else}
-								<ResearchTeamCard />
-							{/if}
-						</li>
-					{/each}
+					{#if id === 'colonies'}
+						{#each mePlayerInfo.colonies as playerCard}
+							<ColonyCard {playerCard} />
+						{/each}
+					{:else}
+						{#each Array(numberConverters).fill(0, 0) as _}
+							<li>
+								{#if id === 'converter-cards'}
+									<ConverterCard />
+								{:else}
+									<ResearchTeamCard />
+								{/if}
+							</li>
+						{/each}
+					{/if}
 				</ul>
 			{/if}
 		</div>

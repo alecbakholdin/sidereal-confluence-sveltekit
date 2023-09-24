@@ -1,3 +1,5 @@
+import { colonyIds } from '$lib/types/cards/colony.js';
+import type { PlayerGameInfo } from '$lib/types/game.js';
 import { availableRaces, raceInfoMap } from '$lib/types/race.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
@@ -64,16 +66,24 @@ export const actions = {
 		if (!allReady)
 			return message(form, 'Not everyone is ready. Wait until everyone is ready to start the game');
 
+		gameState.serverInfo = {
+			colonyDeck: [...colonyIds].sort((a, b) => Math.random() - 0.5)
+		};
 		gameState.gameInfo = {};
 		for (const playerId of gameState.players) {
 			const race = gameState.lobbyInfoMap[playerId].race!;
 			const raceObj = raceInfoMap[race];
-			gameState.gameInfo[playerId] = {
+			const colonies = gameState.serverInfo.colonyDeck.splice(0, raceObj.startingColonies);
+			const playerGameInfo: PlayerGameInfo = {
 				race,
 				resources: raceObj.startingResources || [],
+				colonies: colonies.map((id) => ({ cardId: id, ownerId: playerId, upgraded: false })),
+				converterCards: [],
+				researchTeams: []
 			};
+			gameState.gameInfo[playerId] = playerGameInfo;
 		}
-		gameState.state = "inProgress";
+		gameState.state = 'inProgress';
 		gameState.turn = 1;
 		gameState.phase = 0;
 		gameState.phases = ['trade', 'economy', 'confluence'];

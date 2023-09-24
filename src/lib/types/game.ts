@@ -1,3 +1,4 @@
+import type { PlayerCard } from './cards/card';
 import type { RaceType } from './race';
 import type { ResourceAmount } from './resource';
 import type { TradeInfo, TradePreferences } from './trade';
@@ -17,6 +18,10 @@ export type GameState = {
 	lobbyInfoMap: Record<UserId, LobbyPlayerInfo>;
 	gameInfo: Record<UserId, PlayerGameInfo>;
 	trades: TradeInfo[];
+	
+	serverInfo?: {
+		colonyDeck: string[];
+	}
 };
 
 export type LobbyPlayerInfo = {
@@ -28,6 +33,10 @@ export type PlayerGameInfo = {
 	race: RaceType;
 	resources: ResourceAmount[];
 	tradePreferences?: TradePreferences;
+
+	converterCards: PlayerCard[];
+	colonies: PlayerCard[];
+	researchTeams: PlayerCard[];
 };
 
 export function getDefaultGameState(id: string, adminId: UserId): GameState {
