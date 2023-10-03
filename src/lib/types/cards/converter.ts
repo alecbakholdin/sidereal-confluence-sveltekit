@@ -1,6 +1,11 @@
-import type { EntityContainer } from "../entityContainer"
+import type { EntityContainer } from '../entityContainer';
 
-export type Converter = {
-    input?: EntityContainer | EntityContainer[],
-    output?: EntityContainer
+export interface Converter {
+	input?: EntityContainer | EntityContainer[];
+	output?: EntityContainer;
+}
+
+export interface SingleConverter extends Converter {
+	input?: EntityContainer;
+	output?: EntityContainer;
 }

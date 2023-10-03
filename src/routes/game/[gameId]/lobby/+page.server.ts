@@ -1,4 +1,5 @@
-import { colonyIds } from '$lib/types/cards/colony.js';
+import type { CardType, PlayerCard } from '$lib/types/cards/card.js';
+import { colonies, colonyIds, colonyMap } from '$lib/types/cards/colony.js';
 import type { PlayerGameInfo } from '$lib/types/game.js';
 import { availableRaces, raceInfoMap } from '$lib/types/race.js';
 import { fail, redirect } from '@sveltejs/kit';
@@ -73,11 +74,21 @@ export const actions = {
 		for (const playerId of gameState.players) {
 			const race = gameState.lobbyInfoMap[playerId].race!;
 			const raceObj = raceInfoMap[race];
-			const colonies = gameState.serverInfo.colonyDeck.splice(0, raceObj.startingColonies);
+			const drawnColonies = gameState.serverInfo.colonyDeck.splice(0, raceObj.startingColonies);
+			const defaultCard: Pick<PlayerCard, 'ownerId' | 'upgraded' | 'reservedConverters'> = {
+				ownerId: playerId,
+				upgraded: false,
+				reservedConverters: []
+			};
 			const playerGameInfo: PlayerGameInfo = {
 				race,
 				resources: raceObj.startingResources || [],
-				colonies: colonies.map((id) => ({ cardId: id, ownerId: playerId, upgraded: false })),
+				colonies: drawnColonies.map((cardId) => ({
+					...defaultCard,
+					cardId,
+					cardType: 'Colony',
+					colony: colonyMap[cardId]
+				})),
 				converterCards: [],
 				researchTeams: []
 			};

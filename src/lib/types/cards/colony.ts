@@ -1,4 +1,6 @@
-import type { Converter } from './converter';
+import { textChangeRangeIsUnchanged } from 'typescript';
+import type { CardWrapper, PlayerCard } from './card';
+import type { Converter, SingleConverter } from './converter';
 
 export const colonyTypes = ['Ice', 'Jungle', 'Desert', 'Ocean', 'any'] as const;
 export type ColonyType = (typeof colonyTypes)[number];
@@ -9,11 +11,45 @@ export type Colony = {
 	frontType?: ColonyType;
 	backType?: ColonyType;
 
-	acquisitionConverter?: Converter[];
-	frontConverters?: Converter[];
-	upgradeConverters?: Converter[];
-	backConverters?: Converter[];
+	acquisitionConverter?: SingleConverter[];
+	frontConverters?: SingleConverter[];
+	upgradeConverters?: SingleConverter[];
+	backConverters?: SingleConverter[];
 };
+
+export class ColonyCardWrapper implements CardWrapper {
+	private colony: Colony;
+
+	constructor(private playerCard: PlayerCard) {
+		if (playerCard.cardType !== 'Colony')
+			throw new Error('Expected Colony but got ' + playerCard.cardType);
+
+		this.colony = playerCard.colony!;
+		if (!this.colony)
+			throw new Error('Colony is not set for ColonyCardWrapper ' + JSON.stringify(playerCard));
+	}
+
+	markForEconomy(converter: number, status: boolean): boolean {
+		const converters =
+			(this.playerCard.upgraded ? this.colony.backConverters : this.colony.frontConverters) ?? [];
+		const len = converters?.length ?? 0;
+		if (converter >= len || converter < 0) throw new Error('Invalid converter number ' + converter);
+
+		if (!this.playerCard.reservedConverters)
+			this.playerCard.reservedConverters = converters.map(() => false);
+		this.playerCard.reservedConverters[converter] = status;
+		return true;
+	}
+	upgrade(optionNumber: number): SingleConverter {
+		if (this.playerCard.upgraded) return {};
+		this.playerCard.upgraded = true;
+		this.playerCard.reservedConverters = this.colony.backConverters?.map(() => false) || [];
+		return this.colony.upgradeConverters![optionNumber];
+	}
+	get(): PlayerCard {
+		throw new Error('Method not implemented.');
+	}
+}
 
 export const colonies: Colony[] = [
 	{
@@ -378,5 +414,5 @@ export const colonies: Colony[] = [
 	}
 ];
 
-export const colonyIds = colonies.map(({id}) => id);
+export const colonyIds = colonies.map(({ id }) => id);
 export const colonyMap = Object.fromEntries(colonies.map((colony) => [colony.id, colony]));

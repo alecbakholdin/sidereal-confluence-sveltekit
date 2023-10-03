@@ -4,7 +4,7 @@
 	import type { GameState } from '$lib/types/game';
 	import type { User } from '$lib/types/user';
 	import { setGameContext } from '$lib/util/client/gameContext';
-	import { joinGame } from '$lib/util/client/joinGame';
+	import { joinGame } from '$lib/util/client/gameState';
 	import { Drawer, getModalStore, getToastStore } from '@skeletonlabs/skeleton';
 	import { onMount } from 'svelte';
 	import { derived, writable } from 'svelte/store';

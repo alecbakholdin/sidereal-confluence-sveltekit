@@ -1,25 +1,24 @@
-import { PUBLIC_PUSHER_KEY, PUBLIC_PUSHER_CLUSTER } from '$env/static/public';
+import { PUBLIC_PUSHER_CLUSTER, PUBLIC_PUSHER_KEY } from '$env/static/public';
+import type { GameState } from '$lib/types/game';
+import type { TradeProposal } from '$lib/types/trade';
 import type { User } from '$lib/types/user';
-import { type Changeset, applyChangeset } from 'json-diff-ts';
-import Pusher, { type PresenceChannel, type Members } from 'pusher-js';
+import type { ModalStore, ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
+import { applyChangeset, type Changeset } from 'json-diff-ts';
+import Pusher, { type Members, type PresenceChannel } from 'pusher-js';
 import type { Writable } from 'svelte/store';
+import ReviewTradeProposalModalComponent from '../../../routes/game/[gameId]/game/ReviewTradeProposalModalComponent.svelte';
 import {
-	directChannel,
-	presenceChannel,
 	TOAST_EVENT,
 	TRADE_PROPOSAL_EVENT,
-	UPDATE_EVENT
+	UPDATE_EVENT,
+	presenceChannel
 } from '../pusherChannels';
-import type { GameState } from '$lib/types/game';
-import type PrivateChannel from 'pusher-js/types/src/core/channels/private_channel';
-import type { ModalStore, ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
-import type { TradeProposal } from '$lib/types/trade';
-import ReviewTradeProposalModalComponent from '../../../routes/game/[gameId]/game/ReviewTradeProposalModalComponent.svelte';
 
 type MemberInfo = {
 	id: string;
 	info: User;
 };
+
 export function joinGame(
 	gameState: Writable<GameState>,
 	onlineMembers: Writable<User[]>,
@@ -58,7 +57,6 @@ export function joinGame(
 	pusher.user.signin();
 	pusher.user.bind(TOAST_EVENT, (data: ToastSettings) => toastStore.trigger(data));
 	pusher.user.bind(TRADE_PROPOSAL_EVENT, (data: TradeProposal) => {
-		console.log(data);
 		toastStore.trigger({
 			message: `You've been invited to trade by ${getUsername(data.srcPlayerId)}`,
 			autohide: false,

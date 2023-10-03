@@ -1,7 +1,10 @@
 <script lang="ts">
+	import type { PlayerCard } from '$lib/types/cards/card';
 	import type { ConverterCard } from '$lib/types/cards/converterCard';
 	import Converter from './Converter.svelte';
 	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
+
+	export let cardInfo: PlayerCard | string;
 
 	const converterCard: ConverterCard = {
 		id: `testingConverter-${crypto.randomUUID()}`,

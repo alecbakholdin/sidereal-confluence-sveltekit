@@ -42,6 +42,7 @@ const handleGame: Handle = async ({ event, resolve }) => {
 	if (!gameState) return await resolve(event);
 
 	event.locals.gameState = gameState;
+	event.locals.userPlayerInfo = gameState.gameInfo[event.locals.user.id];
 	const oldState = JSON.parse(JSON.stringify(gameState));
 
 	const response = await resolve(event);

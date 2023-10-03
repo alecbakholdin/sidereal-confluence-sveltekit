@@ -8,7 +8,7 @@
 	export let orientation: 'vertical' | 'horizontal' = 'vertical';
 	export let disableFlip = false;
 
-	interface $$slots {
+	interface $$Slots {
 		title: {};
 		frontTop: {};
 		frontCenter: {};
@@ -42,7 +42,7 @@
 	$: expandedWidth = orientation === 'horizontal' ? '20rem' : `${20 / 1.4}rem`;
 </script>
 
-<div class="card p-2">
+<div class="card p-2 w-fit">
 	<div
 		use:melt={$root}
 		class="rotating-card relative flex flex-col items-center transition-all transform w-fit h-fit"
@@ -94,7 +94,7 @@
 			</div>
 
 			{#if $open}
-				<div class="flex-grow w-full" use:melt={$content} transition:slide>
+				<div class="flex-grow w-full" use:melt={$content} transition:slide={{duration: 50}}>
 					<slot name="frontBottom" />
 				</div>
 			{/if}
@@ -138,7 +138,7 @@
 				{/if}
 			</div>
 			{#if $open}
-				<div class="flex-grow w-full" use:melt={$content} transition:slide>
+				<div class="flex-grow w-full" use:melt={$content} transition:slide={{duration: 50}}>
 					<slot name="backBottom" />
 				</div>
 			{/if}

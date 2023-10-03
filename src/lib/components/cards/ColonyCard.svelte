@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PlayerCard } from '$lib/types/cards/card';
 	import { colonyMap } from '$lib/types/cards/colony';
+	import { createEventDispatcher } from 'svelte';
 	import ColonyType from './ColonyTypeIcon.svelte';
 	import Converter from './Converter.svelte';
 	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
@@ -8,11 +9,33 @@
 	export let cardInfo: PlayerCard | string;
 	export let displayOnly: boolean = false;
 
+	interface $$Slots {
+		markForEconomyForm: {
+			formId: string;
+			i: number;
+			status: boolean;
+		};
+		upgradeForm: {
+			formId: string;
+			i: number;
+		};
+	}
+
+	const dispatch = createEventDispatcher<{
+		markForEconomy: {
+			status: boolean;
+			converterNumber: number;
+		};
+		upgrade: number;
+	}>();
+
 	$: isUpgraded = (typeof cardInfo !== 'string' && cardInfo.upgraded) || false;
-	$: colonyCard = colonyMap[typeof cardInfo === 'string' ? cardInfo : cardInfo.cardId];
-	$: frontSelectable = !displayOnly && !isUpgraded
-	$: backSelectable = !displayOnly && isUpgraded
+	$: reservations = (typeof cardInfo !== 'string' && cardInfo.reservedConverters) || [];
+	$: colonyCard = typeof cardInfo === 'string' ? colonyMap[cardInfo] : cardInfo.colony!;
+	$: frontSelectable = !displayOnly && !isUpgraded;
+	$: backSelectable = !displayOnly && isUpgraded;
 	let flipped: boolean = isUpgraded;
+	$: flipped = isUpgraded;
 </script>
 
 <ExpandableCardTemplate
@@ -25,17 +48,17 @@
 	</div>
 	<div slot="frontCenter" class="grid grid-cols-[auto_1fr] place-items-center">
 		{#each colonyCard.frontConverters || [] as { input, output }, i}
-			{@const inputId = `${colonyCard.id}-front-${i}`}
-			<label
-				class="flex gap-2 items-center cursor-pointer"
-				for={inputId}
-				class:cursor-pointer={frontSelectable}
-			>
-				{#if frontSelectable}
-					<input type="checkbox" class="checkbox" name="scheduled" id={inputId} />
-				{/if}
-				<Converter {input} {output} />
-			</label>
+			{@const formId = `${colonyCard.id}-mark-front-${i}`}
+			<slot name="markForEconomyForm" {formId} {i} status={reservations[i]} />
+			<Converter
+				{input}
+				{output}
+				bind:reserved={reservations[i]}
+				form={formId}
+				on:toggle={() =>
+					dispatch('markForEconomy', { converterNumber: i, status: !reservations[i] })}
+				reservable={frontSelectable}
+			/>
 		{/each}
 	</div>
 	<div
@@ -44,12 +67,12 @@
 		class:justify-between={colonyCard.upgradeConverters?.length !== 1}
 		class:justify-center={colonyCard.upgradeConverters?.length === 1}
 	>
-		{#each colonyCard.upgradeConverters || [] as { input, output }}
-			<div>
-				<button type="button" class="btn variant-ringed-secondary p-0">
-					<Converter {input} {output} upgrade phase="trade" />
-				</button>
-			</div>
+		{#each colonyCard.upgradeConverters || [] as { input, output }, i}
+			{@const formId = `${colonyCard.id}-upgrade-${i}`}
+			<slot name="upgradeForm" {formId} {i} />
+			<button type="submit" form={formId} class="btn variant-ringed-secondary p-0 !cursor-pointer" disabled={isUpgraded}>
+				<Converter {input} {output} upgrade phase="trade" />
+			</button>
 		{/each}
 	</div>
 	<div class="grid place-items-center h-full" slot="backTop">
@@ -57,18 +80,17 @@
 	</div>
 	<div slot="backCenter">
 		{#each colonyCard.backConverters || [] as { input, output }, i}
-			{@const inputId = `${colonyCard.id}-back-${i}`}
-
-			<label
-				for={inputId}
-				class="label flex gap-2 items-center"
-				class:cursor-pointer={backSelectable}
-			>
-				{#if backSelectable}
-					<input type="checkbox" class="checkbox" id={inputId} />
-				{/if}
-				<Converter {input} {output} />
-			</label>
+			{@const formId = `${colonyCard.id}-mark-back-${i}`}
+			<slot name="markForEconomyForm" {formId} {i} status={reservations[i]} />
+			<Converter
+				{input}
+				{output}
+				bind:reserved={reservations[i]}
+				on:toggle={() =>
+					dispatch('markForEconomy', { converterNumber: i, status: !reservations[i] })}
+				form={formId}
+				reservable={backSelectable}
+			/>
 		{/each}
 	</div>
 </ExpandableCardTemplate>
