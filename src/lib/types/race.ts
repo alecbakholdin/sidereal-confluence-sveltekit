@@ -8,10 +8,10 @@ export type RaceInfo = {
 	name: RaceType;
 	image: string;
 	color: string;
-	startingResources?: ResourceAmount[];
+	startingResources?: readonly ResourceAmount[];
 };
 
-export const raceInfo: RaceInfo[] = [
+export const raceInfo: readonly RaceInfo[] = [
 	{
 		name: 'Caylion',
 		image: '/images/races/Caylion.webp',
