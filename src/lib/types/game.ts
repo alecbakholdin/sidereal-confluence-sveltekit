@@ -10,6 +10,7 @@ export type GameState = {
 
 	state: 'lobby' | 'inProgress';
 	turn: number;
+	turns: TurnInfo[];
 	phase: number;
 	phases: ('trade' | 'economy' | 'confluence')[];
 
@@ -23,6 +24,12 @@ export type GameState = {
 		colonyDeck: string[];
 	}
 };
+
+export type TurnInfo = {
+	turnNumber: number;
+	sharingBonus: number;
+	yengiiSharingBonus: number;
+}
 
 export type LobbyPlayerInfo = {
 	ready?: boolean;
@@ -46,6 +53,7 @@ export function getDefaultGameState(id: string, adminId: UserId): GameState {
 
 		state: 'lobby',
 		turn: 1,
+		turns: [],
 		phase: 0,
 		phases: ['trade', 'economy', 'confluence'],
 

@@ -65,7 +65,7 @@
 			<button
 				type="submit"
 				form={formId}
-				class="btn p-0 cursor-pointer"
+				class="btn p-0 cursor-pointer variant-ringed-secondary"
 				disabled={isUpgraded}
 			>
 				<Converter {input} {output} upgrade phase="trade" />
