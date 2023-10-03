@@ -12,21 +12,7 @@
 	const confluenceTab = `/game/${gameId}/game/confluence`;
 
 	$: meInfo = $gameState.gameInfo[gameContext.me.id];
-
-	let turn = 1;
-	let phase = 0;
-
-	function nextPhase() {
-		phase = (phase + 1) % $gameState.phases.length;
-		if (phase === 0) turn++;
-	}
-	function prevPhase() {
-		phase--;
-		if (phase < 0) {
-			phase = $gameState.phases.length - 1;
-			turn--;
-		}
-	}
+	$: turnInfo = $gameState.turns[$gameState.turn];
 </script>
 
 <AppShell
@@ -47,19 +33,36 @@
 			<div class="info-section">
 				<span>Game Info</span>
 				<div class="p-2 flex flex-col gap-1">
-					<PhaseTrack phases={[1, 2, 3, 4, 5, 6]} activePhase={turn - 1} />
-					<PhaseTrack phases={$gameState.phases} activePhase={phase} />
+					<PhaseTrack
+						phaseNames={$gameState.turns.map(({ turnNumber }) => turnNumber)}
+						activePhase={$gameState.turn}
+					>
+						<div class="card p-2 flex flex-col" slot="tooltip" let:i>
+							{@const tooltipTurn = $gameState.turns[i]}
+							<span>
+								<strong>Turn: </strong>
+								{tooltipTurn.turnNumber}
+							</span>
+							<span>
+								<strong>Sharing Bonus:</strong>
+								{tooltipTurn.sharingBonus}
+							</span>
+							<span>
+								<strong>Yengii Sharing Bonus:</strong>
+								{tooltipTurn.yengiiSharingBonus}
+							</span>
+						</div>
+					</PhaseTrack>
+					<PhaseTrack phaseNames={$gameState.phases} activePhase={$gameState.phase} />
 					<span>
 						<strong>Sharing Bonus:</strong>
-						6 VP
+						{turnInfo.sharingBonus} VP
 					</span>
 					<span>
 						<strong>Yengii Sharing Bonus:</strong>
-						3 VP
+						{turnInfo.yengiiSharingBonus} VP
 					</span>
 				</div>
-				<button type="button" on:click={prevPhase}>prev</button>
-				<button type="button" on:click={nextPhase}>next</button>
 			</div>
 			<EntityContainerComponent entityContainer={meInfo.resources} title="My Resources" />
 		</div>

@@ -1,6 +1,6 @@
 import type { CardType, PlayerCard } from '$lib/types/cards/card.js';
 import { colonies, colonyIds, colonyMap } from '$lib/types/cards/colony.js';
-import type { PlayerGameInfo } from '$lib/types/game.js';
+import { getTurnsForPlayerCount, type GameState, type PlayerGameInfo } from '$lib/types/game.js';
 import { availableRaces, raceInfoMap } from '$lib/types/race.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
@@ -67,38 +67,54 @@ export const actions = {
 		if (!allReady)
 			return message(form, 'Not everyone is ready. Wait until everyone is ready to start the game');
 
-		gameState.serverInfo = {
-			colonyDeck: [...colonyIds].sort((a, b) => Math.random() - 0.5)
-		};
+		setupConfluence(gameState);
 		gameState.gameInfo = {};
 		for (const playerId of gameState.players) {
-			const race = gameState.lobbyInfoMap[playerId].race!;
-			const raceObj = raceInfoMap[race];
-			const drawnColonies = gameState.serverInfo.colonyDeck.splice(0, raceObj.startingColonies);
-			const defaultCard: Pick<PlayerCard, 'ownerId' | 'upgraded' | 'reservedConverters'> = {
-				ownerId: playerId,
-				upgraded: false,
-				reservedConverters: []
-			};
-			const playerGameInfo: PlayerGameInfo = {
-				race,
-				resources: raceObj.startingResources || [],
-				colonies: drawnColonies.map((cardId) => ({
-					...defaultCard,
-					cardId,
-					cardType: 'Colony',
-					colony: colonyMap[cardId]
-				})),
-				converterCards: [],
-				researchTeams: []
-			};
-			gameState.gameInfo[playerId] = playerGameInfo;
+			setupPlayer(gameState, playerId);
 		}
 		gameState.state = 'inProgress';
-		gameState.turn = 1;
+		gameState.turn = 0;
 		gameState.phase = 0;
 		gameState.phases = ['trade', 'economy', 'confluence'];
 
 		throw redirect(308, `/game/${gameState.id}/game`);
 	}
 };
+
+function setupPlayer(gameState: GameState, playerId: string) {
+	const race = gameState.lobbyInfoMap[playerId].race!;
+	const raceObj = raceInfoMap[race];
+	const drawnColonies = gameState.serverInfo!.colonyDeck.splice(0, raceObj.startingColonies);
+	const defaultCard: Pick<PlayerCard, 'ownerId' | 'upgraded' | 'reservedConverters'> = {
+		ownerId: playerId,
+		upgraded: false,
+		reservedConverters: []
+	};
+	const playerGameInfo: PlayerGameInfo = {
+		race,
+		resources: [...(raceObj.startingResources || [])],
+		colonies: drawnColonies.map((cardId) => ({
+			...defaultCard,
+			cardId,
+			cardType: 'Colony',
+			colony: colonyMap[cardId]
+		})),
+		converterCards: [],
+		researchTeams: []
+	};
+	gameState.gameInfo[playerId] = playerGameInfo;
+}
+
+function setupConfluence(gameState: GameState) {
+	const numPlayers = gameState.players.length;
+	gameState.turns = getTurnsForPlayerCount(numPlayers);
+
+	// confluence decks
+	gameState.serverInfo = {
+		colonyDeck: [...colonyIds].sort((a, b) => Math.random() - 0.5)
+	};
+
+	/* const kjasModifier = Object.values(gameState.lobbyInfo).find(({race}) => race === 'Kjasjavikalimm') ? 1 : 0;
+	const numColonies = numPlayers + kjasModifier;
+	const numResearchTeams = numPlayers; */
+}
