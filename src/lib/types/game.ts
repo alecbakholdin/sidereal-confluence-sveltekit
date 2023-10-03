@@ -1,3 +1,4 @@
+import type { PlayerCard } from './cards/card';
 import type { RaceType } from './race';
 import type { ResourceAmount } from './resource';
 import type { TradeInfo, TradePreferences } from './trade';
@@ -9,6 +10,7 @@ export type GameState = {
 
 	state: 'lobby' | 'inProgress';
 	turn: number;
+	turns: TurnInfo[];
 	phase: number;
 	phases: ('trade' | 'economy' | 'confluence')[];
 
@@ -17,7 +19,17 @@ export type GameState = {
 	lobbyInfoMap: Record<UserId, LobbyPlayerInfo>;
 	gameInfo: Record<UserId, PlayerGameInfo>;
 	trades: TradeInfo[];
+	
+	serverInfo?: {
+		colonyDeck: string[];
+	}
 };
+
+export type TurnInfo = {
+	turnNumber: number;
+	sharingBonus: number;
+	yengiiSharingBonus: number;
+}
 
 export type LobbyPlayerInfo = {
 	ready?: boolean;
@@ -28,6 +40,10 @@ export type PlayerGameInfo = {
 	race: RaceType;
 	resources: ResourceAmount[];
 	tradePreferences?: TradePreferences;
+
+	converterCards: PlayerCard[];
+	colonies: PlayerCard[];
+	researchTeams: PlayerCard[];
 };
 
 export function getDefaultGameState(id: string, adminId: UserId): GameState {
@@ -37,6 +53,7 @@ export function getDefaultGameState(id: string, adminId: UserId): GameState {
 
 		state: 'lobby',
 		turn: 1,
+		turns: [],
 		phase: 0,
 		phases: ['trade', 'economy', 'confluence'],
 

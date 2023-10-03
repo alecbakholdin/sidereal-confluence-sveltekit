@@ -1,4 +1,4 @@
-import type { GameState } from "$lib/types/game";
+import type { GameState, PlayerGameInfo } from "$lib/types/game";
 import type { User } from "$lib/types/user";
 
 declare global {
@@ -9,6 +9,7 @@ declare global {
         }
         interface Locals {
             gameState: GameState;
+            userPlayerInfo: PlayerGameInfo;
             user: User;
         }
         // interface PageData {}

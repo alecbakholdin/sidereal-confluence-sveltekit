@@ -1,52 +1,107 @@
 <script lang="ts">
-	import { createAccordion, melt } from '@melt-ui/svelte';
-	import { slide } from 'svelte/transition';
-	import ConverterCard from './ConverterCard.svelte';
+	import { page } from '$app/stores';
+	import Card from '$lib/components/cards/Card.svelte';
+	import type { PlayerCard } from '$lib/types/cards/card.js';
+	import { getMyPlayerInfo } from '$lib/util/client/gameContext';
+	import { confirmAction } from '$lib/util/client/modals';
+	import { superFormToastOnError } from '$lib/util/client/toasts';
 	import Icon from '@iconify/svelte';
-	import { writable } from 'svelte/store';
+	import { createAccordion, melt } from '@melt-ui/svelte';
+	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
+	import type { Readable } from 'svelte/store';
+	import { slide } from 'svelte/transition';
+	import { superForm } from 'sveltekit-superforms/client';
+
+	export let data;
+
+	const toastStore = getToastStore();
+	const modalStore = getModalStore();
 
 	const {
 		elements: { item, root, trigger, content },
 		helpers: { isSelected }
-	} = createAccordion({defaultValue: 'converter-cards'});
+	} = createAccordion({ defaultValue: 'colonies' });
 
-	const test = [
+	const { enhance: markForEconomyEnhance } = superForm(data.markForEconomyForm, {
+		onError: (e) => superFormToastOnError(toastStore, e)
+	});
+	const { enhance: upgradeEnhance } = superForm(data.upgradeForm, {
+		onSubmit: async ({ cancel }) =>
+			await confirmAction(modalStore, {
+				onCancel: cancel,
+				prompt: 'Are you sure you want to upgrade?'
+			}),
+		onError: (e) => superFormToastOnError(toastStore, e)
+	});
+	const myPlayerInfo = getMyPlayerInfo();
+
+	const cardList: { id: string; title: string; icon: string; cards: PlayerCard[] }[] = [
 		{
 			id: 'converter-cards',
 			title: 'Converter Cards',
 			icon: 'fluent:card-ui-20-regular',
-			numberConverters: 8
+			cards: $myPlayerInfo.converterCards
 		},
 		{
 			id: 'colonies',
 			title: 'Colonies',
 			icon: 'mdi:planet',
-			numberConverters: 3
+			cards: $myPlayerInfo.colonies
 		},
 		{
 			id: 'research-teams',
 			title: 'Research Teams',
 			icon: 'majesticons:test-tube-filled',
-			numberConveters: 2
+			cards: $myPlayerInfo.researchTeams
 		}
-	] as { id: string; title: string; icon: string; numberConverters: number }[];
+	];
 </script>
 
-<div class="p-2 md:p-4 w-full max-w-2xl place-self-center" use:melt={$root}>
-	{#each test as { id, title, icon, numberConverters }}
+<div class="p-2 md:p-4 w-full max-w-4xl place-self-center" use:melt={$root}>
+	{#each cardList as { id, title, icon, cards }}
 		{@const selected = $isSelected(id)}
 		<div class="card my-1" use:melt={$item(id)} class:hover:bg-surface-700={!selected}>
 			<button type="button" class="w-full flex items-center p-2 gap-2" use:melt={$trigger(id)}>
 				<Icon {icon} class="text-4xl" />
 				<h4 class="h4 flex-grow sm:text-start">{title}</h4>
 				<div class:rotate-180={selected}>
-					<Icon icon="tabler:chevron-down" class="text-4xl transition-transform" />
+					<Icon icon="tabler:chevron-down" class="text-4xl" />
 				</div>
 			</button>
 			{#if selected}
-				<ul class="flex flex-wrap gap-2 p-2" transition:slide>
-					{#each Array(numberConverters).fill(0, 0) as _}
-						<li><ConverterCard /></li>
+				<ul
+					class="grid place-items-center grid-cols-1 lg:grid-cols-2 pb-4 gap-2"
+					use:melt={$content(id)}
+					transition:slide
+				>
+					{#each cards as card}
+						<li>
+							<Card cardInfo={card}>
+								<svelte:fragment slot="upgradeForm" let:formId let:i>
+									<form
+										id={formId}
+										action="{$page.url.pathname}?/upgrade"
+										use:upgradeEnhance
+										method="post"
+									>
+										<input type="hidden" name="optionNumber" value={i} />
+										<input type="hidden" name="cardId" value={card.cardId} />
+									</form>
+								</svelte:fragment>
+								<svelte:fragment slot="markForEconomyForm" let:formId let:i let:status>
+									<form
+										id={formId}
+										action="{$page.url.pathname}?/markForEconomy"
+										use:markForEconomyEnhance
+										method="post"
+									>
+										<input type="hidden" name="converterNumber" value={i} />
+										<input type="hidden" name="cardId" value={card.cardId} />
+										<input type="hidden" name="status" value={status} />
+									</form>
+								</svelte:fragment>
+							</Card>
+						</li>
 					{/each}
 				</ul>
 			{/if}

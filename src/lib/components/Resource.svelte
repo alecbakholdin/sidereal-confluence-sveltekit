@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { largeResources, type LargeResourceType, type ResourceType } from '$lib/types/resource';
+	import { largeResources, type LargeCubeType, type ResourceType } from '$lib/types/resource';
 	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
 
@@ -8,7 +8,7 @@
 	export let editable: boolean = false;
 	export let donation: boolean = false;
 
-	$: large = largeResources.includes(resource as LargeResourceType) || resource === 'hexagon';
+	$: large = largeResources.includes(resource as LargeCubeType);
 	$: small = !large;
 
 	const dispatch = createEventDispatcher<{ change: number }>();
@@ -43,6 +43,10 @@
 	<div class="icon">
 		{#if resource === 'hexagon'}
 			<Icon icon="ic:baseline-hexagon" />
+		{:else if resource === 'ship'}
+			<Icon icon="game-icons:spaceship" />
+		{:else if resource === 'point'}
+			<Icon icon="solar:star-circle-bold-duotone" />
 		{:else}
 			<Icon icon="bi:diamond-fill" />
 		{/if}
@@ -71,6 +75,7 @@
 			on:mouseup={handleMouseUp}
 			on:touchend={handleMouseUp}
 			on:click
+			tabindex={editable ? 0 : -1}
 			class:pointer-events-none={!editable}
 		>
 			<span class="font-mono quantity">
@@ -90,16 +95,21 @@
 	.donation {
 		fill: none;
 		stroke: var(--donation-color);
-		stroke-width: 1px;
-		stroke-dasharray: 2, 1;
+		stroke-width: 1.5px;
 		stroke-linejoin: round;
 	}
 
 	/* text formatting */
-	.large, .large input{
+	.large {
+		@apply text-5xl;
+	}
+	.large input {
 		@apply text-4xl;
 	}
-	.small, .small input {
+	.small {
+		@apply text-3xl;
+	}
+	.small input {
 		@apply text-2xl;
 	}
 
@@ -142,6 +152,12 @@
 	}
 	.hexagon .icon {
 		@apply text-amber-400;
+	}
+	.point .icon {
+		@apply text-secondary-500;
+	}
+	.ship .icon {
+		@apply text-red-600
 	}
 
 	/* remove up and down arrows */
