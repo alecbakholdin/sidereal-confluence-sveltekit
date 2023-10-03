@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { ResearchTeam } from '$lib/types/cards/researchTeam';
-	import Converter from './Converter.svelte';
-	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
+	import type { CardProps } from './Card.svelte';
+	import Converter from './cardParts/Converter.svelte';
+	import ExpandableCardTemplate from './cardParts/ExpandableCardTemplate.svelte';
+
+	interface $$Props extends CardProps {};
 
 	const researchTeam: ResearchTeam = {
 		id: `testing-${crypto.randomUUID()}`,

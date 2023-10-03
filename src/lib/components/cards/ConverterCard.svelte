@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PlayerCard } from '$lib/types/cards/card';
 	import type { ConverterCard } from '$lib/types/cards/converterCard';
-	import Converter from './Converter.svelte';
-	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
+	import Converter from './cardParts/Converter.svelte';
+	import ExpandableCardTemplate from './cardParts/ExpandableCardTemplate.svelte';
 
 	export let cardInfo: PlayerCard | string;
 

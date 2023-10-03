@@ -2,24 +2,16 @@
 	import type { PlayerCard } from '$lib/types/cards/card';
 	import { colonyMap } from '$lib/types/cards/colony';
 	import { createEventDispatcher } from 'svelte';
-	import ColonyType from './ColonyTypeIcon.svelte';
-	import Converter from './Converter.svelte';
-	import ExpandableCardTemplate from './ExpandableCardTemplate.svelte';
+	import type { CardProps, CardSlots } from './Card.svelte';
+	import ColonyType from './cardParts/ColonyTypeIcon.svelte';
+	import Converter from './cardParts/Converter.svelte';
+	import ExpandableCardTemplate from './cardParts/ExpandableCardTemplate.svelte';
+
+	interface $$Slots extends CardSlots {}
+	interface $$Props extends CardProps {}
 
 	export let cardInfo: PlayerCard | string;
 	export let displayOnly: boolean = false;
-
-	interface $$Slots {
-		markForEconomyForm: {
-			formId: string;
-			i: number;
-			status: boolean;
-		};
-		upgradeForm: {
-			formId: string;
-			i: number;
-		};
-	}
 
 	const dispatch = createEventDispatcher<{
 		markForEconomy: {
@@ -70,7 +62,12 @@
 		{#each colonyCard.upgradeConverters || [] as { input, output }, i}
 			{@const formId = `${colonyCard.id}-upgrade-${i}`}
 			<slot name="upgradeForm" {formId} {i} />
-			<button type="submit" form={formId} class="btn variant-ringed-secondary p-0 !cursor-pointer" disabled={isUpgraded}>
+			<button
+				type="submit"
+				form={formId}
+				class="btn p-0 cursor-pointer"
+				disabled={isUpgraded}
+			>
 				<Converter {input} {output} upgrade phase="trade" />
 			</button>
 		{/each}

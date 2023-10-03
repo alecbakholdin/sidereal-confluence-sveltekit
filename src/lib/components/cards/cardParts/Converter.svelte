@@ -4,7 +4,7 @@
 	import { sortedResourceArrFromEntityContainer } from '$lib/types/resource';
 	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
-	import Resource from '../Resource.svelte';
+	import Resource from '../../Resource.svelte';
 	import ColonyTypeIcon from './ColonyTypeIcon.svelte';
 
 	const uuid = crypto.randomUUID();
