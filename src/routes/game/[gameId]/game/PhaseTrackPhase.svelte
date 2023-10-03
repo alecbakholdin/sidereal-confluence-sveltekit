@@ -3,19 +3,21 @@
 
 	const {
 		elements: { content, trigger, arrow },
-		states: { open }
+		states: { open },
 	} = createTooltip({
 		positioning: {
 			placement: 'bottom'
 		},
+		closeOnPointerDown: false,
+		forceVisible: true,
 		openDelay: 0,
 		closeDelay: 0
 	});
 </script>
 
-<span use:melt={$trigger} class:pointer-cursor={$$slots.tooltip}>
+<button use:melt={$trigger} class:pointer-cursor={$$slots.tooltip} disabled={!$$slots.tooltip}>
 	<slot />
-</span>
+</button>
 {#if $open}
 	<div use:melt={$content} class="z-20">
 		<slot name="tooltip" />

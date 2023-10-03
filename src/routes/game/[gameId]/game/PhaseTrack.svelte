@@ -20,12 +20,16 @@
 <div class="relative flex items-center gap-1" bind:this={container}>
 	{#each formattedPhases as phase, i}
 		<span class="z-10" bind:this={rects[i]}>
-			<PhaseTrackPhase>
-				<svelte:fragment slot="tooltip">
-					<slot name="tooltip" {i}/>
-				</svelte:fragment>
+			{#if $$slots.tooltip}
+				<PhaseTrackPhase>
+					<svelte:fragment slot="tooltip">
+						<slot name="tooltip" {i} />
+					</svelte:fragment>
+					{phase}
+				</PhaseTrackPhase>
+			{:else}
 				{phase}
-			</PhaseTrackPhase>
+			{/if}
 		</span>
 		{#if i < phaseNames.length - 1}
 			<Icon icon="material-symbols:chevron-right" class="w-4 z-10" />
