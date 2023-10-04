@@ -11,6 +11,8 @@ export type PlayerCard = {
     cardType: CardType;
     reservedConverters: boolean[]; // length should match the number of converters
 
+    caylionDoubled?: boolean;
+
     colony?: Colony;
     converter?: Converter;
     researchTeam?: ResearchTeam;

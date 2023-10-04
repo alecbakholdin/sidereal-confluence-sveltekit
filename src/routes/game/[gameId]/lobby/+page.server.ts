@@ -97,10 +97,12 @@ function setupPlayer(gameState: GameState, playerId: string) {
 			...defaultCard,
 			cardId,
 			cardType: 'Colony',
+			caylionDoubled: race === 'Caylion',
 			colony: colonyMap[cardId]
 		})),
 		converterCards: [],
-		researchTeams: []
+		researchTeams: [],
+		ready: false
 	};
 	gameState.gameInfo[playerId] = playerGameInfo;
 }

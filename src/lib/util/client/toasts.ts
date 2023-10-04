@@ -15,8 +15,12 @@ export function superFormToastOnError<T, M>(
 ) {
 	const { error } = event.result;
 	const message = typeof error === 'string' ? error : error.message;
+	toastError(toastStore, message);
+}
+
+export function toastError(toastStore: ToastStore, message: string) {
 	toastStore.trigger({
 		message,
-		background: 'variant-ghost-error'
+		background: 'variant-filled-error'
 	});
 }

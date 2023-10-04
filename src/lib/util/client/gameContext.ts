@@ -28,3 +28,8 @@ export function getMyPlayerInfo(): Readable<PlayerGameInfo> {
 	const gameState = getGameState();
 	return derived(gameState, ({ gameInfo }) => gameInfo[gameContext.me.id]);
 }
+
+export function getRootGamePath(): string {
+	const gameContext = getGameContext();
+	return gameContext.getUrl('/game');
+}

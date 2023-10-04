@@ -45,6 +45,8 @@ export type PlayerGameInfo = {
 	converterCards: PlayerCard[];
 	colonies: PlayerCard[];
 	researchTeams: PlayerCard[];
+
+	ready: boolean;
 };
 
 export function getDefaultGameState(id: string, adminId: UserId): GameState {
