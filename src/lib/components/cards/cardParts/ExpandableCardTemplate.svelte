@@ -5,6 +5,8 @@
 	import { slide } from 'svelte/transition';
 
 	export let flipped = false;
+	export let expanded = false;
+	export let disableExpansion = false;
 	export let orientation: 'vertical' | 'horizontal' = 'vertical';
 	export let disableFlip = false;
 
@@ -40,6 +42,7 @@
 	$: unexpandedWidth = triggerWidth + 'px';
 	$: expandedHeight = orientation === 'vertical' ? '20rem' : `${20 / 1.4}rem`;
 	$: expandedWidth = orientation === 'horizontal' ? '20rem' : `${20 / 1.4}rem`;
+	$: $open = expanded;
 </script>
 
 <div class="card p-2 w-fit">
@@ -58,15 +61,17 @@
 					class="flex flex-grow flex-col"
 					transition:slide={{ duration: 50 }}
 				>
-					<button use:melt={$trigger} class="btn-icon btn-icon-sm absolute top-0 left-0">
-						<Icon icon="bx:collapse-alt" class="text-xl" />
-					</button>
+					{#if !disableExpansion}
+						<button use:melt={$trigger} class="btn-icon btn-icon-sm absolute top-0 left-0">
+							<Icon icon="bx:collapse-alt" class="text-xl" />
+						</button>
+					{/if}
 
 					<button
 						type="button"
 						class="btn-icon btn-icon-sm absolute top-0 right-0"
 						class:hidden={disableFlip}
-						on:click={() => (flipped = !flipped)}
+						on:click|stopPropagation={() => (flipped = !flipped)}
 					>
 						<Icon icon="solar:refresh-bold" class="text-xl" />
 					</button>
@@ -82,7 +87,7 @@
 				bind:clientWidth={frontTriggerWidth}
 			>
 				<slot name="frontCenter" />
-				{#if !$open}
+				{#if !$open && !disableExpansion}
 					<button
 						use:melt={$trigger}
 						class="btn-icon btn-icon-sm"
@@ -94,7 +99,7 @@
 			</div>
 
 			{#if $open}
-				<div class="flex-grow w-full" use:melt={$content} transition:slide={{duration: 50}}>
+				<div class="flex-grow w-full" use:melt={$content} transition:slide={{ duration: 50 }}>
 					<slot name="frontBottom" />
 				</div>
 			{/if}
@@ -106,14 +111,16 @@
 					class="flex flex-col flex-grow"
 					transition:slide={{ duration: 50 }}
 				>
-					<button use:melt={$trigger} class="btn-icon btn-icon-sm absolute top-0 left-0">
-						<Icon icon="bx:collapse-alt" class="text-xl" />
-					</button>
+					{#if !disableExpansion}
+						<button use:melt={$trigger} class="btn-icon btn-icon-sm absolute top-0 left-0">
+							<Icon icon="bx:collapse-alt" class="text-xl" />
+						</button>
+					{/if}
 					<button
 						type="button"
 						class="btn-icon btn-icon-sm absolute top-0 right-0"
 						class:hidden={disableFlip}
-						on:click={() => (flipped = !flipped)}
+						on:click|stopPropagation={() => (flipped = !flipped)}
 					>
 						<Icon icon="solar:refresh-bold" class="text-xl" />
 					</button>
@@ -127,7 +134,7 @@
 				bind:clientWidth={backTriggerWidth}
 			>
 				<slot name="backCenter" />
-				{#if !$open}
+				{#if !$open && !disableExpansion}
 					<button
 						use:melt={$trigger}
 						class="btn-icon btn-icon-sm"
@@ -138,7 +145,7 @@
 				{/if}
 			</div>
 			{#if $open}
-				<div class="flex-grow w-full" use:melt={$content} transition:slide={{duration: 50}}>
+				<div class="flex-grow w-full" use:melt={$content} transition:slide={{ duration: 50 }}>
 					<slot name="backBottom" />
 				</div>
 			{/if}

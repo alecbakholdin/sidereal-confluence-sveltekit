@@ -12,8 +12,9 @@ export const actions = {
 	async unready({locals: {userPlayerInfo}}) {
 		userPlayerInfo.ready = false;
 	},
-	async nextPhase({locals: {gameState}}) {
+	async nextPhase({locals: {gameState, userPlayerInfo}}) {
 		const playerInfos = Object.values(gameState.gameInfo);
+		userPlayerInfo.ready = true;
 		const allReady = !playerInfos.find(({ready}) => !ready);
 		if(!allReady) throw error(400, {message: "Not everyone is ready"});
 

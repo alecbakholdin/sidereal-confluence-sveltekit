@@ -1,6 +1,6 @@
 import type { CardType, PlayerCard } from '$lib/types/cards/card.js';
 import { colonies, colonyIds, colonyMap } from '$lib/types/cards/colony.js';
-import { getTurnsForPlayerCount, type GameState, type PlayerGameInfo } from '$lib/types/game.js';
+import { getTurnsForPlayerCount, type GameState, type PlayerGameInfo, getColonyBidTrack, getResearchTeamBidTrack } from '$lib/types/game.js';
 import { availableRaces, raceInfoMap } from '$lib/types/race.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
@@ -92,6 +92,7 @@ function setupPlayer(gameState: GameState, playerId: string) {
 	};
 	const playerGameInfo: PlayerGameInfo = {
 		race,
+		raceInfo: raceObj,
 		resources: [...(raceObj.startingResources || [])],
 		colonies: drawnColonies.map((cardId) => ({
 			...defaultCard,
@@ -116,7 +117,14 @@ function setupConfluence(gameState: GameState) {
 		colonyDeck: [...colonyIds].sort((a, b) => Math.random() - 0.5)
 	};
 
-	/* const kjasModifier = Object.values(gameState.lobbyInfo).find(({race}) => race === 'Kjasjavikalimm') ? 1 : 0;
+	const kjasModifier = Object.values(gameState.lobbyInfoMap).find(({race}) => race === 'Kjasjavikalimm') ? 1 : 0;
 	const numColonies = numPlayers + kjasModifier;
-	const numResearchTeams = numPlayers; */
+	gameState.colonyBidTrack = getColonyBidTrack(numColonies);
+	for(const bidTrack of gameState.colonyBidTrack) {
+		const colonyId: string = gameState.serverInfo!.colonyDeck.splice(0, 1)[0];
+		bidTrack.card = colonyMap[colonyId];
+	}
+
+	const numResearchTeams = numPlayers;
+	gameState.researchTeamBidTrack = getResearchTeamBidTrack(numResearchTeams);
 }

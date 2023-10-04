@@ -32,6 +32,8 @@
 
 <ExpandableCardTemplate
 	bind:flipped
+	expanded={displayOnly}
+	disableExpansion={displayOnly}
 	on:toggleExpanded={({ detail }) => !detail && (flipped = isUpgraded)}
 >
 	<span class="text-center" slot="title">{colonyCard.title}</span>
@@ -65,7 +67,8 @@
 			<button
 				type="submit"
 				form={formId}
-				class="btn p-0 cursor-pointer variant-ringed-secondary"
+				class="btn p-0 variant-ringed-secondary"
+				class:pointer-events-none={displayOnly}
 				disabled={isUpgraded}
 			>
 				<Converter {input} {output} upgrade phase="trade" />

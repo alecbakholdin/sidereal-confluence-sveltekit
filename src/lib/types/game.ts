@@ -1,5 +1,7 @@
 import type { PlayerCard } from './cards/card';
-import type { RaceType } from './race';
+import type { Colony } from './cards/colony';
+import type { ResearchTeam } from './cards/researchTeam';
+import type { RaceInfo, RaceType } from './race';
 import type { ResourceAmount } from './resource';
 import type { TradeInfo, TradePreferences } from './trade';
 import type { UserId } from './user';
@@ -20,10 +22,30 @@ export type GameState = {
 	gameInfo: Record<UserId, PlayerGameInfo>;
 	trades: TradeInfo[];
 
+	colonyBidTrack: BidTrack<Colony>[];
+	colonyBidOrder?: BidOrder[];
+	colonyActiveBidder?: number;
+	researchTeamBidTrack: BidTrack<ResearchTeam>[];
+	researchTeamBidOrder?: BidOrder[];
+	researchTeamActiveBidder?: number;
+
 	serverInfo?: {
 		colonyDeck: string[];
 	}
 };
+
+export interface BidTrack<T> {
+	shipMinimum: number;
+	card?: T;
+	reservedBy?: UserId;
+}
+
+export type BidOrder = {
+	user: UserId;
+	shipsUsed: number;
+	numCards: number;
+	tiebreaker: number;
+}
 
 export type TurnInfo = {
 	turnNumber: number;
@@ -39,6 +61,7 @@ export type LobbyPlayerInfo = {
 
 export type PlayerGameInfo = {
 	race: RaceType;
+	raceInfo: RaceInfo;
 	resources: ResourceAmount[];
 	tradePreferences?: TradePreferences;
 
@@ -59,6 +82,9 @@ export function getDefaultGameState(id: string, adminId: UserId): GameState {
 		turns: [],
 		phase: 0,
 		phases: ['trade', 'economy', 'confluence'],
+
+		colonyBidTrack: [],
+		researchTeamBidTrack: [],
 
 		players: [],
 		usernameMap: {},
@@ -85,4 +111,32 @@ const availableTurnInfos: readonly TurnInfo[] = [
 export function getTurnsForPlayerCount(playerCount: number) {
 	const players = Math.max(4, playerCount);
 	return availableTurnInfos.filter(({ playerCounts }) => playerCounts.includes(players)).sort((a, b) => a.turnNumber - b.turnNumber)
+}
+
+const researchTeamBidTracks: readonly number[][] = [
+	[1, 1, 2, 3],
+	[1, 1, 2, 3, 3],
+	[1, 1, 1, 2, 3, 3],
+	[1, 1, 1, 2, 2, 3, 4],
+	[1, 1, 1, 1, 2, 2, 3, 4],
+	[1, 1, 1, 1, 2, 2, 3, 4, 4]
+]
+const colonyBidTracks: readonly number[][] = [
+	[1, 1, 2, 3],
+	[1, 1, 2, 3, 3],
+	[1, 1, 1, 2, 3, 3],
+	[1, 1, 1, 2, 2, 3, 4],
+	[1, 1, 1, 1, 2, 2, 3, 4],
+	[1, 1, 1, 1, 2, 2, 2, 4, 4],
+	[1, 1, 1, 1, 1, 2, 2, 2, 4, 4]
+]
+function getBidTrackForPlayerCount<T>(arr: readonly number[][], playerCount: number): BidTrack<T>[] {
+	const clippedPlayerCount = Math.min(Math.max(4, playerCount), arr.length - 1); // range is [4, arr.length)
+	return arr[clippedPlayerCount - 4].map((shipMinimum): BidTrack<T> => ({ shipMinimum }));
+}
+export function getColonyBidTrack(playerCount: number) {
+	return getBidTrackForPlayerCount<Colony>(colonyBidTracks, playerCount);
+}
+export function getResearchTeamBidTrack(playerCount: number) {
+	return getBidTrackForPlayerCount<ResearchTeam>(researchTeamBidTracks, playerCount);
 }

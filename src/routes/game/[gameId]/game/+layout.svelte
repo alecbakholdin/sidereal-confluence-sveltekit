@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { toastOnError } from '$lib/actions/toastOnError';
+	import { loadingButton } from '$lib/actions/loadingButton';
 	import EntityContainerComponent from '$lib/components/EntityContainerComponent.svelte';
 	import {
 		getGameContext,
@@ -8,16 +8,23 @@
 		getMyPlayerInfo,
 		getRootGamePath
 	} from '$lib/util/client/gameContext';
-	import { AppBar, AppShell, TabAnchor, TabGroup, getToastStore } from '@skeletonlabs/skeleton';
-	import PhaseTrack from './PhaseTrack.svelte';
-	import { superForm } from 'sveltekit-superforms/client';
 	import { superFormToastOnError } from '$lib/util/client/toasts';
-	import { loadingButton } from '$lib/actions/loadingButton';
+	import {
+		AppBar,
+		AppShell,
+		TabAnchor,
+		TabGroup,
+		getModalStore,
+		getToastStore
+	} from '@skeletonlabs/skeleton';
 	import { derived } from 'svelte/store';
+	import { superForm } from 'sveltekit-superforms/client';
+	import PhaseTrack from './PhaseTrack.svelte';
 
 	export let data;
 
 	const toastStore = getToastStore();
+	const modalStore = getModalStore();
 	const rootGamePath = getRootGamePath();
 	const myPlayerInfo = getMyPlayerInfo();
 
@@ -49,10 +56,6 @@
 	});
 </script>
 
-{meInfo.ready}
-{$myPlayerInfo.ready}
-{$ready.action}
-{$ready.text}
 <AppShell
 	slotSidebarLeft="bg-surface-500/5 w-72 p-4"
 	slotSidebarRight="bg-surface-500/5 w-0 md:w-72 md:p-4"
@@ -148,4 +151,13 @@
 			<slot />
 		</div>
 	</TabGroup>
+	<svelte:fragment slot="pageFooter">
+		<button
+			type="button"
+			class="btn"
+			on:click={() => modalStore.trigger({ type: 'alert', body: JSON.stringify($gameState), modalClasses: '[&>article]:overflow-scroll' })}
+		>
+			Show Game State
+		</button>
+	</svelte:fragment>
 </AppShell>
