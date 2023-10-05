@@ -34,7 +34,7 @@ export type GameState = {
 	}
 };
 
-export interface BidTrack<T> {
+export interface BidTrack<T = any> {
 	shipMinimum: number;
 	card?: T;
 	reservedBy?: UserId;

@@ -66,9 +66,11 @@
 			</div>
 		{/if}
 
-		<BidTrack bidTrack={colonyBidTrack} active={isColonyTrackActive}>
-			<h4 class="h4" slot="title">Colony Bid Track</h4>
-		</BidTrack>
+		<div transition:slide>
+			<BidTrack bidTrack={colonyBidTrack} active={isColonyTrackActive}>
+				<h4 class="h4" slot="title">Colony Bid Track</h4>
+			</BidTrack>
+		</div>
 	{/if}
 
 	{#if !biddingOver || isResearchTeamTrackActive}
@@ -90,8 +92,10 @@
 			</div>
 		{/if}
 
-		<BidTrack bidTrack={researchTeamBidTrack} active={isResearchTeamTrackActive}>
-			<h4 class="h4" slot="title">Research Team Bid Track</h4>
-		</BidTrack>
+		<div transition:slide>
+			<BidTrack bidTrack={researchTeamBidTrack} active={isResearchTeamTrackActive}>
+				<h4 class="h4" slot="title">Research Team Bid Track</h4>
+			</BidTrack>
+		</div>
 	{/if}
 </div>
