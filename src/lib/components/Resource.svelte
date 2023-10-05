@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { largeResources, type LargeCubeType, type ResourceType } from '$lib/types/resource';
 	import Icon from '@iconify/svelte';
+	import type { CssClasses } from '@skeletonlabs/skeleton';
 	import { createEventDispatcher } from 'svelte';
 
 	export let resource: ResourceType;
 	export let quantity: number | undefined = undefined;
 	export let editable: boolean = false;
 	export let donation: boolean = false;
+	export let iconSize: CssClasses | undefined = undefined;
+	export let quantitySize: CssClasses | undefined = undefined;
+	export let showZero: boolean = false;
 
 	$: large = largeResources.includes(resource as LargeCubeType);
 	$: small = !large;
@@ -40,7 +44,7 @@
 	class:large
 	class:small
 >
-	<div class="icon">
+	<div class="icon {iconSize}">
 		{#if resource === 'hexagon'}
 			<Icon icon="ic:baseline-hexagon" />
 		{:else if resource === 'ship'}
@@ -78,8 +82,8 @@
 			tabindex={editable ? 0 : -1}
 			class:pointer-events-none={!editable}
 		>
-			<span class="font-mono quantity">
-				{quantity || ''}
+			<span class="{quantitySize} font-mono quantity">
+				{quantity || (showZero ? 0 : '')}
 			</span>
 		</button>
 	{/if}
@@ -103,13 +107,10 @@
 	.large {
 		@apply text-5xl;
 	}
-	.large input {
-		@apply text-4xl;
-	}
 	.small {
 		@apply text-3xl;
 	}
-	.small input {
+	.small input, .large input {
 		@apply text-2xl;
 	}
 

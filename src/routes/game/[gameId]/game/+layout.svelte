@@ -43,13 +43,17 @@
 	}));
 
 	const { submitting: readySubmitting, enhance: readyEnhance } = superForm(data.emptyForm, {
-		onError: (e) => superFormToastOnError(toastStore, e),
+		onError: (e) => {
+			superFormToastOnError(toastStore, e);
+		},
 		warnings: {
 			duplicateId: false
 		}
 	});
 	const { submitting: nextPhaseSubmitting, enhance: nextPhaseEnhance } = superForm(data.emptyForm, {
-		onError: (e) => superFormToastOnError(toastStore, e),
+		onError: (e) => {
+			superFormToastOnError(toastStore, e);
+		},
 		warnings: {
 			duplicateId: false
 		}
@@ -72,8 +76,7 @@
 	<svelte:fragment slot="pageHeader">
 		<div class="m-2 p-2 flex flex-col gap-2">
 			<div class="info-section">
-				<span>Game Info</span>
-				<div class="p-2 flex items-end sm:items-start sm:flex-col gap-3 w-full">
+				<div class="p-2 flex flex-col sm:flex-row gap-3 w-full">
 					<div class="flex flex-col gap-1 flex-grow">
 						<PhaseTrack
 							phaseNames={$gameState.turns.map(({ turnNumber }) => turnNumber)}
@@ -105,15 +108,26 @@
 							{turnInfo.yengiiSharingBonus} VP
 						</span>
 					</div>
-					<div class="flex flex-col">
-						<form action="{rootGamePath}?/{$ready.action}" method="post" use:readyEnhance>
-							<button
-								class="btn variant-ghost-secondary"
-								use:loadingButton={{ loading: readySubmitting }}
-							>
-								{$ready.text}
-							</button>
-						</form>
+					<div class="flex flex-col gap-2">
+						{#if $myPlayerInfo.ready}
+							<form action="{rootGamePath}?/unready" method="post" use:readyEnhance>
+								<button
+									class="btn variant-ghost-secondary"
+									use:loadingButton={{ loading: readySubmitting }}
+								>
+									Unready
+								</button>
+							</form>
+						{:else}
+							<form action="{rootGamePath}?/readyUp" method="post" use:readyEnhance>
+								<button
+									class="btn variant-ghost-secondary"
+									use:loadingButton={{ loading: readySubmitting }}
+								>
+									Ready Up
+								</button>
+							</form>
+						{/if}
 						<form action="{rootGamePath}?/nextPhase" method="post" use:nextPhaseEnhance>
 							<button
 								class="btn variant-ghost-secondary"
@@ -155,7 +169,12 @@
 		<button
 			type="button"
 			class="btn"
-			on:click={() => modalStore.trigger({ type: 'alert', body: JSON.stringify($gameState), modalClasses: '[&>article]:overflow-scroll' })}
+			on:click={() =>
+				modalStore.trigger({
+					type: 'alert',
+					body: JSON.stringify($gameState),
+					modalClasses: '[&>article]:overflow-scroll'
+				})}
 		>
 			Show Game State
 		</button>

@@ -3,13 +3,14 @@
 	import PhaseTrackPhase from './PhaseTrackPhase.svelte';
 
 	export let phaseNames: any[];
-	export let activePhase: number;
+	export let activePhase: number | undefined;
 
 	$: formattedPhases =
 		phaseNames?.map((p) =>
 			String(p)
 				.split(' ')
 				.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+				.join(' ')
 		) || [];
 
 	let container: HTMLDivElement;
@@ -35,11 +36,13 @@
 			<Icon icon="material-symbols:chevron-right" class="w-4 z-10" />
 		{/if}
 	{/each}
-	<div
-		class="absolute rounded-full h-full transition-all bg-purple-400"
-		style:width="{rects[activePhase]?.clientWidth + 10}px"
-		style:transform="translateX({rects[activePhase]?.getBoundingClientRect().left -
-			baseOffset -
-			5}px)"
-	></div>
+	{#if activePhase !== undefined}
+		<div
+			class="absolute rounded-full h-full transition-all bg-purple-400"
+			style:width="{rects[activePhase]?.clientWidth + 10}px"
+			style:transform="translateX({rects[activePhase]?.getBoundingClientRect().left -
+				baseOffset -
+				5}px)"
+		/>
+	{/if}
 </div>
