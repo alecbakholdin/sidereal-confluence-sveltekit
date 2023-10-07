@@ -24,7 +24,7 @@ export class ColonyCardWrapper implements CardWrapper {
 		if (playerCard.cardType !== 'Colony')
 			throw new Error('Expected Colony but got ' + playerCard.cardType);
 
-		this.colony = playerCard.colony!;
+		this.colony = colonyMap[playerCard.cardId];
 		if (!this.colony)
 			throw new Error('Colony is not set for ColonyCardWrapper ' + JSON.stringify(playerCard));
 	}

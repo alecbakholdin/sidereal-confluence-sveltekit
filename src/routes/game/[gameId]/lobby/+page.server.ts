@@ -1,6 +1,13 @@
-import type { CardType, PlayerCard } from '$lib/types/cards/card.js';
-import { colonies, colonyIds, colonyMap } from '$lib/types/cards/colony.js';
-import { getTurnsForPlayerCount, type GameState, type PlayerGameInfo, getColonyBidTrack, getResearchTeamBidTrack } from '$lib/types/game.js';
+import type { PlayerCard } from '$lib/types/cards/card.js';
+import { colonyIds, colonyMap } from '$lib/types/cards/colony.js';
+import { researchTeamIds, researchTeamMap } from '$lib/types/cards/researchTeam.js';
+import {
+	getColonyBidTrack,
+	getResearchTeamBidTrack,
+	getTurnsForPlayerCount,
+	type GameState,
+	type PlayerGameInfo
+} from '$lib/types/game.js';
 import { availableRaces, raceInfoMap } from '$lib/types/race.js';
 import { fail, redirect } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
@@ -85,6 +92,10 @@ function setupPlayer(gameState: GameState, playerId: string) {
 	const race = gameState.lobbyInfoMap[playerId].race!;
 	const raceObj = raceInfoMap[race];
 	const drawnColonies = gameState.serverInfo!.colonyDeck.splice(0, raceObj.startingColonies);
+	const drawnResearchTeams = gameState.serverInfo!.researchTeamDeck.splice(
+		0,
+		raceObj.startingResearchTeams
+	);
 	const defaultCard: Pick<PlayerCard, 'ownerId' | 'upgraded' | 'reservedConverters'> = {
 		ownerId: playerId,
 		upgraded: false,
@@ -102,7 +113,12 @@ function setupPlayer(gameState: GameState, playerId: string) {
 			colony: colonyMap[cardId]
 		})),
 		converterCards: [],
-		researchTeams: [],
+		researchTeams: drawnResearchTeams.map((cardId) => ({
+			...defaultCard,
+			cardId,
+			cardType: 'Research Team',
+			researchTeam: researchTeamMap[cardId]
+		})),
 		ready: false
 	};
 	gameState.gameInfo[playerId] = playerGameInfo;
@@ -114,17 +130,28 @@ function setupConfluence(gameState: GameState) {
 
 	// confluence decks
 	gameState.serverInfo = {
-		colonyDeck: [...colonyIds].sort((a, b) => Math.random() - 0.5)
+		colonyDeck: [...colonyIds].sort(() => Math.random() - 0.5),
+		researchTeamDeck: [...researchTeamIds]
+			.sort(() => Math.random() - 0.5)
+			.sort((a, b) => researchTeamMap[a].era! - researchTeamMap[b].era!)
 	};
 
-	const kjasModifier = Object.values(gameState.lobbyInfoMap).find(({race}) => race === 'Kjasjavikalimm') ? 1 : 0;
+	const kjasModifier = Object.values(gameState.lobbyInfoMap).find(
+		({ race }) => race === 'Kjasjavikalimm'
+	)
+		? 1
+		: 0;
 	const numColonies = numPlayers + kjasModifier;
 	gameState.colonyBidTrack = getColonyBidTrack(numColonies);
-	for(const bidTrack of gameState.colonyBidTrack) {
+	for (const bidTrack of gameState.colonyBidTrack) {
 		const colonyId: string = gameState.serverInfo!.colonyDeck.splice(0, 1)[0];
-		bidTrack.card = colonyMap[colonyId];
+		bidTrack.cardId = colonyId;
 	}
 
 	const numResearchTeams = numPlayers;
 	gameState.researchTeamBidTrack = getResearchTeamBidTrack(numResearchTeams);
+	for (const bidTrack of gameState.researchTeamBidTrack) {
+		const researchTeamId: string = gameState.serverInfo!.researchTeamDeck.splice(0, 1)[0];
+		bidTrack.cardId = researchTeamId;
+	}
 }

@@ -1,7 +1,6 @@
 import type { UserId } from "../user";
-import { ColonyCardWrapper, type Colony } from "./colony";
-import type { Converter, SingleConverter } from "./converter";
-import type { ResearchTeam } from "./researchTeam";
+import { ColonyCardWrapper } from "./colony";
+import type { SingleConverter } from "./converter";
 
 export type CardType = 'Colony' | 'Converter' | 'Research Team'
 export type PlayerCard = {
@@ -12,10 +11,6 @@ export type PlayerCard = {
     reservedConverters: boolean[]; // length should match the number of converters
 
     caylionDoubled?: boolean;
-
-    colony?: Colony;
-    converter?: Converter;
-    researchTeam?: ResearchTeam;
 }
 
 export interface CardWrapper {

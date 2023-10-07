@@ -1,5 +1,3 @@
-import { colonyMap, type Colony } from '$lib/types/cards/colony';
-import type { ResearchTeam } from '$lib/types/cards/researchTeam.js';
 import type { BidOrder, GameState } from '$lib/types/game';
 import { fail } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
@@ -35,6 +33,7 @@ export const actions = {
 			userPlayerInfo.resources.find(({ resource, donation }) => resource === 'ship' && !donation)
 				?.quantity || 0;
 		if (form.data.colonyShips + form.data.researchTeamShips > shipsAvailable) {
+            console.error("User does not have enough ships");
 			return message(form, 'You do not have enough ships for that', { status: 400 });
 		}
 
@@ -90,8 +89,8 @@ export const actions = {
 						bidOrder: gameState.researchTeamBidOrder
 				  };
 		const trackObj = track[form.data.cardIndex];
-		if (!trackObj || !trackObj?.card) {
-			console.error(form.data);
+		if (!trackObj || !trackObj?.cardId) {
+			console.error('No card exists for this index', form.data, trackObj);
 			return message(form, 'No card exists for this index', { status: 400 });
 		}
 		if (trackObj.reservedBy) {
@@ -119,27 +118,15 @@ export const actions = {
 		resourceAmount.quantity -= bidderObj.shipsUsed;
 		trackObj.reservedBy = user.id;
 
-		if (form.data.cardType === 'Colony') {
-			const colony = trackObj.card as Colony;
-			userPlayerInfo.colonies.push({
-				cardId: colony.id,
-				cardType: 'Colony',
-				ownerId: user.id,
-				upgraded: false,
-				reservedConverters: [],
-				colony
-			});
-		} else {
-			const researchTeam = trackObj.card as ResearchTeam;
-			userPlayerInfo.colonies.push({
-				cardId: researchTeam.id,
-				cardType: 'Research Team',
-				ownerId: user.id,
-				upgraded: false,
-				reservedConverters: [],
-				researchTeam
-			});
-		}
+		const arr =
+			form.data.cardType === 'Colony' ? userPlayerInfo.colonies : userPlayerInfo.researchTeams;
+		arr.push({
+			cardId: trackObj.cardId,
+			cardType: form.data.cardType,
+			ownerId: user.id,
+			upgraded: false,
+			reservedConverters: []
+		});
 
 		advanceBidder(gameState);
 	}
@@ -158,10 +145,10 @@ function advanceBidder(gameState: GameState) {
 		gameState.colonyActiveBidder = undefined;
 		if (gameState.researchTeamBidOrder?.length) {
 			gameState.researchTeamActiveBidder = 0;
+		} else {
+			endConfluence(gameState);
 		}
-	}
-    
-    if (gameState.colonyActiveBidder === undefined && !gameState.researchTeamActiveBidder) {
+	} else if (gameState.researchTeamActiveBidder === 0) {
 		endConfluence(gameState);
 	}
 }
@@ -181,7 +168,7 @@ function bidOrderComparator(a: BidOrder, b: BidOrder) {
 }
 
 function endConfluence(gameState: GameState) {
-    console.log('ending confluence');
+	console.log('ending confluence');
 
 	gameState.turn++;
 	gameState.phase = 0;
@@ -192,21 +179,21 @@ function endConfluence(gameState: GameState) {
 
 	const nextColonies = gameState.colonyBidTrack
 		.filter((x) => !x.reservedBy && x.shipMinimum !== 1)
-		.map((x) => x.card);
+		.map((x) => x.cardId);
 	for (let i = 0; i < gameState.colonyBidTrack.length; i++) {
 		const trackObj = gameState.colonyBidTrack[i];
 		trackObj.reservedBy = undefined;
-		if (i < nextColonies.length) trackObj.card = nextColonies[i];
-		else trackObj.card = colonyMap[gameState.serverInfo!.colonyDeck.splice(0, 1)[0]];
+		if (i < nextColonies.length) trackObj.cardId = nextColonies[i];
+		else trackObj.cardId = gameState.serverInfo!.colonyDeck.shift();
 	}
 
 	const nextResearchTeams = gameState.researchTeamBidTrack
 		.filter((x) => !x.reservedBy && x.shipMinimum !== 1)
-		.map((x) => x.card);
+		.map((x) => x.cardId);
 	for (let i = 0; i < gameState.researchTeamBidTrack.length; i++) {
 		const trackObj = gameState.researchTeamBidTrack[i];
 		trackObj.reservedBy = undefined;
-		/* if(i < nextColonies.length) trackObj.card = nextColonies[i];
-        else trackObj.card = colonyMap[gameState.serverInfo!.colonyDeck.splice(0, 1)[0]]; */
+		if (i < nextResearchTeams.length) trackObj.cardId = nextResearchTeams[i];
+		else trackObj.cardId = gameState.serverInfo!.researchTeamDeck.shift();
 	}
 }

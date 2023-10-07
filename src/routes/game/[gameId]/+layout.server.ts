@@ -26,7 +26,8 @@ export async function load({ locals, url }) {
 	gameState.lobbyInfoMap[user.id] = gameState.lobbyInfoMap[user.id] || {};
 	gameState.gameInfo[user.id] = gameState.gameInfo[user.id] || {};
 
+	const {serverInfo, ...clientGameState} = gameState;
 	return {
-		gameState
+		gameState: clientGameState
 	};
 }

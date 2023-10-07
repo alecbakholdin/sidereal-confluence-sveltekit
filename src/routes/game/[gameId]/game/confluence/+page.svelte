@@ -5,7 +5,6 @@
 	import { slide } from 'svelte/transition';
 	import PhaseTrack from '../PhaseTrack.svelte';
 	import BidTrack from './BidTrack.svelte';
-	import ConfluencePlayerList from './ConfluencePlayerList.svelte';
 	import SetBidForm from './SetBidForm.svelte';
 
 	const toastStore = getToastStore();
@@ -23,10 +22,14 @@
 	$: isColonyTrackActive = $gameState.colonyActiveBidder !== undefined;
 	$: isResearchTeamTrackActive = $gameState.researchTeamActiveBidder !== undefined;
 	$: biddingOver = isColonyTrackActive || isResearchTeamTrackActive;
-	$: activeBidder = isColonyTrackActive
-		? $gameState.colonyBidOrder?.[$gameState.colonyActiveBidder!]
-		: $gameState.researchTeamBidOrder?.[$gameState.researchTeamActiveBidder!];
-	$: if (activeBidder?.user === me.id)
+	const activeBidderUserId = derived(gameState, (val) =>
+		val.colonyActiveBidder
+			? val.colonyBidOrder?.[val.colonyActiveBidder]?.user
+			: val.researchTeamActiveBidder
+			? val.researchTeamBidOrder?.[val.researchTeamActiveBidder]?.user
+			: undefined
+	);
+	$: if ($activeBidderUserId === me.id)
 		toastStore.trigger({ message: "It's your turn to bid!", background: 'variant-filled-primary' });
 
 	const colonyBidTrack = derived(gameState, (state) => state.colonyBidTrack);
@@ -93,7 +96,7 @@
 		{/if}
 
 		<div transition:slide>
-			<BidTrack bidTrack={researchTeamBidTrack} active={isResearchTeamTrackActive}>
+			<BidTrack bidTrack={researchTeamBidTrack} active={isResearchTeamTrackActive} horizontal>
 				<h4 class="h4" slot="title">Research Team Bid Track</h4>
 			</BidTrack>
 		</div>

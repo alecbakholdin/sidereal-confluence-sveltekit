@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
 
-	import { slide } from 'svelte/transition';
+	import { fade, slide } from 'svelte/transition';
 
 	import { loadingButton } from '$lib/actions/loadingButton';
 
@@ -27,8 +27,9 @@
 	const gameState = getGameState();
 
 	type T = $$Generic<Colony | ResearchTeam>;
-	export let bidTrack: Readable<BidTrack<T>[]>;
+	export let bidTrack: Readable<BidTrack[]>;
 	export let active: boolean = false;
+	export let horizontal: boolean = false;
 
 	const me = getMe();
 
@@ -65,8 +66,7 @@
 	function scrollTo(index: number) {
 		const child = listChildren[index];
 		if (!listParent || !child) return;
-		listParent.scrollLeft =
-			child.offsetLeft - windowWidth / 2;
+		listParent.scrollLeft = child.offsetLeft - windowWidth / 2;
 	}
 
 	$: isColonyTrackActive = $gameState.colonyActiveBidder !== undefined;
@@ -95,7 +95,7 @@
 			<button
 				type="button"
 				class="z-10 absolute right-5 top-1/2 transform -translate-y-1/2 btn-icon variant-filled-surface"
-                on:click={() => scrollTo($activeTrackObjIndex + 1)}
+				on:click={() => scrollTo($activeTrackObjIndex + 1)}
 			>
 				<Icon icon="material-symbols:chevron-right" />
 			</button>
@@ -106,11 +106,14 @@
 				on:scroll={updateScroll}
 			>
 				<div class="w-screen flex-shrink-0"></div>
-				{#each $bidTrack as { card, shipMinimum, reservedBy }, i (card?.id ?? i)}
+				{#each $bidTrack as { cardId, shipMinimum, reservedBy }, i (cardId ?? i)}
 					<li
-						class="w-64 flex-shrink-0 snap-center grid place-items-center gap-4"
-						animate:flip={{ duration: 250 }}
+						class="flex-shrink-0 snap-center grid place-items-center gap-4"
+						class:w-64={!horizontal}
+						class:w-92={horizontal}
+						animate:flip={{ duration: 500 }}
 						bind:this={listChildren[i]}
+						in:fade={{ delay: 500, duration: 300 }}
 					>
 						<Resource resource={'ship'} quantity={shipMinimum} />
 
@@ -118,7 +121,7 @@
 							class="relative border-2 rounded-md border-transparent"
 							style:border-color={reservedBy && $gameState.gameInfo[reservedBy].raceInfo.color}
 						>
-							<Card cardInfo={card?.id || ''} displayOnly />
+							<Card cardInfo={cardId || ''} displayOnly />
 							{#if reservedBy}
 								<span
 									class="absolute px-1 bottom-0 left-0"

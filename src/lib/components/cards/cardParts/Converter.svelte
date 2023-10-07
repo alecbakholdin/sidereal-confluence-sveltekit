@@ -2,6 +2,7 @@
 	import type { ColonyType } from '$lib/types/cards/colony';
 	import type { EntityContainer } from '$lib/types/entityContainer';
 	import { sortedResourceArrFromEntityContainer } from '$lib/types/resource';
+	import { getGameState } from '$lib/util/client/gameContext';
 	import Icon from '@iconify/svelte';
 	import { createEventDispatcher } from 'svelte';
 	import Resource from '../../Resource.svelte';
@@ -20,9 +21,12 @@
 	export let reserved: boolean | undefined = undefined;
 
 	const dispatch = createEventDispatcher<{ toggle: boolean }>();
+	const gameState = getGameState();
 
 	$: inputArr = Array.isArray(input) ? input : input ? [input] : [];
 	$: outputArr = sortedResourceArrFromEntityContainer(output);
+	$: currentTurn = $gameState.turns[$gameState.turn];
+	$: currentSharingBonus = currentTurn.sharingBonus;
 
 	function colonyTypes(container: EntityContainer) {
 		return (Object.entries(container.colonyTypes || {}) as [ColonyType, number][]).filter(
@@ -81,6 +85,9 @@
 			{/each}
 			{#if upgrade}
 				<Icon icon="grommet-icons:upgrade" class="text-secondary-400 text-2xl" />
+			{:else if output?.sharingBonus}
+				<Icon icon="mdi:add" />
+				<Resource resource="point" quantity={currentSharingBonus} showZero />
 			{:else if outputArr.length === 0}
 				<Icon icon="material-symbols:crop-free" class="text-2xl" />
 			{/if}

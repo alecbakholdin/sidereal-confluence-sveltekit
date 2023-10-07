@@ -23,7 +23,8 @@
 
 	$: isUpgraded = (typeof cardInfo !== 'string' && cardInfo.upgraded) || false;
 	$: reservations = (typeof cardInfo !== 'string' && cardInfo.reservedConverters) || [];
-	$: colonyCard = typeof cardInfo === 'string' ? colonyMap[cardInfo] : cardInfo.colony!;
+	$: cardId = typeof cardInfo === 'string' ? cardInfo : cardInfo.cardId;
+	$: colonyCard = colonyMap[cardId];
 	$: frontSelectable = !displayOnly && !isUpgraded;
 	$: backSelectable = !displayOnly && isUpgraded;
 	let flipped: boolean = isUpgraded;

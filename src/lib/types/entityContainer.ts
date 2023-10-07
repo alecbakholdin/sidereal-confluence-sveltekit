@@ -1,18 +1,16 @@
+import { error } from '@sveltejs/kit';
 import { z } from 'zod';
-import { resources, toSortedResourceArr, type ResourceAmount } from './resource';
 import { colonyTypes } from './cards/colony';
 import type { PlayerGameInfo } from './game';
-import { error } from '@sveltejs/kit';
+import { resources } from './resource';
 
 const quantitySchema = z.number().nonnegative().int();
 
+const resourceContainerSchema = z.record(z.enum(resources), quantitySchema.optional());
+
 export const entityContainerSchema = z.object({
-	resource: z
-		.object(Object.fromEntries(resources.map((r) => [r, quantitySchema.optional()])))
-		.optional(),
-	donation: z
-		.object(Object.fromEntries(resources.map((r) => [r, quantitySchema.optional()])))
-		.optional(),
+	resource: resourceContainerSchema.optional(),
+	donation: resourceContainerSchema.optional(),
 	colonyTypes: z
 		.object(Object.fromEntries(colonyTypes.map((c) => [c, quantitySchema.optional()])))
 		.optional(),

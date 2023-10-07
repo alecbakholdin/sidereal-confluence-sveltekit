@@ -19,6 +19,7 @@
 <script lang="ts">
 	import type { CardType, PlayerCard } from '$lib/types/cards/card';
 	import { colonyMap } from '$lib/types/cards/colony';
+	import { researchTeamMap } from '$lib/types/cards/researchTeam';
 	import ColonyCard from './ColonyCard.svelte';
 	import ConverterCard from './ConverterCard.svelte';
 	import ResearchTeamCard from './ResearchTeamCard.svelte';
@@ -29,9 +30,11 @@
 	export let displayOnly: boolean = false;
 	export let cardInfo: PlayerCard | string;
 
-	$: colonyIfString =
-		typeof cardInfo === 'string' ? colonyMap[cardInfo] && ('Colony' as CardType) : undefined;
-	$: cardtypeIfString = colonyIfString as CardType;
+	function isOfType(obj: Record<string, any>, type: CardType): CardType | undefined {
+		return (typeof cardInfo === 'string' && obj[cardInfo] && type) || undefined;
+	}
+
+	$: cardtypeIfString = isOfType(colonyMap, 'Colony') || isOfType(researchTeamMap, 'Research Team');
 	$: cardType = typeof cardInfo === 'string' ? cardtypeIfString : cardInfo.cardType;
 </script>
 
@@ -47,7 +50,7 @@
 {:else if cardType === 'Converter'}
 	<ConverterCard {cardInfo} />
 {:else if cardType === 'Research Team'}
-	<ResearchTeamCard {cardInfo} />
+	<ResearchTeamCard {cardInfo} {displayOnly} />
 {:else}
 	Unsupported card type {cardType}
 {/if}

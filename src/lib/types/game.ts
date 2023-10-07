@@ -1,6 +1,4 @@
 import type { PlayerCard } from './cards/card';
-import type { Colony } from './cards/colony';
-import type { ResearchTeam } from './cards/researchTeam';
 import type { RaceInfo, RaceType } from './race';
 import type { ResourceAmount } from './resource';
 import type { TradeInfo, TradePreferences } from './trade';
@@ -22,21 +20,22 @@ export type GameState = {
 	gameInfo: Record<UserId, PlayerGameInfo>;
 	trades: TradeInfo[];
 
-	colonyBidTrack: BidTrack<Colony>[];
+	colonyBidTrack: BidTrack[];
 	colonyBidOrder?: BidOrder[];
 	colonyActiveBidder?: number;
-	researchTeamBidTrack: BidTrack<ResearchTeam>[];
+	researchTeamBidTrack: BidTrack[];
 	researchTeamBidOrder?: BidOrder[];
 	researchTeamActiveBidder?: number;
 
 	serverInfo?: {
 		colonyDeck: string[];
-	}
+		researchTeamDeck: string[];
+	};
 };
 
-export interface BidTrack<T = any> {
+export interface BidTrack {
 	shipMinimum: number;
-	card?: T;
+	cardId?: string;
 	reservedBy?: UserId;
 }
 
@@ -45,14 +44,14 @@ export type BidOrder = {
 	shipsUsed: number;
 	numCards: number;
 	tiebreaker: number;
-}
+};
 
 export type TurnInfo = {
 	turnNumber: number;
 	sharingBonus: number;
 	yengiiSharingBonus: number;
-	playerCounts: number[]
-}
+	playerCounts: number[];
+};
 
 export type LobbyPlayerInfo = {
 	ready?: boolean;
@@ -107,10 +106,12 @@ const availableTurnInfos: readonly TurnInfo[] = [
 	{ turnNumber: 3, sharingBonus: 4, yengiiSharingBonus: 2, playerCounts: [4] },
 	{ turnNumber: 5, sharingBonus: 3, yengiiSharingBonus: 1, playerCounts: [4, 5] },
 	{ turnNumber: 5, sharingBonus: 2, yengiiSharingBonus: 0, playerCounts: [6, 7, 8, 9, 1] }
-]
+];
 export function getTurnsForPlayerCount(playerCount: number) {
 	const players = Math.max(4, playerCount);
-	return availableTurnInfos.filter(({ playerCounts }) => playerCounts.includes(players)).sort((a, b) => a.turnNumber - b.turnNumber)
+	return availableTurnInfos
+		.filter(({ playerCounts }) => playerCounts.includes(players))
+		.sort((a, b) => a.turnNumber - b.turnNumber);
 }
 
 const researchTeamBidTracks: readonly number[][] = [
@@ -120,7 +121,7 @@ const researchTeamBidTracks: readonly number[][] = [
 	[1, 1, 1, 2, 2, 3, 4],
 	[1, 1, 1, 1, 2, 2, 3, 4],
 	[1, 1, 1, 1, 2, 2, 3, 4, 4]
-]
+];
 const colonyBidTracks: readonly number[][] = [
 	[1, 1, 2, 3],
 	[1, 1, 2, 3, 3],
@@ -129,14 +130,17 @@ const colonyBidTracks: readonly number[][] = [
 	[1, 1, 1, 1, 2, 2, 3, 4],
 	[1, 1, 1, 1, 2, 2, 2, 4, 4],
 	[1, 1, 1, 1, 1, 2, 2, 2, 4, 4]
-]
-function getBidTrackForPlayerCount<T>(arr: readonly number[][], playerCount: number): BidTrack<T>[] {
+];
+function getBidTrackForPlayerCount(
+	arr: readonly number[][],
+	playerCount: number
+): BidTrack[] {
 	const clippedPlayerCount = Math.min(Math.max(4, playerCount), arr.length - 1); // range is [4, arr.length)
-	return arr[clippedPlayerCount - 4].map((shipMinimum): BidTrack<T> => ({ shipMinimum }));
+	return arr[clippedPlayerCount - 4].map((shipMinimum): BidTrack => ({ shipMinimum }));
 }
 export function getColonyBidTrack(playerCount: number) {
-	return getBidTrackForPlayerCount<Colony>(colonyBidTracks, playerCount);
+	return getBidTrackForPlayerCount(colonyBidTracks, playerCount);
 }
 export function getResearchTeamBidTrack(playerCount: number) {
-	return getBidTrackForPlayerCount<ResearchTeam>(researchTeamBidTracks, playerCount);
+	return getBidTrackForPlayerCount(researchTeamBidTracks, playerCount);
 }

@@ -6,7 +6,7 @@ import { UPDATE_EVENT, presenceChannel } from '$lib/util/pusherChannels';
 import { getGameState, setGameState } from '$lib/util/server/gameState.server';
 import type { ActionResult, Handle } from '@sveltejs/kit';
 import { sequence } from '@sveltejs/kit/hooks';
-import { diff } from 'json-diff-ts';
+import { diff, flattenChangeset, type Changeset } from 'json-diff-ts';
 import jwt from 'jsonwebtoken';
 
 const handleAuth: Handle = async ({ event, resolve }) => {
@@ -57,8 +57,14 @@ const handleGame: Handle = async ({ event, resolve }) => {
 		response.status < 400 &&
 		!(await isFormFailure(response))
 	) {
-		if (clientDiff.length) {
-			pusher.trigger(presenceChannel(gameId), UPDATE_EVENT, clientDiff);
+		if(JSON.stringify(clientDiff).length > 9500) {
+			const flattenedDiff: Changeset = flattenChangeset(clientDiff); 
+			console.log(`Diff is very large, using flat changeset with ${flattenedDiff.length} entries`);
+			while(flattenedDiff.length) {
+				await pusher.trigger(presenceChannel(gameId), UPDATE_EVENT, flattenedDiff.splice(0, 10));
+			}
+		} else {
+			await pusher.trigger(presenceChannel(gameId), UPDATE_EVENT, clientDiff);
 		}
 		await setGameState(gameId, newState);
 	}
