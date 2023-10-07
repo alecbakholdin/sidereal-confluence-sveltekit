@@ -19,6 +19,7 @@
 <script lang="ts">
 	import type { CardType, PlayerCard } from '$lib/types/cards/card';
 	import { colonyMap } from '$lib/types/cards/colony';
+	import { converterCardMap } from '$lib/types/cards/converterCard';
 	import { researchTeamMap } from '$lib/types/cards/researchTeam';
 	import ColonyCard from './ColonyCard.svelte';
 	import ConverterCard from './ConverterCard.svelte';
@@ -34,7 +35,10 @@
 		return (typeof cardInfo === 'string' && obj[cardInfo] && type) || undefined;
 	}
 
-	$: cardtypeIfString = isOfType(colonyMap, 'Colony') || isOfType(researchTeamMap, 'Research Team');
+	$: cardtypeIfString =
+		isOfType(colonyMap, 'Colony') ||
+		isOfType(researchTeamMap, 'Research Team') ||
+		isOfType(converterCardMap, 'Converter');
 	$: cardType = typeof cardInfo === 'string' ? cardtypeIfString : cardInfo.cardType;
 </script>
 

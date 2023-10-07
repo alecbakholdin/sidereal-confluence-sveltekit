@@ -1,5 +1,6 @@
 import type { PlayerCard } from '$lib/types/cards/card.js';
 import { colonyIds, colonyMap } from '$lib/types/cards/colony.js';
+import { converterCards } from '$lib/types/cards/converterCard.js';
 import { researchTeamIds, researchTeamMap } from '$lib/types/cards/researchTeam.js';
 import {
 	getColonyBidTrack,
@@ -109,15 +110,19 @@ function setupPlayer(gameState: GameState, playerId: string) {
 			...defaultCard,
 			cardId,
 			cardType: 'Colony',
-			caylionDoubled: race === 'Caylion',
-			colony: colonyMap[cardId]
+			caylionDoubled: race === 'Caylion'
 		})),
-		converterCards: [],
+		converterCards: converterCards
+			.filter((x) => x.race === race && x.isStartingCard)
+			.map(({ id }) => ({
+				...defaultCard,
+				cardId: id,
+				cardType: 'Converter'
+			})),
 		researchTeams: drawnResearchTeams.map((cardId) => ({
 			...defaultCard,
 			cardId,
-			cardType: 'Research Team',
-			researchTeam: researchTeamMap[cardId]
+			cardType: 'Research Team'
 		})),
 		ready: false
 	};

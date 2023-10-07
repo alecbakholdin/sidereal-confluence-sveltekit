@@ -11,6 +11,31 @@ export type ResearchTeam = {
 	};
 };
 
+export const technologies = [
+	'Nanotechnology',
+	'Quantum Computers',
+	'Universal Translator',
+	'Genetic Engineering',
+	'Clinical Immortality',
+	'Ubiquitous Cultural Repository',
+	'Atomic Transmutation',
+	'Interspecies Medical Exchange',
+	'Hyperspace Mining',
+	'Singularity Control',
+	'Cross Species Ethical Equality',
+	'Antimatter Power',
+	'Achronal Analysis',
+	'Organic Construction',
+	'Megastructures',
+	'Social Exodus',
+	'Matter Generation',
+	'Galactic Telecomm Control',
+	'Poly Species Corporations',
+	'Xeno Cultural Exchange',
+	'Temporal Dilation'
+] as const;
+export type TechnologyType = (typeof technologies)[number];
+
 export const researchTeams: readonly ResearchTeam[] = [
 	{
 		id: 'researchTeam_319',

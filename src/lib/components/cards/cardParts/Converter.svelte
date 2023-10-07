@@ -36,7 +36,7 @@
 	function submitForm() {
 		if (form) {
 			const formEl = document.getElementById(form) as HTMLFormElement;
-			formEl.requestSubmit();
+			formEl?.requestSubmit();
 		}
 	}
 </script>

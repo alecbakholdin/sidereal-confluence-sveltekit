@@ -12,9 +12,11 @@
 
 	interface $$Slots {
 		title: {};
+		frontTitle: {};
 		frontTop: {};
 		frontCenter: {};
 		frontBottom: {};
+		backTitle: {};
 		backTop: {};
 		backCenter: {};
 		backBottom: {};
@@ -76,7 +78,9 @@
 						<Icon icon="solar:refresh-bold" class="text-xl" />
 					</button>
 
-					<slot name="title" />
+					<slot name="frontTitle">
+						<slot name="title" />
+					</slot>
 					<slot name="frontTop" />
 				</div>
 			{/if}
@@ -124,7 +128,9 @@
 					>
 						<Icon icon="solar:refresh-bold" class="text-xl" />
 					</button>
-					<slot name="title" />
+					<slot name="backTitle">
+						<slot name="title" />
+					</slot>
 					<slot name="backTop" />
 				</div>
 			{/if}
