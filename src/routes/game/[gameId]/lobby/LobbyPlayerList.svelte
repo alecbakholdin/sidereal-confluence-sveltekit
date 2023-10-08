@@ -24,7 +24,7 @@
 	});
 </script>
 
-<div class="card variant-ghost flex flex-col">
+<div class="card flex flex-col">
 	<header class="card-header">
 		<h4 class="h4">Players</h4>
 	</header>

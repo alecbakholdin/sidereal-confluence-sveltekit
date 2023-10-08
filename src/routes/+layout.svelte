@@ -3,6 +3,7 @@
 	import '../app.postcss';
 
 	import { onNavigate } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { settingsModal } from '$lib/util/client/settingsStore';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
 	import Icon from '@iconify/svelte';
@@ -13,7 +14,6 @@
 		initializeStores,
 		storePopup
 	} from '@skeletonlabs/skeleton';
-	import { page } from '$app/stores';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	initializeStores();
 	const modalStore = getModalStore();

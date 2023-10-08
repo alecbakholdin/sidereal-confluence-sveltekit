@@ -18,6 +18,19 @@ export function superFormToastOnError<T, M>(
 	toastError(toastStore, message);
 }
 
+export function toastErrorMessage(toastStore: ToastStore, message: Writable<any>) {
+	message.subscribe((update: string | App.Error) => {
+		if(!update) return;
+		console.error(update);
+		if (typeof update === 'string') {
+			toastError(toastStore, update);
+		} else {
+			toastError(toastStore, update.message);
+		}
+		message.set(undefined);
+	});
+}
+
 export function toastError(toastStore: ToastStore, message: string) {
 	toastStore.trigger({
 		message,

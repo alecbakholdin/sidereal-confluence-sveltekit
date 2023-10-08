@@ -26,7 +26,7 @@ export async function load() {
 	return {
 		kickUserForm: await superValidate(kickUserSchema),
 		chooseRaceSchema: await superValidate(chooseRaceSchema),
-		emptyForm: await superValidate(emptySchema)
+		readyForm: await superValidate(emptySchema),
 	};
 }
 

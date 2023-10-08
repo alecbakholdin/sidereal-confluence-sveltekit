@@ -43,7 +43,7 @@
 	}
 </script>
 
-<div class="sm:card sm:variant-ghost w-full flex flex-col">
+<div class="sm:card w-full flex flex-col">
 	<header class="card-header">
 		<h4 class="h4">Race Selection</h4>
 	</header>
