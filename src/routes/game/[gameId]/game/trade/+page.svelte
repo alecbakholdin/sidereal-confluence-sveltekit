@@ -25,7 +25,7 @@
 		class="flex justify-center"
 		bind:clientHeight={height}
 	>
-		<div class="w-fit flex flex-col gap-3">
+		<div class="card p-4 w-fit flex flex-col gap-3">
 			<div class="grid grid-cols-2 w-fit place-items-center gap-3">
 				<span>Offering</span>
 				<span>Looking For</span>

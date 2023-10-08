@@ -34,7 +34,7 @@
 </script>
 
 <div
-	class="card variant-soft flex flex-col border w-80"
+	class="card flex flex-col border w-80"
 	style:border-color={raceInfoMap[$gameState.gameInfo[playerId].race].color}
 >
 	<header class="card-header flex flex-col">
