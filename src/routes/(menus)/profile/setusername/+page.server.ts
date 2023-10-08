@@ -1,12 +1,12 @@
 import { AUTH_SECRET } from '$env/static/private';
 import { fail, redirect } from '@sveltejs/kit';
+import jwt from 'jsonwebtoken';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
-import jwt from 'jsonwebtoken'
 
 const changeUsernameSchema = z.object({
     username: z.string()
-        .min(5, "Username must be at least 5 characters")
+        .min(2, "Username must be at least 2 characters")
         .regex(/^[ A-Za-z0-9_-]+$/, "Username can only have letters, numbers, underscores, spaces, and hyphens")
 })
 

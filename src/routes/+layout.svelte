@@ -29,12 +29,18 @@
 		});
 	});
 
+	//logic for stars + shooting stars
+	const maxDistance = distanceFromCenter(100, 100);
 	let windowWidth: number;
 	let windowHeight: number;
 	$: widthRatio = windowWidth / 1920;
 	$: heightRatio = windowHeight / 1080;
 	$: numStars = Math.floor(widthRatio * heightRatio * 100);
 	$: numShootingStars = $page.url.pathname === '/' ? Math.ceil(widthRatio * heightRatio * 10) : 0;
+
+	function distanceFromCenter(a: number, b: number) {
+		return Math.sqrt((a - 50) * (a - 50) + (b - 50) * (b - 50));
+	}
 	function quickHash(a: number) {
 		a = a ^ 61 ^ (a >> 16);
 		a = a + (a << 3);
@@ -50,14 +56,18 @@
 <div class="-z-10 h-0 relative">
 	<ul class="absolute -z-10 top-0 left-0 w-screen h-screen" id="stars-bg">
 		{#each { length: numStars } as _, i}
+			{@const left = quickHash(i + 111) % 100}
+			{@const top = quickHash(i + 1) % 100}
+			{@const distance = distanceFromCenter(top, left)}
 			<li
 				class:text-xs={!(i % 3)}
 				class:text-sm={!(i % 5)}
-				class="absolute -z-10 animate-pulse"
+				class="absolute -z-10"
 				style:animation-delay="{(i % 10) * 100}ms"
 				style:animation-duration="2s"
-				style:left="{quickHash(i) % 100}%"
-				style:top="{quickHash(i + 1) % 100}%"
+				style:opacity={distance / maxDistance < 0.2 ? 0 : 1}
+				style:left="{left}%"
+				style:top="{top}%"
 			>
 				<Icon icon="mdi:star-four-points" />
 			</li>
