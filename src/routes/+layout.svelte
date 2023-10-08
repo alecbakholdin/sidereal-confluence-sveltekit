@@ -5,6 +5,7 @@
 	import { onNavigate } from '$app/navigation';
 	import { settingsModal } from '$lib/util/client/settingsStore';
 	import { arrow, autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom';
+	import Icon from '@iconify/svelte';
 	import {
 		Modal,
 		Toast,
@@ -12,8 +13,7 @@
 		initializeStores,
 		storePopup
 	} from '@skeletonlabs/skeleton';
-	import Icon from '@iconify/svelte';
-	import { makeHullPresorted } from '@melt-ui/svelte/internal/helpers';
+	import { page } from '$app/stores';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	initializeStores();
 	const modalStore = getModalStore();
@@ -31,9 +31,10 @@
 
 	let windowWidth: number;
 	let windowHeight: number;
-	$: widthRatio = windowWidth/1920;
-	$: heightRatio = windowHeight/1080;
-	$: numStars = Math.floor(widthRatio * heightRatio * 100)
+	$: widthRatio = windowWidth / 1920;
+	$: heightRatio = windowHeight / 1080;
+	$: numStars = Math.floor(widthRatio * heightRatio * 100);
+	$: numShootingStars = $page.url.pathname === '/' ? Math.ceil(widthRatio * heightRatio * 10) : 0;
 	function quickHash(a: number) {
 		a = a ^ 61 ^ (a >> 16);
 		a = a + (a << 3);
@@ -44,7 +45,7 @@
 	}
 </script>
 
-<svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight}/>
+<svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
 
 <div class="-z-10 h-0 relative">
 	<ul class="absolute -z-10 top-0 left-0 w-screen h-screen" id="stars-bg">
@@ -52,7 +53,7 @@
 			<li
 				class:text-xs={!(i % 3)}
 				class:text-sm={!(i % 5)}
-				class="star absolute -z-10 animate-pulse"
+				class="absolute -z-10 animate-pulse"
 				style:animation-delay="{(i % 10) * 100}ms"
 				style:animation-duration="2s"
 				style:left="{quickHash(i) % 100}%"
@@ -60,6 +61,16 @@
 			>
 				<Icon icon="mdi:star-four-points" />
 			</li>
+		{/each}
+		{#each { length: numShootingStars } as _, i}
+			<li
+				class="shooting-star"
+				style:left="initial"
+				style:top="{i % 2 ? quickHash(42 + i) % 90 : 0}%"
+				style:right="{!(i % 2) ? quickHash(37 + i) % 70 : 0}%"
+				style:animation-duration="{8 * (quickHash(i) % 3) + 1})s"
+				style:animation-delay="{(i / 8) * 3}s"
+			></li>
 		{/each}
 	</ul>
 </div>
@@ -80,8 +91,45 @@
 	#stars-bg {
 		background: radial-gradient(ellipse at bottom, #211b32 0%, #090a0f 75%);
 	}
-	.star {
+	.shooting-star {
 		position: absolute;
-		aspect-ratio: 1;
+		top: 50%;
+		left: 50%;
+		width: 4px;
+		height: 4px;
+		background: #fff;
+		border-radius: 50%;
+		box-shadow:
+			0 0 0 4px rgba(255, 255, 255, 0.1),
+			0 0 0 8px rgba(255, 255, 255, 0.1),
+			0 0 20px rgba(255, 255, 255, 0.1);
+		animation: shooting-star-animate 2s linear infinite;
+	}
+	.shooting-star::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 300px;
+		height: 1px;
+		background: linear-gradient(90deg, #fff, transparent);
+	}
+
+	@keyframes shooting-star-animate {
+		0% {
+			transform: rotate(315deg) translateX(0);
+			opacity: 1;
+		}
+		35% {
+			opacity: 1;
+		}
+		50% {
+			transform: rotate(315deg) translateX(-1000px);
+			opacity: 0;
+		}
+		100% {
+			transform: rotate(315deg) translateX(-1000px);
+			opacity: 0;
+		}
 	}
 </style>
