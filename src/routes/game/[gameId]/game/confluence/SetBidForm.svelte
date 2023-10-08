@@ -67,8 +67,10 @@
 						type="button"
 						class="btn-icon btn-icon-sm variant-soft-surface"
 						on:click={() => {
-							if(myShipsRemaining || $form.researchTeamShips) $form.colonyShips++;
-                            if(!myShipsRemaining) $form.researchTeamShips--;
+							if (myShipsRemaining || $form.researchTeamShips) {
+								$form.colonyShips++;
+								if (!myShipsRemaining) $form.researchTeamShips--;
+							}
 						}}
 					>
 						<Icon icon="material-symbols:chevron-right" />
@@ -99,8 +101,10 @@
 						type="button"
 						class="btn-icon btn-icon-sm variant-soft-surface"
 						on:click={() => {
-							if (myShipsRemaining || $form.colonyShips) $form.researchTeamShips++;
-							if (!myShipsRemaining) $form.colonyShips--;
+							if (myShipsRemaining || $form.colonyShips) {
+								$form.researchTeamShips++;
+								if (!myShipsRemaining) $form.colonyShips--;
+							}
 						}}
 					>
 						<Icon icon="material-symbols:chevron-right" />

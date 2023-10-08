@@ -1,5 +1,5 @@
-<div class="background-planet w-screen h-screen relative grid place-items-center">
-	<slot />
+<slot />
+<!-- <div class="background-planet w-screen h-screen relative grid place-items-center">
 </div>
 
 <style>
@@ -10,3 +10,4 @@
 		object-fit: fill;
 	}
 </style>
+ -->
