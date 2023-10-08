@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import 'iconify-icon';
 	import '../app.postcss';
 
@@ -27,19 +27,28 @@
 			});
 		});
 	});
+
+	function quickHash(a: number) {
+		a = a ^ 61 ^ (a >> 16);
+		a = a + (a << 3);
+		a = a ^ (a >> 4);
+		a = a * 0x27d4eb2d;
+		a = a ^ (a >> 15);
+		return a;
+	}
 </script>
 
 <div class="-z-10 h-0 relative">
 	<ul class="absolute -z-10 top-0 left-0 w-screen h-screen" id="stars-bg">
-		{#each { length: 80 } as _, i}
+		{#each { length: 40 } as _, i}
 			<li
 				class:text-xs={!(i % 3)}
 				class:text-sm={!(i % 5)}
 				class="star absolute -z-10 animate-pulse"
 				style:animation-delay="{(i % 10) * 100}ms"
-				style:animation-duration="1s"
-				style:left="{(i * 10007) % 100}%"
-				style:top="{((i * 24113) % 200) / 2}%"
+				style:animation-duration="2s"
+				style:left="{quickHash(i) % 100}%"
+				style:top="{quickHash(i + 1) % 100}%"
 			>
 				<Icon icon="mdi:star-four-points" />
 			</li>
@@ -61,7 +70,7 @@
 
 <style lang="postcss">
 	#stars-bg {
-		background: radial-gradient(ellipse at bottom, #211b32 0%, #090a0f 100%);
+		background: radial-gradient(ellipse at bottom, #211b32 0%, #090a0f 75%);
 	}
 	.star {
 		position: absolute;
