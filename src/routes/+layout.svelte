@@ -13,6 +13,7 @@
 		storePopup
 	} from '@skeletonlabs/skeleton';
 	import Icon from '@iconify/svelte';
+	import { makeHullPresorted } from '@melt-ui/svelte/internal/helpers';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
 	initializeStores();
 	const modalStore = getModalStore();
@@ -29,7 +30,10 @@
 	});
 
 	let windowWidth: number;
-	$: numStars = Math.floor(windowWidth/1920 * 80)
+	let windowHeight: number;
+	$: widthRatio = windowWidth/1920;
+	$: heightRatio = windowHeight/1080;
+	$: numStars = Math.floor(widthRatio * heightRatio * 100)
 	function quickHash(a: number) {
 		a = a ^ 61 ^ (a >> 16);
 		a = a + (a << 3);
@@ -40,7 +44,7 @@
 	}
 </script>
 
-<svelte:window bind:innerWidth={windowWidth} />
+<svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight}/>
 
 <div class="-z-10 h-0 relative">
 	<ul class="absolute -z-10 top-0 left-0 w-screen h-screen" id="stars-bg">
