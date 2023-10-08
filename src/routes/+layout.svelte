@@ -59,18 +59,19 @@
 			{@const left = quickHash(i + 111) % 100}
 			{@const top = quickHash(i + 1) % 100}
 			{@const distance = distanceFromCenter(top, left)}
-			<li
-				class:text-xs={!(i % 3)}
-				class:text-sm={!(i % 5)}
-				class="absolute -z-10"
-				style:animation-delay="{(i % 10) * 100}ms"
-				style:animation-duration="2s"
-				style:opacity={distance / maxDistance < 0.2 ? 0 : 1}
-				style:left="{left}%"
-				style:top="{top}%"
-			>
-				<Icon icon="mdi:star-four-points" />
-			</li>
+			{#if distance / maxDistance > 0.2}
+				<li
+					class:text-xs={!(i % 3)}
+					class:text-sm={!(i % 5)}
+					class="absolute -z-10 animate-pulse"
+					style:animation-delay="{(i % 10) * 100}ms"
+					style:animation-duration="2s"
+					style:left="{left}%"
+					style:top="{top}%"
+				>
+					<Icon icon="mdi:star-four-points" />
+				</li>
+			{/if}
 		{/each}
 		{#each { length: numShootingStars } as _, i}
 			<li
