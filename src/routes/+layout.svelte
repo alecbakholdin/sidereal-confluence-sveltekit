@@ -28,6 +28,8 @@
 		});
 	});
 
+	let windowWidth: number;
+	$: numStars = Math.floor(windowWidth/1920 * 80)
 	function quickHash(a: number) {
 		a = a ^ 61 ^ (a >> 16);
 		a = a + (a << 3);
@@ -38,9 +40,11 @@
 	}
 </script>
 
+<svelte:window bind:innerWidth={windowWidth} />
+
 <div class="-z-10 h-0 relative">
 	<ul class="absolute -z-10 top-0 left-0 w-screen h-screen" id="stars-bg">
-		{#each { length: 40 } as _, i}
+		{#each { length: numStars } as _, i}
 			<li
 				class:text-xs={!(i % 3)}
 				class:text-sm={!(i % 5)}
