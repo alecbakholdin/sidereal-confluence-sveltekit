@@ -133,23 +133,14 @@
 	</svelte:fragment>
 
 	<TabGroup justify="justify-center">
-		<TabAnchor href={tradeTab} selected={$page.url.pathname === tradeTab}>
-			<span class="text-sm">Trade</span>
-		</TabAnchor>
-		<TabAnchor href={economyTab} selected={$page.url.pathname === economyTab}>
-			<span class="text-sm">Economy</span>
-		</TabAnchor>
-		<TabAnchor href={confluenceTab} selected={$page.url.pathname === confluenceTab}>
-			<span class="text-sm">Confluence</span>
-		</TabAnchor>
-		<!-- 		<TabAnchor
-			selected={false}
-			name="People"
-			value={0}
-			on:click={() => drawerStore.open({ position: 'right' })}
-		>
-			Players
-		</TabAnchor> -->
+		{#each $gameState.phases as phase}
+			{@const href = gameContext.getUrl(`/game/${phase}`)}
+			<TabAnchor {href} selected={$page.url.pathname === href}>
+				<span class="text-sm">
+					{phase.replaceAll(/(?:^|\s)\w/g, x => x.toUpperCase())}
+				</span>
+			</TabAnchor>
+		{/each}
 		<div class="grid" slot="panel">
 			<slot />
 		</div>
