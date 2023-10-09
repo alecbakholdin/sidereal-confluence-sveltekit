@@ -71,7 +71,7 @@ function advancePhaseIfNecessary(gameState: GameState) {
 	if(allReady) {
 		gameState.phase += 1;
 	}
-	Object.values(gameState.gameInfo).forEach(x => x.ready = false);
+	Object.values(gameState.gameInfo).forEach(x => x.ready = false); 
 }
 
 function getCardFromInfo(
