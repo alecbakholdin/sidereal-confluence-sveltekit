@@ -1,5 +1,5 @@
 import type { RaceType } from '../race';
-import type { Converter } from './converter';
+import type { Converter, SingleConverter } from './converter';
 import type { TechnologyType } from './researchTeam';
 
 export type ConverterCard = {
@@ -12,9 +12,9 @@ export type ConverterCard = {
 	isStartingCard?: boolean;
 	technology?: TechnologyType;
 
-	acquisitionConverter?: Converter[];
-	frontConverters?: Converter[];
-	backConverters?: Converter[];
+	acquisitionConverter?: SingleConverter[];
+	frontConverters?: SingleConverter[];
+	backConverters?: SingleConverter[];
 	upgradeOptions?: ConverterCardUpgradeOptions[];
 };
 

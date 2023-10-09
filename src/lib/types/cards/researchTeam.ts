@@ -1,10 +1,10 @@
-import type { Converter } from './converter';
+import type { Converter, SingleConverter } from './converter';
 
 export type ResearchTeam = {
 	id: string;
 	title: string;
 	era?: number;
-	acquisitionConverters?: Converter[];
+	acquisitionConverters?: SingleConverter[];
 	researchConverters?: Converter[];
 	result: {
 		technology?: string;
