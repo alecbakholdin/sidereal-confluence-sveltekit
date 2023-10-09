@@ -1,6 +1,5 @@
-import { textChangeRangeIsUnchanged } from 'typescript';
-import type { CardWrapper, PlayerCard } from './card';
-import type { Converter, SingleConverter } from './converter';
+import { CardWrapper, type CardType, type PlayerCard, type UpgradeOption } from './card';
+import type { SingleConverter } from './converter';
 
 export const colonyTypes = ['Ice', 'Jungle', 'Desert', 'Ocean', 'any'] as const;
 export type ColonyType = (typeof colonyTypes)[number];
@@ -17,37 +16,28 @@ export type Colony = {
 	backConverters?: SingleConverter[];
 };
 
-export class ColonyCardWrapper implements CardWrapper {
+export class ColonyCardWrapper extends CardWrapper<Colony> {
+	cardType: CardType = 'Colony';
 	private colony: Colony;
 
-	constructor(private playerCard: PlayerCard) {
-		if (playerCard.cardType !== 'Colony')
-			throw new Error('Expected Colony but got ' + playerCard.cardType);
+	constructor(playerCard: PlayerCard) {
+		super(playerCard);
+		if (this.playerCard.cardType !== 'Colony')
+			throw new Error('Expected Colony but got ' + this.playerCard.cardType);
 
-		this.colony = colonyMap[playerCard.cardId];
+		this.colony = colonyMap[this.playerCard.cardId];
 		if (!this.colony)
 			throw new Error('Colony is not set for ColonyCardWrapper ' + JSON.stringify(playerCard));
 	}
 
-	markForEconomy(converter: number, status: boolean): boolean {
-		const converters =
-			(this.playerCard.upgraded ? this.colony.backConverters : this.colony.frontConverters) ?? [];
-		const len = converters?.length ?? 0;
-		if (converter >= len || converter < 0) throw new Error('Invalid converter number ' + converter);
+	override getActiveConverters(): SingleConverter[] {
+		return (
+			(this.playerCard.upgraded ? this.colony.backConverters : this.colony.frontConverters) ?? []
+		);
+	}
 
-		if (!this.playerCard.reservedConverters)
-			this.playerCard.reservedConverters = converters.map(() => false);
-		this.playerCard.reservedConverters[converter] = status;
-		return true;
-	}
-	upgrade(optionNumber: number): SingleConverter {
-		if (this.playerCard.upgraded) return {};
-		this.playerCard.upgraded = true;
-		this.playerCard.reservedConverters = this.colony.backConverters?.map(() => false) || [];
-		return this.colony.upgradeConverters![optionNumber];
-	}
-	get(): PlayerCard {
-		throw new Error('Method not implemented.');
+	override getUpgradeOptions(): UpgradeOption[] {
+		return this.colony.upgradeConverters?.map((x) => ({ converter: x })) || [];
 	}
 }
 

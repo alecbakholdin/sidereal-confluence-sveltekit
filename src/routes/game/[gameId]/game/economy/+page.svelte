@@ -2,15 +2,15 @@
 	import { page } from '$app/stores';
 	import Card from '$lib/components/cards/Card.svelte';
 	import type { PlayerCard } from '$lib/types/cards/card.js';
-	import { getMyPlayerInfo } from '$lib/util/client/gameContext';
+	import { getGameState, getMyPlayerInfo } from '$lib/util/client/gameContext';
 	import { confirmAction } from '$lib/util/client/modals';
 	import { superFormToastOnError } from '$lib/util/client/toasts';
 	import Icon from '@iconify/svelte';
 	import { createAccordion, melt } from '@melt-ui/svelte';
 	import { getModalStore, getToastStore } from '@skeletonlabs/skeleton';
-	import type { Readable } from 'svelte/store';
 	import { slide } from 'svelte/transition';
 	import { superForm } from 'sveltekit-superforms/client';
+	import EconomyOutcomePreview from './EconomyOutcomePreview.svelte';
 
 	export let data;
 
@@ -34,6 +34,7 @@
 		onError: (e) => superFormToastOnError(toastStore, e)
 	});
 	const myPlayerInfo = getMyPlayerInfo();
+	const gameState = getGameState();
 
 	const cardList: { id: string; title: string; icon: string; cards: PlayerCard[] }[] = [
 		{
@@ -58,6 +59,9 @@
 </script>
 
 <div class="p-2 md:p-4 w-full max-w-4xl place-self-center" use:melt={$root}>
+	<div class="grid place-items-center">
+		<EconomyOutcomePreview />
+	</div>
 	{#each cardList as { id, title, icon, cards }}
 		{@const selected = $isSelected(id)}
 		<div class="card my-1" use:melt={$item(id)} class:hover:bg-surface-700={!selected}>

@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { loadingButton } from '$lib/actions/loadingButton';
+	import { initEmptyForm } from '$lib/actions/toastOnError';
 	import EntityContainerComponent from '$lib/components/EntityContainerComponent.svelte';
 	import {
 		getGameContext,
 		getGameState,
 		getMyPlayerInfo,
+		getPhase,
 		getRootGamePath
 	} from '$lib/util/client/gameContext';
 	import { superFormToastOnError } from '$lib/util/client/toasts';
@@ -17,7 +19,6 @@
 		getModalStore,
 		getToastStore
 	} from '@skeletonlabs/skeleton';
-	import { derived } from 'svelte/store';
 	import { superForm } from 'sveltekit-superforms/client';
 	import PhaseTrack from './PhaseTrack.svelte';
 
@@ -37,26 +38,14 @@
 
 	$: meInfo = $gameState.gameInfo[gameContext.me.id];
 	$: turnInfo = $gameState.turns[$gameState.turn];
-	const ready = derived(myPlayerInfo, ({ ready }) => ({
-		action: ready ? 'unready' : 'readyUp',
-		text: ready ? 'Unready' : 'Ready Up'
-	}));
 
-	const { submitting: readySubmitting, enhance: readyEnhance } = superForm(data.emptyForm, {
-		onError: (e) => {
-			superFormToastOnError(toastStore, e);
-		},
-		warnings: {
-			duplicateId: false
-		}
-	});
-	const { submitting: nextPhaseSubmitting, enhance: nextPhaseEnhance } = superForm(data.emptyForm, {
-		onError: (e) => {
-			superFormToastOnError(toastStore, e);
-		},
-		warnings: {
-			duplicateId: false
-		}
+	const { loading: nextPhaseLoading, enhance: nextPhaseEnhance } = initEmptyForm(toastStore);
+	const { loading: readyLoading, enhance: readyEnhance } = initEmptyForm(toastStore);
+
+	const phase = getPhase();
+	$: toastStore.trigger({
+		message: `It's now ${$phase}`,
+		timeout: 1000
 	});
 </script>
 
@@ -113,7 +102,7 @@
 							<form action="{rootGamePath}?/unready" method="post" use:readyEnhance>
 								<button
 									class="btn variant-ghost-secondary"
-									use:loadingButton={{ loading: readySubmitting }}
+									use:loadingButton={{ loading: readyLoading }}
 								>
 									Unready
 								</button>
@@ -122,7 +111,7 @@
 							<form action="{rootGamePath}?/readyUp" method="post" use:readyEnhance>
 								<button
 									class="btn variant-ghost-secondary"
-									use:loadingButton={{ loading: readySubmitting }}
+									use:loadingButton={{ loading: readyLoading }}
 								>
 									Ready Up
 								</button>
@@ -131,7 +120,7 @@
 						<form action="{rootGamePath}?/nextPhase" method="post" use:nextPhaseEnhance>
 							<button
 								class="btn variant-ghost-secondary"
-								use:loadingButton={{ loading: nextPhaseSubmitting }}
+								use:loadingButton={{ loading: nextPhaseLoading }}
 							>
 								Next phase
 							</button>

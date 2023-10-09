@@ -1,4 +1,5 @@
 import type { RaceType } from '../race';
+import { CardWrapper, type CardType, type PlayerCard, type UpgradeOption } from './card';
 import type { Converter, SingleConverter } from './converter';
 import type { TechnologyType } from './researchTeam';
 
@@ -15,13 +16,36 @@ export type ConverterCard = {
 	acquisitionConverter?: SingleConverter[];
 	frontConverters?: SingleConverter[];
 	backConverters?: SingleConverter[];
-	upgradeOptions?: ConverterCardUpgradeOptions[];
+	upgradeOptions?: UpgradeOption[];
 };
 
-export type ConverterCardUpgradeOptions = {
-	technology?: TechnologyType;
-	converter?: Converter;
-};
+export class ConverterCardCardWrapper extends CardWrapper<ConverterCard> {
+	cardType: CardType = 'Converter';
+	private converterCard: ConverterCard;
+
+	constructor(playerCard: PlayerCard) {
+		super(playerCard);
+		if (this.playerCard.cardType !== 'Converter')
+			throw new Error('Expected Converer but got ' + this.playerCard.cardType);
+		this.converterCard = converterCardMap[this.playerCard.cardId];
+		if (!this.converterCard)
+			throw new Error(
+				'Converter Card is not set for ConverterCardCardWrapper ' + JSON.stringify(playerCard)
+			);
+	}
+
+	override getActiveConverters(): SingleConverter[] {
+		return (
+			(this.playerCard.upgraded
+				? this.converterCard.backConverters
+				: this.converterCard.frontConverters) ?? []
+		);
+	}
+
+	override getUpgradeOptions(): UpgradeOption[] {
+		return this.converterCard.upgradeOptions || [];
+	}
+}
 
 export const converterCards: readonly ConverterCard[] = [
 	{

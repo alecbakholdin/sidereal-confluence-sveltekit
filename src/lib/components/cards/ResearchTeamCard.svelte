@@ -71,7 +71,7 @@
 </ExpandableCardTemplate>
 
 {#if $open && converterCard}
-	<div class="card z-30" use:melt={$content} transition:fade={{duration: 100}}>
+	<div class="!bg-primary-700 card z-30 transform scale-90 p-1" use:melt={$content} transition:fade={{duration: 100}}>
 		<ConverterCard cardInfo={converterCard} displayOnly />
 	</div>
 {/if}

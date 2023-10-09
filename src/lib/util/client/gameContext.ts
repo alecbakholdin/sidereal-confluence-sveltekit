@@ -38,3 +38,8 @@ export function getRootGamePath(): string {
 	const gameContext = getGameContext();
 	return gameContext.getUrl('/game');
 }
+
+export function getPhase() {
+	const gameState = getGameState();
+	return derived(gameState, (state) => state.phases[state.phase]);
+}

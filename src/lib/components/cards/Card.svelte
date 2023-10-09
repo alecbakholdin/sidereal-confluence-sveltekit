@@ -52,7 +52,14 @@
 		</svelte:fragment>
 	</ColonyCard>
 {:else if cardType === 'Converter'}
-	<ConverterCard {cardInfo} />
+	<ConverterCard {cardInfo}>
+		<svelte:fragment slot="markForEconomyForm" let:formId let:status let:i>
+			<slot name="markForEconomyForm" {formId} {status} {i} />
+		</svelte:fragment>
+		<svelte:fragment slot="upgradeForm" let:formId let:i>
+			<slot name="upgradeForm" {formId} {i} />
+		</svelte:fragment>
+	</ConverterCard>
 {:else if cardType === 'Research Team'}
 	<ResearchTeamCard {cardInfo} {displayOnly} />
 {:else}
