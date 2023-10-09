@@ -60,7 +60,7 @@
 			{#if $open}
 				<div
 					use:melt={$content}
-					class="flex flex-grow flex-col"
+					class="flex flex-grow flex-col px-8"
 					transition:slide={{ duration: 50 }}
 				>
 					{#if !disableExpansion}
@@ -112,7 +112,7 @@
 			{#if $open}
 				<div
 					use:melt={$content}
-					class="flex flex-col flex-grow"
+					class="flex flex-col flex-grow px-8"
 					transition:slide={{ duration: 50 }}
 				>
 					{#if !disableExpansion}
