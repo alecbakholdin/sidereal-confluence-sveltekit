@@ -49,6 +49,8 @@
 		a = a ^ (a >> 15);
 		return a;
 	}
+
+	const starIcons = ["tabler:north-star", "mdi:star-four-points", "game-icons:polar-star"] as const;
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} bind:innerHeight={windowHeight} />
@@ -69,7 +71,7 @@
 					style:left="{left}%"
 					style:top="{top}%"
 				>
-					<Icon icon="mdi:star-four-points" />
+					<Icon icon={starIcons[i % starIcons.length]} />
 				</li>
 			{/if}
 		{/each}
