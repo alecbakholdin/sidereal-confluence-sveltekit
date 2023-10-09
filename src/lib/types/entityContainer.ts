@@ -21,13 +21,19 @@ export type EntityContainer = z.infer<typeof entityContainerSchema>;
 export function resolveResourceUpdate(
 	gameInfo: PlayerGameInfo,
 	input?: EntityContainer,
-	output?: EntityContainer
+	output?: EntityContainer,
+	opts?: {
+		allowDonationsAsInputs?: boolean;
+	}
 ) {
 	for (const resource of resources) {
 		let qty = input?.resource?.[resource];
 		if (!qty) continue;
 
-		const resourceAmounts = gameInfo.resources.filter(({ resource: r }) => r === resource);
+		const allowDonations = opts?.allowDonationsAsInputs;
+		const resourceAmounts = gameInfo.resources.filter(
+			({ resource: r, donation: d }) => r === resource && (allowDonations || !d)
+		);
 		const totalAvailable = resourceAmounts.reduce((total, { quantity }) => total + quantity, 0);
 		if (totalAvailable < qty) throw error(400, { message: 'User does not have enough resources' });
 
@@ -73,4 +79,6 @@ export function resolveResourceUpdate(
 			resourceAmount.quantity += qty;
 		}
 	}
+
+	gameInfo.resources = gameInfo.resources.filter((x) => x.quantity);
 }

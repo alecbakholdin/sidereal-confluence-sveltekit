@@ -1,3 +1,4 @@
+import { resolveResourceUpdate } from '$lib/types/entityContainer.js';
 import type { BidOrder, GameState } from '$lib/types/game';
 import { fail } from '@sveltejs/kit';
 import { message, superValidate } from 'sveltekit-superforms/server';
@@ -33,7 +34,7 @@ export const actions = {
 			userPlayerInfo.resources.find(({ resource, donation }) => resource === 'ship' && !donation)
 				?.quantity || 0;
 		if (form.data.colonyShips + form.data.researchTeamShips > shipsAvailable) {
-            console.error("User does not have enough ships");
+			console.error('User does not have enough ships');
 			return message(form, 'You do not have enough ships for that', { status: 400 });
 		}
 
@@ -109,13 +110,7 @@ export const actions = {
 		if (bidderObj.shipsUsed < trackObj.shipMinimum)
 			return message(form, 'You did not bet enough sihps', { status: 400 });
 
-		const resourceAmount = userPlayerInfo.resources.find(
-			(x) => x.resource === 'ship' && !x.donation
-		);
-		if (!resourceAmount || bidderObj.shipsUsed > resourceAmount.quantity)
-			return message(form, 'You do not have enough ships', { status: 400 });
-
-		resourceAmount.quantity -= bidderObj.shipsUsed;
+		resolveResourceUpdate(userPlayerInfo, { resource: { ship: bidderObj.shipsUsed } });
 		trackObj.reservedBy = user.id;
 
 		const arr =
